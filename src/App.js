@@ -1,18 +1,37 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Header from './components/Header'
+import Main from './components/Main'
+import Nav from './components/Nav'
+import Footer from './components/Footer'
 
 class App extends Component {
+  componentDidMount(){
+    window.$('.sidebar-menu').SidebarNav()
+
+    var menuLeft = document.getElementById( 'cbp-spmenu-s1' ),
+    showLeftPush = document.getElementById( 'showLeftPush' ),
+    body = document.body;
+    
+    showLeftPush.onclick = function() {
+      window.classie.toggle( this, 'active' );
+      window.classie.toggle( body, 'cbp-spmenu-push-toright' );
+      window.classie.toggle( menuLeft, 'cbp-spmenu-open' );
+      disableOther( 'showLeftPush' );
+    };
+    
+    function disableOther( button ) {
+      if( button !== 'showLeftPush' ) {
+        window.classie.toggle( showLeftPush, 'disabled' );
+      }
+    }
+  }
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      <div>
+        <Nav/>
+        <Header/>
+        <Main/>
+        <Footer/>
       </div>
     );
   }
