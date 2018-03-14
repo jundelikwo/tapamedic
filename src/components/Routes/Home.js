@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom'
 
 class Home extends Component{
     render(){
-        return (
+        return(
             <div>
-                <Link to="/dashboard">Click to go to the dashboard</Link>
+                <h2>This is The Home Page</h2>
+                <Link to="/login">Login</Link>
             </div>
         )
     }

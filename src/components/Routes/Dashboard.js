@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import Header from '../Header'
-import Main from '../Main'
-import Nav from '../Nav'
-import Footer from '../Footer'
+import Header from '../UserHeader'
+import Main from '../UserMain'
+import Nav from '../UserNav'
+import Footer from '../UserFooter'
 
 class Dashboard extends Component{
     componentDidMount(){
