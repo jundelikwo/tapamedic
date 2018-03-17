@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom'
 
-class Home extends Component{
+class CreateProfile extends Component{
     state = {
         redirect: false
     }
@@ -132,4 +132,4 @@ class Home extends Component{
     }
 }
 
-export default Home
+export default CreateProfile
