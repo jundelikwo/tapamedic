@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom'
 import firebase from 'firebase'
+import { connect } from 'react-redux'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 
 
@@ -44,10 +45,20 @@ class Login extends Component{
         };
     }
     render(){
-        return this.state.redirect ?
-            <Redirect to="/createprofile" />:
-            <StyledFirebaseAuth uiConfig={this.getUIConfig()} firebaseAuth={firebase.auth()}/>
+        if(this.props.loggedIn){
+            return <Redirect to="/dashboard" />
+        }else if(this.state.redirect){
+            return <Redirect to="/createprofile" />
+        }else{
+            return <StyledFirebaseAuth uiConfig={this.getUIConfig()} firebaseAuth={firebase.auth()}/>
+        }
     }
 }
 
-export default Login
+const mapStateToProps = (state) => {
+    return {
+        loggedIn: state.user.uid
+    }
+}
+
+export default connect(mapStateToProps)(Login)
