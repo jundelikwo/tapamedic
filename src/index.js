@@ -8,7 +8,7 @@ import thunk from 'redux-thunk'
 import reducers from './reducers'
 import { login, logout, addRole } from './actions'
 import { FirebaseConfig } from './config'
-import { b64DecodeUnicode } from './functions'
+import { b64DecodeUnicode, removeServiceWorker } from './functions'
 import './index.css';
 import App from './App';
 //import registerServiceWorker from './registerServiceWorker';
@@ -68,3 +68,4 @@ ReactDOM.render((
     </Provider>
 ), document.getElementById('root'));
 //registerServiceWorker();
+removeServiceWorker()
