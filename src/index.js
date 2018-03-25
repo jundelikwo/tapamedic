@@ -11,7 +11,7 @@ import { FirebaseConfig } from './config'
 import { b64DecodeUnicode } from './functions'
 import './index.css';
 import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+//import registerServiceWorker from './registerServiceWorker';
 
 
 try {
@@ -67,4 +67,4 @@ ReactDOM.render((
         </BrowserRouter>
     </Provider>
 ), document.getElementById('root'));
-registerServiceWorker();
+//registerServiceWorker();
