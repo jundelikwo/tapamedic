@@ -2,10 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom'
 import firebase from 'firebase'
-import { createStore, compose } from 'redux'
+import { applyMiddleware, createStore, compose } from 'redux'
 import { Provider } from 'react-redux'
+import thunk from 'redux-thunk'
 import reducers from './reducers'
-import { login, logout, addRole } from './actions'
+import { login, logout, addRole, addDisplayName } from './actions'
 import { FirebaseConfig } from './config'
 import { b64DecodeUnicode } from './functions'
 import './index.css';
@@ -14,15 +15,16 @@ import registerServiceWorker from './registerServiceWorker';
 
 
 try {
-    // Initialize firebase
-    firebase.initializeApp(FirebaseConfig);
+  // Initialize firebase
+  firebase.initializeApp(FirebaseConfig);
 } catch (e){
     
 }
 
 // Initialize store
 let store = createStore(reducers, {}, compose(
-    window.devToolsExtension ? window.devToolsExtension() : f => f
+  applyMiddleware(thunk),
+  window.devToolsExtension ? window.devToolsExtension() : f => f
 ))
 
 
@@ -35,6 +37,7 @@ firebase.auth().onAuthStateChanged(user => {
   }
   // On user login add new listener.
   if (user) {
+    console.log('User',user)
     store.dispatch(login(user))
     // Check if refresh is required.
     metadataRef = firebase.database().ref('metadata/' + user.uid + '/refreshTime');
@@ -46,7 +49,7 @@ firebase.auth().onAuthStateChanged(user => {
       user.getIdToken(true).then(idToken => {
         const payload = JSON.parse(b64DecodeUnicode(idToken.split('.')[1]))
         
-        store.dispatch(login(user))
+        // store.dispatch(login(user))
         store.dispatch(addRole(payload.role))
       });
     };

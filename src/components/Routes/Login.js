@@ -46,7 +46,11 @@ class Login extends Component{
     }
     render(){
         if(this.props.loggedIn){
-            return <Redirect to="/dashboard" />
+            if(this.props.name){
+                return <Redirect to="/dashboard" />
+            }else{
+                return <Redirect to="/createprofile" />
+            }
         }else if(this.state.redirect){
             return <Redirect to="/createprofile" />
         }else{
@@ -57,7 +61,8 @@ class Login extends Component{
 
 const mapStateToProps = (state) => {
     return {
-        loggedIn: state.user.uid
+        loggedIn: state.user.uid,
+        name: state.user.name
     }
 }
 
