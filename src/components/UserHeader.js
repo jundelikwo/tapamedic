@@ -180,8 +180,8 @@ class Header extends Component{
 							</a>
 							<ul className="dropdown-menu drp-mnu">
 								<li> <a><i className="fa fa-cog"></i> Settings</a> </li> 
-								<li> <a><i className="fa fa-user"></i> My Account</a> </li>
-								<li> <a><i className="fa fa-suitcase"></i> Profile</a> </li> 
+								<li> <a><i className="fa fa-user"></i> My Profile</a> </li>
+								<li> <a><i className="fa fa-suitcase"></i> My Wallet</a> </li> 
 								<li> <a onClick={(e) => {
 									e.preventDefault()
 									firebase.auth().signOut()

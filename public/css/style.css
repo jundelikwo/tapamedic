@@ -34,7 +34,8 @@ ul,label{
 	padding:0;
 }
 body a:hover{
-	text-decoration:none;
+    text-decoration:none;
+    cursor: pointer;
 }
 .main-content {
     position: relative;
@@ -70,9 +71,6 @@ span.dashboard_text {
     left:0px;
     width: 100%;
     z-index: 100;
-}
-div.sticky-header a:hover{
-    cursor: pointer;
 }
 .header-section {
     background:#FFF;
