@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
+import firebase from 'firebase'
 
 class Header extends Component{
     render(){
         return(
-            <div className="sticky-header header-section ">
+        <div className="sticky-header header-section ">
 			<div className="header-left">
 				
 				
@@ -12,14 +14,14 @@ class Header extends Component{
 				<div className="profile_details_left">
 					<ul className="nofitications-dropdown">
 						<li className="dropdown head-dpdn">
-							<a href="#" className="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i className="fa fa-envelope"></i><span className="badge">4</span></a>
+							<a className="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i className="fa fa-envelope"></i><span className="badge">4</span></a>
 							<ul className="dropdown-menu">
 								<li>
 									<div className="notification_header">
 										<h3>You have 3 new messages</h3>
 									</div>
 								</li>
-								<li><a href="#">
+								<li><a>
 								   <div className="user_img"><img src="images/1.jpg" alt=""/></div>
 								   <div className="notification_desc">
 									<p>Lorem ipsum dolor amet</p>
@@ -27,7 +29,7 @@ class Header extends Component{
 									</div>
 								   <div className="clearfix"></div>	
 								</a></li>
-								<li className="odd"><a href="#">
+								<li className="odd"><a>
 									<div className="user_img"><img src="images/4.jpg" alt=""/></div>
 								   <div className="notification_desc">
 									<p>Lorem ipsum dolor amet </p>
@@ -35,7 +37,7 @@ class Header extends Component{
 									</div>
 								  <div className="clearfix"></div>	
 								</a></li>
-								<li><a href="#">
+								<li><a>
 								   <div className="user_img"><img src="images/3.jpg" alt=""/></div>
 								   <div className="notification_desc">
 									<p>Lorem ipsum dolor amet </p>
@@ -45,20 +47,20 @@ class Header extends Component{
 								</a></li>
 								<li>
 									<div className="notification_bottom">
-										<a href="#">See all messages</a>
+										<a>See all messages</a>
 									</div> 
 								</li>
 							</ul>
 						</li>
 						<li className="dropdown head-dpdn">
-							<a href="#" className="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i className="fa fa-bell"></i><span className="badge blue">4</span></a>
+							<a className="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i className="fa fa-bell"></i><span className="badge blue">4</span></a>
 							<ul className="dropdown-menu">
 								<li>
 									<div className="notification_header">
 										<h3>You have 3 new notification</h3>
 									</div>
 								</li>
-								<li><a href="#">
+								<li><a>
 									<div className="user_img"><img src="images/4.jpg" alt=""/></div>
 								   <div className="notification_desc">
 									<p>Lorem ipsum dolor amet</p>
@@ -66,7 +68,7 @@ class Header extends Component{
 									</div>
 								  <div className="clearfix"></div>	
 								 </a></li>
-								 <li className="odd"><a href="#">
+								 <li className="odd"><a>
 									<div className="user_img"><img src="images/1.jpg" alt=""/></div>
 								   <div className="notification_desc">
 									<p>Lorem ipsum dolor amet </p>
@@ -74,7 +76,7 @@ class Header extends Component{
 									</div>
 								   <div className="clearfix"></div>	
 								 </a></li>
-								 <li><a href="#">
+								 <li><a>
 									<div className="user_img"><img src="images/3.jpg" alt=""/></div>
 								   <div className="notification_desc">
 									<p>Lorem ipsum dolor amet </p>
@@ -84,20 +86,20 @@ class Header extends Component{
 								 </a></li>
 								 <li>
 									<div className="notification_bottom">
-										<a href="#">See all notifications</a>
+										<a>See all notifications</a>
 									</div> 
 								</li>
 							</ul>
 						</li>	
 						<li className="dropdown head-dpdn">
-							<a href="#" className="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i className="fa fa-tasks"></i><span className="badge blue1">8</span></a>
+							<a className="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i className="fa fa-tasks"></i><span className="badge blue1">8</span></a>
 							<ul className="dropdown-menu">
 								<li>
 									<div className="notification_header">
 										<h3>You have 8 pending task</h3>
 									</div>
 								</li>
-								<li><a href="#">
+								<li><a>
 									<div className="task-info">
 										<span className="task-desc">Database update</span><span className="percentage">40%</span>
 										<div className="clearfix"></div>	
@@ -106,7 +108,7 @@ class Header extends Component{
 										<div className="bar yellow" style={{width: '40%'}}></div>
 									</div>
 								</a></li>
-								<li><a href="#">
+								<li><a>
 									<div className="task-info">
 										<span className="task-desc">Dashboard done</span><span className="percentage">90%</span>
 									   <div className="clearfix"></div>	
@@ -115,7 +117,7 @@ class Header extends Component{
 										 <div className="bar green" style={{width: '90%'}}></div>
 									</div>
 								</a></li>
-								<li><a href="#">
+								<li><a>
 									<div className="task-info">
 										<span className="task-desc">Mobile App</span><span className="percentage">33%</span>
 										<div className="clearfix"></div>	
@@ -124,7 +126,7 @@ class Header extends Component{
 										 <div className="bar red" style={{width: '33%'}}></div>
 									</div>
 								</a></li>
-								<li><a href="#">
+								<li><a>
 									<div className="task-info">
 										<span className="task-desc">Issues fixed</span><span className="percentage">80%</span>
 									   <div className="clearfix"></div>	
@@ -135,7 +137,7 @@ class Header extends Component{
 								</a></li>
 								<li>
 									<div className="notification_bottom">
-										<a href="#">See all pending tasks</a>
+										<a>See all pending tasks</a>
 									</div> 
 								</li>
 							</ul>
@@ -164,12 +166,12 @@ class Header extends Component{
 				<div className="profile_details">		
 					<ul>
 						<li className="dropdown profile_details_drop">
-							<a href="#" className="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+							<a className="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 								<div className="profile_img">	
 									<span className="prfil-img"><img src="images/2.jpg" alt=""/> </span> 
 									<div className="user-name">
-										<p>Admin Name</p>
-										<span>Administrator</span>
+										<p>Hi {this.props.firstName}</p>
+										<span>{this.props.lastName}</span>
 									</div>
 									<i className="fa fa-angle-down lnr"></i>
 									<i className="fa fa-angle-up lnr"></i>
@@ -177,10 +179,13 @@ class Header extends Component{
 								</div>	
 							</a>
 							<ul className="dropdown-menu drp-mnu">
-								<li> <a href="#"><i className="fa fa-cog"></i> Settings</a> </li> 
-								<li> <a href="#"><i className="fa fa-user"></i> My Account</a> </li>
-								<li> <a href="#"><i className="fa fa-suitcase"></i> Profile</a> </li> 
-								<li> <a href="#"><i className="fa fa-sign-out"></i> Logout</a> </li>
+								<li> <a><i className="fa fa-cog"></i> Settings</a> </li> 
+								<li> <a><i className="fa fa-user"></i> My Account</a> </li>
+								<li> <a><i className="fa fa-suitcase"></i> Profile</a> </li> 
+								<li> <a onClick={(e) => {
+									e.preventDefault()
+									firebase.auth().signOut()
+								}}><i className="fa fa-sign-out"></i> Logout</a> </li>
 							</ul>
 						</li>
 					</ul>
@@ -193,4 +198,21 @@ class Header extends Component{
     }
 }
 
-export default Header
+const mapStateToProps = (state) => {
+	let name = state.user.name
+	let spaceChar = name.lastIndexOf(' ')
+	let firstName = ''
+	let lastName = ''
+	if(spaceChar !== -1 ){
+		firstName = name.slice(0,spaceChar)
+		lastName = name.slice(spaceChar+1)
+	}else{
+		firstName = name;
+	}
+	return {
+		firstName,
+		lastName
+	}
+}
+
+export default connect(mapStateToProps)(Header)

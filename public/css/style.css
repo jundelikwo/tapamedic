@@ -71,6 +71,9 @@ span.dashboard_text {
     width: 100%;
     z-index: 100;
 }
+div.sticky-header a:hover{
+    cursor: pointer;
+}
 .header-section {
     background:#FFF;
     box-shadow:  1px 1px 4px rgba(0, 0, 0, 0.21);
