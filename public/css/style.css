@@ -55,7 +55,6 @@ span.dashboard_text {
     padding-left: 35px;
 }
 
-
 .navbar-inverse .navbar-brand {
     color: #b8c7ce;
 }
@@ -170,7 +169,6 @@ button#showLeftPush:hover {
     background: #2d6696fc;
     background: none;
     color: #fff;
-    margin-top: 10px;
 }
 .nav > li > a:hover, .nav > li > a:focus {
     text-decoration: none;
@@ -6310,7 +6308,7 @@ text.highcharts-yaxis-title {
   background-color: #fff;
 }
 .panel .panel-heading {
-  padding: 20px;
+  padding: 0;
   overflow: hidden;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
@@ -6325,6 +6323,19 @@ text.highcharts-yaxis-title {
   margin: 0;
   padding: 0;
   font-weight: 600;
+  height: 100%;
+  width: 100%;
+}
+.panel .panel-heading .panel-title a{
+    display: block;
+    height: 100%;
+    padding: 20px;
+    background-color: #629aa9;
+    color: #f5f5f5;
+}
+.panel .panel-heading .panel-title a.collapsed{
+    color: #333;
+    background-color: #f5f5f5;
 }
 h4.asd label {
     font-size: 1em;

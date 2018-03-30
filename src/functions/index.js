@@ -7,10 +7,3 @@ export function b64DecodeUnicode(str) {
         return '%' + code;
     }));
 }
-
-export function removeServiceWorker(){
-    navigator.serviceWorker.getRegistrations().then(function(registrations) {
-        for(let registration of registrations) {
-         registration.unregister()
-       } })
-}

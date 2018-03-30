@@ -9,7 +9,7 @@ class Header extends Component{
 			<div className="header-left">
 				
 				
-				<button id="showLeftPush"><i className="fa fa-bars"></i></button>
+				<button id="showLeftPush" style={{ display: 'none' }}><i className="fa fa-bars"></i></button>
 				
 				<div className="profile_details_left">
 					<ul className="nofitications-dropdown">
@@ -199,7 +199,7 @@ class Header extends Component{
 }
 
 const mapStateToProps = (state) => {
-	let name = state.user.name
+	let name = state.user.name || 'Anonymous'
 	let spaceChar = name.lastIndexOf(' ')
 	let firstName = ''
 	let lastName = ''

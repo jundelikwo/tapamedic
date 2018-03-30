@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import moment from 'moment'
 import Pikaday from 'pikaday'
-import { addProfileData } from '../../actions'
+import { addUserData } from '../../actions'
 
 class CreateProfile extends Component{
     state = {
@@ -36,14 +36,17 @@ class CreateProfile extends Component{
         var data = {
             address: this.refs.address.value,
             blood: this.refs.blood.value,
+            diseases: this.refs.diseases.value,
             dob: moment(this.refs.dob.value).unix(),
+            drugs: this.refs.drugs.value,
             firstName: this.refs.firstName.value,
+            occupation: this.refs.occupation.value,
             genotype: this.refs.genotype.value,
             lastName: this.refs.lastName.value,
             sex: this.refs.sex.value
         }
-        //this.setState({ redirect: true })
-        this.props.dispatch(addProfileData(data));
+        this.setState({ redirect: true })
+        this.props.dispatch(addUserData(data));
         console.log("Form", data);
     }
     render(){
@@ -78,13 +81,13 @@ class CreateProfile extends Component{
                                     </div>
                                     <div className="gaps">
                                         <p>Diseases you suffer from</p>
-                                        <textarea id="message" refs="drugs" name="message" placeholder="" title="Please enter Diseases you suffer from"></textarea>
+                                        <textarea id="message" ref="diseases" name="diseases" placeholder="" title="Please enter Diseases you suffer from"></textarea>
                                     </div> 
                                 </div>
                                 <div className="right-agileinfo same">
                                     <div className="gaps">
                                         <p>Occupation</p>
-                                        <input type="text" name="occupation" placeholder="" required=""/>
+                                        <input type="text" ref='occupation' name="occupation" placeholder="" required=""/>
                                     </div>
                                     <div className="gaps">
                                         <p>Blood Group</p>	
@@ -111,7 +114,7 @@ class CreateProfile extends Component{
                                     </div>
                                     <div className="gaps">
                                         <p>Drugs you are allergic to</p>
-                                        <textarea id="message" refs="diseases" name="diseases" placeholder="" title="Please enter Drugs you are allergic to"></textarea>
+                                        <textarea id="message" ref="drugs" name="drugs" placeholder="" title="Please enter Drugs you are allergic to"></textarea>
                                     </div>
                                 </div>
                                 <div className="clear"></div>

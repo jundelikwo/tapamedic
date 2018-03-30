@@ -4,7 +4,7 @@ const initialState = {
     uid: null,
     phoneNumber: null,
     role: "",
-    name: 'Anonymous'
+    name: ''
 }
 
 let userReducer = (state = initialState , action ) => {

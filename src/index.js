@@ -6,12 +6,13 @@ import { applyMiddleware, createStore, compose } from 'redux'
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
 import reducers from './reducers'
-import { login, logout, addRole } from './actions'
+import { login, logout, addRole, startAddProfileData } from './actions'
 import { FirebaseConfig } from './config'
-import { b64DecodeUnicode, removeServiceWorker } from './functions'
+import { b64DecodeUnicode } from './functions'
 import './index.css';
 import App from './App';
 //import registerServiceWorker from './registerServiceWorker';
+import { unregister } from './registerServiceWorker';
 
 
 try {
@@ -30,6 +31,7 @@ let store = createStore(reducers, {}, compose(
 
 let callback = null;
 let metadataRef = null;
+let profileRef = null;
 firebase.auth().onAuthStateChanged(user => {
   // Remove previous listener.
   if (callback) {
@@ -39,6 +41,7 @@ firebase.auth().onAuthStateChanged(user => {
   if (user) {
     console.log('User',user)
     store.dispatch(login(user))
+    
     // Check if refresh is required.
     metadataRef = firebase.database().ref('metadata/' + user.uid + '/refreshTime');
     callback = (snapshot) => {
@@ -51,12 +54,14 @@ firebase.auth().onAuthStateChanged(user => {
         
         // store.dispatch(login(user))
         store.dispatch(addRole(payload.role))
+        profileRef = store.dispatch(startAddProfileData())
       });
     };
     // Subscribe new listener to changes on that node.
     metadataRef.on('value', callback);
   } else {
     store.dispatch(logout())
+    firebase.off()
   }
 });
 
@@ -68,4 +73,4 @@ ReactDOM.render((
     </Provider>
 ), document.getElementById('root'));
 //registerServiceWorker();
-removeServiceWorker()
+unregister()

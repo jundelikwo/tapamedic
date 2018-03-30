@@ -1,5 +1,5 @@
 import firebase from 'firebase'
-import { LOGIN, LOGOUT, ADD_ROLE, ADD_DISPLAY_NAME } from './types'
+import { LOGIN, LOGOUT, ADD_ROLE, ADD_DISPLAY_NAME, ADD_PROFILE_DATA } from './types'
 
 export var login = (user) => {
     return {
@@ -28,7 +28,7 @@ export var addDisplayName = (name) => {
     }
 }
 
-export var addProfileData = (data) => {
+export var addUserData = (data) => {
     return (dispatch, getState) => {
         const { uid, role } = getState().user;
         firebase.database().ref(`${role}s/${uid}/data`).update(data)
@@ -44,5 +44,21 @@ export var addProfileData = (data) => {
                 }
             })
             .catch( e => console.log(e,'Failed'))
+    }
+}
+
+export var addProfileData = (data) => {
+    return {
+        type: ADD_PROFILE_DATA,
+        data
+    }
+}
+
+export var startAddProfileData = () => {
+    return (dispatch, getState) => {
+        const { uid, role } = getState().user;
+        return firebase.database().ref(`${role}s/${uid}/data`).on('value',snapshot => {
+            dispatch(addProfileData(snapshot.val()))
+        })
     }
 }
