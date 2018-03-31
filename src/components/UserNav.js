@@ -67,7 +67,7 @@ class Nav extends Component{
                     </li>
                     <li className="treeview">
                       <NavLink to="/dashboard/payment" activeStyle={activeStyle} exact>
-                        <i className="fa fa-user"></i> <span>Make Payment</span>
+                        <i className="fa fa-suitcase"></i> <span>Make Payment</span>
                       </NavLink>
                     </li>
                     <li className="treeview">
@@ -95,3 +95,4 @@ const activeStyle = {
 }
 
 export default IsLoggedIn(Nav)
+//export default Nav

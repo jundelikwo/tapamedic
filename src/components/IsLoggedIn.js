@@ -16,7 +16,7 @@ let isLoggedIn = (Component) => {
         return {
             isLoggedIn: state.user.uid
         }
-    })(LoggedIn)
+    }, null, null, { pure: false })(LoggedIn)
 }
 
 export default isLoggedIn

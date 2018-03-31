@@ -183,7 +183,7 @@ class Header extends Component{
 				<div className="clearfix"> </div>
 			</div>
 
-			<div className="header-right">				
+			<div className="header-right">
 				<div className="profile_details">		
 					<ul>
 						<li className="dropdown profile_details_drop">
@@ -240,4 +240,5 @@ const mapStateToProps = (state) => {
 	}
 }
 
-export default IsLoggedIn(connect(mapStateToProps)(Header))
+export default IsLoggedIn(connect(mapStateToProps, null, null, { pure: false })(Header))
+//export default Header
