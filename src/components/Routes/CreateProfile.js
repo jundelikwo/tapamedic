@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom'
 import moment from 'moment'
 import Pikaday from 'pikaday'
 import { addUserData } from '../../actions'
+import IsLoggedIn from '../IsLoggedIn'
 
 class CreateProfile extends Component{
     state = {
@@ -127,4 +128,4 @@ class CreateProfile extends Component{
     }
 }
 
-export default connect()(CreateProfile)
+export default IsLoggedIn(connect()(CreateProfile))

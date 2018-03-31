@@ -31,7 +31,6 @@ let store = createStore(reducers, {}, compose(
 
 let callback = null;
 let metadataRef = null;
-let profileRef = null;
 firebase.auth().onAuthStateChanged(user => {
   // Remove previous listener.
   if (callback) {
@@ -54,7 +53,7 @@ firebase.auth().onAuthStateChanged(user => {
         
         // store.dispatch(login(user))
         store.dispatch(addRole(payload.role))
-        profileRef = store.dispatch(startAddProfileData())
+        store.dispatch(startAddProfileData())
       });
     };
     // Subscribe new listener to changes on that node.

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from '../logo.svg';
 import '../App.css';
+import IsLoggedIn from './IsLoggedIn'
 
 class Main extends Component{
     render(){
@@ -24,4 +25,4 @@ class Main extends Component{
     }
 }
 
-export default Main
+export default IsLoggedIn(Main)

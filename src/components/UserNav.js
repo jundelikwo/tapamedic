@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom'
 import firebase from 'firebase'
+import IsLoggedIn from './IsLoggedIn'
 
 class Nav extends Component{
   componentDidMount(){
@@ -50,14 +51,14 @@ class Nav extends Component{
                       </NavLink>
                     </li>
                     <li className="treeview">
-                      <a href="charts.html">
+                      <NavLink to="/dashboard/questions" activeStyle={activeStyle} exact>
                       <i className="fa fa-laptop"></i> <span>Ask a Question</span>
-                      </a>
+                      </NavLink>
                     </li>
                     <li className="treeview">
-                      <a href="charts.html">
+                      <NavLink to="/dashboard/talk-to-a-doc" activeStyle={activeStyle} exact>
                       <i className="fa fa-pie-chart"></i> <span>Talk to a Doctor</span>
-                      </a>
+                      </NavLink>
                     </li>
                     <li className="treeview">
                       <NavLink to="/dashboard/profile" activeStyle={activeStyle} exact>
@@ -93,4 +94,4 @@ const activeStyle = {
   borderLeftColor: '#3c8dbc'
 }
 
-export default Nav
+export default IsLoggedIn(Nav)

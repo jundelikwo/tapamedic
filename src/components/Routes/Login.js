@@ -54,7 +54,7 @@ class Login extends Component{
         }else if(this.state.redirect){
             return <Redirect to="/createprofile" />
         }else{
-            return <StyledFirebaseAuth uiConfig={this.getUIConfig()} firebaseAuth={firebase.auth()}/>
+            return <div style={{ marginTop: '30px' }}><StyledFirebaseAuth uiConfig={this.getUIConfig()} firebaseAuth={firebase.auth()}/></div>
         }
     }
 }

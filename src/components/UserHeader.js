@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import firebase from 'firebase'
+import IsLoggedIn from './IsLoggedIn'
 
 class Header extends Component{
     render(){
@@ -215,4 +216,4 @@ const mapStateToProps = (state) => {
 	}
 }
 
-export default connect(mapStateToProps)(Header)
+export default IsLoggedIn(connect(mapStateToProps)(Header))

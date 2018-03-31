@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
+import IsLoggedIn from '../IsLoggedIn'
 
 class Profile extends Component{
     render(){
@@ -164,4 +165,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps)(Profile);
+export default IsLoggedIn(connect(mapStateToProps)(Profile));

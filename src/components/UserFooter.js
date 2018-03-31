@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import IsLoggedIn from './IsLoggedIn'
 
 class Footer extends Component{
     render(){
@@ -10,4 +11,4 @@ class Footer extends Component{
     }
 }
 
-export default Footer
+export default IsLoggedIn(Footer)
