@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import IsLoggedIn from '../IsLoggedIn'
 
-class Question extends Component{
+class Questions extends Component{
     render(){
         return(
             <div id="page-wrapper">
                 <div className="main-page">
                     <div className="blank-page widget-shadow scroll" id="style-2 div1">
-                        Question Page
+                        Questions Page
                     </div>
                 </div>
             </div>
@@ -15,4 +15,4 @@ class Question extends Component{
     }
 }
 
-export default IsLoggedIn(Question)
+export default IsLoggedIn(Questions)

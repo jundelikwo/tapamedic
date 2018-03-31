@@ -40,6 +40,18 @@ firebase.auth().onAuthStateChanged(user => {
   if (user) {
     console.log('User',user)
     store.dispatch(login(user))
+
+    let payload1 = {}
+    let profileDataRef  = null
+    user.getIdToken(true).then(idToken => {
+      payload1 = JSON.parse(b64DecodeUnicode(idToken.split('.')[1]))
+      
+      if(payload1.role){
+        store.dispatch(addRole(payload1.role))
+        profileDataRef = store.dispatch(startAddProfileData())
+        console.log('profileDataRef',profileDataRef)
+      }
+    });
     
     // Check if refresh is required.
     metadataRef = firebase.database().ref('metadata/' + user.uid + '/refreshTime');
@@ -51,9 +63,12 @@ firebase.auth().onAuthStateChanged(user => {
       user.getIdToken(true).then(idToken => {
         const payload = JSON.parse(b64DecodeUnicode(idToken.split('.')[1]))
         
-        // store.dispatch(login(user))
-        store.dispatch(addRole(payload.role))
-        store.dispatch(startAddProfileData())
+        if(payload.role !== payload1.role){
+          // store.dispatch(login(user))
+          profileDataRef.off()
+          store.dispatch(addRole(payload.role))
+          store.dispatch(startAddProfileData())
+        }
       });
     };
     // Subscribe new listener to changes on that node.

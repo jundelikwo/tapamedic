@@ -27,4 +27,5 @@ class Dashboard extends Component{
     }
 }
 
-export default IsLoggedIn(Dashboard)
+//export default IsLoggedIn(Dashboard)
+export default Dashboard

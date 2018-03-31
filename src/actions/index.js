@@ -57,8 +57,11 @@ export var addProfileData = (data) => {
 export var startAddProfileData = () => {
     return (dispatch, getState) => {
         const { uid, role } = getState().user;
-        return firebase.database().ref(`${role}s/${uid}/data`).on('value',snapshot => {
+        let profileDataRef = firebase.database().ref(`${role}s/${uid}/data`)
+        
+        profileDataRef.on('value',snapshot => {
             dispatch(addProfileData(snapshot.val()))
         })
+        return profileDataRef
     }
 }

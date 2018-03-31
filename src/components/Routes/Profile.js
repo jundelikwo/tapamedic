@@ -61,7 +61,7 @@ class Profile extends Component{
                                     <div className="form-group mb-n">
                                         <label className="col-md-2 control-label">Diseases You Suffer From</label>
                                         <div className="col-md-8">
-                                            <textarea type="text" className="form-control1" readOnly>{diseases}</textarea>
+                                            <textarea type="text" className="form-control1" value={diseases} readOnly></textarea>
                                         </div>
                                     </div>
                                     <div className="form-group mb-n">
@@ -91,7 +91,7 @@ class Profile extends Component{
                                     <div className="form-group mb-n">
                                         <label className="col-md-2 control-label">Drugs You Are Allergic To</label>
                                         <div className="col-md-8">
-                                            <textarea type="text" className="form-control1" readOnly>{drugs}</textarea>
+                                            <textarea type="text" className="form-control1" value={drugs} readOnly></textarea>
                                         </div>
                                     </div>
                                 </form>

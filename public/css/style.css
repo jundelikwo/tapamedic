@@ -63,6 +63,9 @@ span.dashboard_text {
     background-color: transparent;
     border-color: transparent;
 }
+div.mobile-nav {
+    display: none;
+}
 /* ----STICKY HEADER----*/
 .sticky-header{
     position: fixed;
@@ -7241,7 +7244,32 @@ h4.asd label {
 	}
 	.login-page, .signup-page {
 		width: 60%;
-	}
+    }
+    ul.nofitications-dropdown{
+        display: none;
+    }
+    div.mobile-nav {
+        display: block;
+        padding-top: 20px;
+    }
+    div.mobile-nav li.dropdown.head-dpdn{
+        margin-right: 15px;
+        padding: 0;
+        margin-bottom: 10px;
+        font-size: 14.4px;
+    }
+    /* div.mobile-nav li:hover{
+        border-bottom: 1px solid #337ab7;
+    } */
+    div.mobile-nav li:last-of-type{
+        margin-right: 0;
+    }
+    div.header-left {
+        width: 100%;
+    }
+    div.header-right {
+        display: none;
+    }
 }
 @media(max-width:767px){
 	.sidebar .navbar-collapse.collapse {

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
 import firebase from 'firebase'
 import IsLoggedIn from './IsLoggedIn'
@@ -142,28 +143,47 @@ class Header extends Component{
 									</div> 
 								</li>
 							</ul>
-						</li>	
+						</li>
 					</ul>
+					<div className="mobile-nav">
+						<li className="dropdown head-dpdn">
+							<NavLink to="/dashboard" activeStyle={activeStyle} exact>
+								<span>Dashboard</span>
+							</NavLink>
+						</li>
+						<li className="dropdown head-dpdn">
+							<NavLink to="/" activeStyle={activeStyle} exact>
+								<span>Home</span>
+							</NavLink>
+						</li>
+						<li className="dropdown head-dpdn">
+							<NavLink to="/dashboard/questions" activeStyle={activeStyle} exact>
+								<span>Ask a Question</span>
+							</NavLink>
+						</li>
+						<li className="dropdown head-dpdn">
+							<NavLink to="/dashboard/talk-to-a-doc" activeStyle={activeStyle} exact>
+								<span>Talk to a Doctor</span>
+							</NavLink>
+						</li>
+						<li className="dropdown head-dpdn">
+							<NavLink to="/dashboard/profile" activeStyle={activeStyle} exact>
+								<span>My Profile</span>
+							</NavLink>
+						</li>
+						<li className="dropdown head-dpdn">
+							<NavLink to="/dashboard/payment" activeStyle={activeStyle} exact>
+								<span>Make Payment</span>
+							</NavLink>
+						</li>
+					</div>
 					<div className="clearfix"> </div>
 				</div>
 				
 				<div className="clearfix"> </div>
 			</div>
-			<div className="header-right">
-				
-				
-				
-				{/* <div className="search-box">
-					<form className="input">
-						<input className="sb-search-input input__field--madoka" placeholder="Search..." type="search" id="input-31" />
-						<label className="input__label" for="input-31">
-							<svg className="graphic" width="100%" height="100%" viewBox="0 0 404 77" preserveAspectRatio="none">
-								<path d="m0,0l404,0l0,77l-404,0l0,-77z"/>
-							</svg>
-						</label>
-					</form>
-				</div> */}
-				
+
+			<div className="header-right">				
 				<div className="profile_details">		
 					<ul>
 						<li className="dropdown profile_details_drop">
@@ -197,6 +217,10 @@ class Header extends Component{
 		</div>
         )
     }
+}
+
+const activeStyle = {
+	color: 'green'
 }
 
 const mapStateToProps = (state) => {
