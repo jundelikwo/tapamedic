@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 let isLoggedIn = (Component) => {
     class LoggedIn extends React.Component{
         render(){
-            if(this.isLoggedIn){
+            if(this.props.isLoggedIn){
                 return <Component />
             }else{
                 return <div>You need to be Logged In to View This Component</div>
