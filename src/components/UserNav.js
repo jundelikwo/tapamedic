@@ -65,6 +65,11 @@ class Nav extends Component{
                       </NavLink>
                     </li>
                     <li className="treeview">
+                      <NavLink to="/dashboard/payment" activeStyle={activeStyle} exact>
+                        <i className="fa fa-user"></i> <span>Make Payment</span>
+                      </NavLink>
+                    </li>
+                    <li className="treeview">
                     <a onClick={(e) => {
                       e.preventDefault()
                       firebase.auth().signOut()

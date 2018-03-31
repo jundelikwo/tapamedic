@@ -4,6 +4,8 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 
+var paystack = require('paystack')(functions.config().paystack.key);
+
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
@@ -41,4 +43,21 @@ exports.setUserRole = functions.auth.user().onCreate((event) =>{
     .catch(error => {
         console.log(error);
     });
+})
+
+exports.verifyPaystack = functions.database.ref('/patients/{uid}/payment').onWrite(event => {
+    const val = event.data.val();
+    console.log('Value',val)
+    // This onWrite will trigger whenever anything is written to the path, so
+    // noop if the charge was deleted, errored out, or the API returned a result (id exists)
+    if (val === null || val.id || val.error) return null;
+
+    paystack.transaction.verify(val.reference,function(error, body){
+        console.log('Error',error)
+        console.log('Body',body)
+    })
+
+    return admin.database().ref(`/patients/${event.params.userId}/payment`).once('value').then((snapshot) => {
+        return snapshot.val();
+      })
 })
