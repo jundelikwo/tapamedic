@@ -51,81 +51,92 @@ class CreateProfile extends Component{
         console.log("Form", data);
     }
     render(){
-        return (this.state.redirect) ?
-            <Redirect to="/dashboard" />:
-            <div id="signupprofile" style={{ minHeight:"100vh" }}>
-                <div className="bg-agile">
-                    <div className="book-appointment">
-                    <h2 style={{ marginBottom: "10px" }}>Medical Information</h2>
-                            <form action="#" method="post" onSubmit={this.onFormSubmit}>
-                                <h3 style={{ fontStyle: "italic", color: "red", marginBottom: "22px", paddingLeft: "1.5em" }}>This form is optional but it is recommended to fill it out inorder to help our doctors serve you better</h3>
-                                <div className="left-agileits-w3layouts same">
-                                    <div className="gaps">
-                                        <p>First Name</p>
-                                        <input type="text" ref="firstName" name="First Name" placeholder="" required=""/>
-                                    </div>	
-                                    <div className="gaps">
-                                        <p>Last Name</p>
-                                            <input type="text" ref="lastName" name="Last Name" placeholder="" required=""/>
+        if(this.state.redirect){
+            return <Redirect to="/dashboard" />
+        }else if(this.props.name){
+            return <Redirect to="/dashboard/profile" />
+        }else{
+            return(
+                <div id="signupprofile" style={{ minHeight:"100vh" }}>
+                    <div className="bg-agile">
+                        <div className="book-appointment">
+                        <h2 style={{ marginBottom: "10px" }}>Medical Information</h2>
+                                <form action="#" method="post" onSubmit={this.onFormSubmit}>
+                                    <h3 style={{ fontStyle: "italic", color: "red", marginBottom: "22px", paddingLeft: "1.5em" }}>This form is optional but it is recommended to fill it out inorder to help our doctors serve you better</h3>
+                                    <div className="left-agileits-w3layouts same">
+                                        <div className="gaps">
+                                            <p>First Name</p>
+                                            <input type="text" ref="firstName" name="First Name" placeholder="" required=""/>
+                                        </div>	
+                                        <div className="gaps">
+                                            <p>Last Name</p>
+                                                <input type="text" ref="lastName" name="Last Name" placeholder="" required=""/>
+                                        </div>
+                                        <div className="gaps">
+                                            <p>Sex</p>	
+                                                <select className="form-control" ref="sex">
+                                                    <option></option>
+                                                    <option>Male</option>
+                                                    <option>Female</option>
+                                                </select>
+                                        </div>
+                                        <div className="gaps">
+                                            <p>Date of Birth</p>		
+                                            <input  id="datepicker1" ref="dob" name="Text" type="text" value="" onFocus={this.onDateFocus} onBlur={this.onDateBlur} required="" />
+                                        </div>
+                                        <div className="gaps">
+                                            <p>Diseases you suffer from</p>
+                                            <textarea id="message" ref="diseases" name="diseases" placeholder="" title="Please enter Diseases you suffer from"></textarea>
+                                        </div> 
                                     </div>
-                                    <div className="gaps">
-                                        <p>Sex</p>	
-                                            <select className="form-control" ref="sex">
+                                    <div className="right-agileinfo same">
+                                        <div className="gaps">
+                                            <p>Occupation</p>
+                                            <input type="text" ref='occupation' name="occupation" placeholder="" required=""/>
+                                        </div>
+                                        <div className="gaps">
+                                            <p>Blood Group</p>	
+                                            <select className="form-control" ref="blood">
                                                 <option></option>
-                                                <option>Male</option>
-                                                <option>Female</option>
+                                                <option>A</option>
+                                                <option>B</option>
+                                                <option>AB</option>
+                                                <option>O</option>
                                             </select>
+                                        </div>
+                                        <div className="gaps">
+                                            <p>Genotype</p>	
+                                            <select className="form-control" ref="genotype">
+                                                <option></option>
+                                                <option>AA</option>
+                                                <option>AS</option>
+                                                <option>SS</option>
+                                            </select>
+                                        </div>
+                                        <div className="gaps">	
+                                            <p>Address</p>
+                                            <input type="text" ref="address" name="address" placeholder="" required=""/>
+                                        </div>
+                                        <div className="gaps">
+                                            <p>Drugs you are allergic to</p>
+                                            <textarea id="message" ref="drugs" name="drugs" placeholder="" title="Please enter Drugs you are allergic to"></textarea>
+                                        </div>
                                     </div>
-                                    <div className="gaps">
-                                        <p>Date of Birth</p>		
-                                        <input  id="datepicker1" ref="dob" name="Text" type="text" value="" onFocus={this.onDateFocus} onBlur={this.onDateBlur} required="" />
-                                    </div>
-                                    <div className="gaps">
-                                        <p>Diseases you suffer from</p>
-                                        <textarea id="message" ref="diseases" name="diseases" placeholder="" title="Please enter Diseases you suffer from"></textarea>
-                                    </div> 
-                                </div>
-                                <div className="right-agileinfo same">
-                                    <div className="gaps">
-                                        <p>Occupation</p>
-                                        <input type="text" ref='occupation' name="occupation" placeholder="" required=""/>
-                                    </div>
-                                    <div className="gaps">
-                                        <p>Blood Group</p>	
-                                        <select className="form-control" ref="blood">
-                                            <option></option>
-                                            <option>A</option>
-                                            <option>B</option>
-                                            <option>AB</option>
-                                            <option>O</option>
-                                        </select>
-                                    </div>
-                                    <div className="gaps">
-                                        <p>Genotype</p>	
-                                        <select className="form-control" ref="genotype">
-                                            <option></option>
-                                            <option>AA</option>
-                                            <option>AS</option>
-                                            <option>SS</option>
-                                        </select>
-                                    </div>
-                                    <div className="gaps">	
-                                        <p>Address</p>
-                                        <input type="text" ref="address" name="address" placeholder="" required=""/>
-                                    </div>
-                                    <div className="gaps">
-                                        <p>Drugs you are allergic to</p>
-                                        <textarea id="message" ref="drugs" name="drugs" placeholder="" title="Please enter Drugs you are allergic to"></textarea>
-                                    </div>
-                                </div>
-                                <div className="clear"></div>
-                                <input type="submit" value="Next" />
-                            </form>
-                        </div>
+                                    <div className="clear"></div>
+                                    <input type="submit" value="Next" />
+                                </form>
+                            </div>
+                    </div>
                 </div>
-            </div>
-        
+            )
+        }
     }
 }
 
-export default IsLoggedIn(connect()(CreateProfile))
+const mapStateToProps = state => {
+    return {
+        name: state.user.name
+    }
+}
+
+export default IsLoggedIn(connect(mapStateToProps)(CreateProfile))
