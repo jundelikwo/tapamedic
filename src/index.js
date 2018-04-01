@@ -65,7 +65,7 @@ firebase.auth().onAuthStateChanged(user => {
         
         if(payload.role !== payload1.role){
           // store.dispatch(login(user))
-          profileDataRef.off()
+          if(profileDataRef){profileDataRef.off()}
           store.dispatch(addRole(payload.role))
           store.dispatch(startAddProfileData())
         }

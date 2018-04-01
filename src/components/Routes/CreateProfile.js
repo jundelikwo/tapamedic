@@ -15,6 +15,34 @@ class CreateProfile extends Component{
         this.onDateFocus = this.onDateFocus.bind(this)
         this.onDateBlur = this.onDateBlur.bind(this)
         this.onFormSubmit = this.onFormSubmit.bind(this)
+        this.onFieldChange = this.onFieldChange.bind(this)
+    }
+    componentWillMount(){
+        const {
+            address,
+            blood,
+            diseases,
+            dob,
+            drugs,
+            firstName,
+            occupation,
+            genotype,
+            lastName,
+            sex
+        } = this.props
+
+        this.setState({
+            address,
+            blood,
+            diseases,
+            dob,
+            drugs,
+            firstName,
+            occupation,
+            genotype,
+            lastName,
+            sex
+        })
     }
     componentDidMount(){
         new Pikaday(
@@ -28,6 +56,14 @@ class CreateProfile extends Component{
     }
     onDateFocus(){
         this.refs.dob.value = ''
+    }
+    onFieldChange(evt){
+        evt.preventDefault()
+        const { name,value } = evt.target
+        let data = {}
+        data[name] = value;
+        data.dob = this.refs.dob.value
+        this.setState(data)
     }
     onDateBlur(){
         if (this.refs.dob.value == '') {this.refs.dob.value = 'mm/dd/yyyy'}
@@ -48,9 +84,22 @@ class CreateProfile extends Component{
         }
         this.setState({ redirect: true })
         this.props.dispatch(addUserData(data));
-        console.log("Form", data);
+        //console.log("Form", data);
     }
     render(){
+        const {
+            address,
+            blood,
+            diseases,
+            dob,
+            drugs,
+            firstName,
+            occupation,
+            genotype,
+            lastName,
+            sex
+        } = this.state
+        
         if(this.state.redirect){
             return <Redirect to="/dashboard" />
         }else if(this.props.name){
@@ -66,15 +115,15 @@ class CreateProfile extends Component{
                                     <div className="left-agileits-w3layouts same">
                                         <div className="gaps">
                                             <p>First Name</p>
-                                            <input type="text" ref="firstName" name="First Name" placeholder="" required=""/>
+                                            <input onChange={this.onFieldChange} type="text" ref="firstName" value={firstName} name="firstName" placeholder="" required=""/>
                                         </div>	
                                         <div className="gaps">
                                             <p>Last Name</p>
-                                                <input type="text" ref="lastName" name="Last Name" placeholder="" required=""/>
+                                                <input onChange={this.onFieldChange} type="text" ref="lastName" value={lastName} name="lastName" placeholder="" required=""/>
                                         </div>
                                         <div className="gaps">
                                             <p>Sex</p>	
-                                                <select className="form-control" ref="sex">
+                                                <select onChange={this.onFieldChange} className="form-control" ref="sex" name="sex" value={sex}>
                                                     <option></option>
                                                     <option>Male</option>
                                                     <option>Female</option>
@@ -82,21 +131,21 @@ class CreateProfile extends Component{
                                         </div>
                                         <div className="gaps">
                                             <p>Date of Birth</p>		
-                                            <input  id="datepicker1" ref="dob" name="Text" type="text" value="" onFocus={this.onDateFocus} onBlur={this.onDateBlur} required="" />
+                                            <input onChange={this.onFieldChange}  id="datepicker1" ref="dob" value={dob} name="dob" type="text" onFocus={this.onDateFocus} onBlur={this.onDateBlur} required="" />
                                         </div>
                                         <div className="gaps">
                                             <p>Diseases you suffer from</p>
-                                            <textarea id="message" ref="diseases" name="diseases" placeholder="" title="Please enter Diseases you suffer from"></textarea>
+                                            <textarea onChange={this.onFieldChange} id="message" ref="diseases" value={diseases} name="diseases" placeholder="" title="Please enter Diseases you suffer from"></textarea>
                                         </div> 
                                     </div>
                                     <div className="right-agileinfo same">
                                         <div className="gaps">
                                             <p>Occupation</p>
-                                            <input type="text" ref='occupation' name="occupation" placeholder="" required=""/>
+                                            <input onChange={this.onFieldChange} type="text" ref='occupation' value={occupation} name="occupation" placeholder="" required=""/>
                                         </div>
                                         <div className="gaps">
                                             <p>Blood Group</p>	
-                                            <select className="form-control" ref="blood">
+                                            <select onChange={this.onFieldChange} className="form-control" ref="blood" name="blood" value={blood}>
                                                 <option></option>
                                                 <option>A</option>
                                                 <option>B</option>
@@ -106,7 +155,7 @@ class CreateProfile extends Component{
                                         </div>
                                         <div className="gaps">
                                             <p>Genotype</p>	
-                                            <select className="form-control" ref="genotype">
+                                            <select onChange={this.onFieldChange} className="form-control" ref="genotype" name="genotype" value={genotype}>
                                                 <option></option>
                                                 <option>AA</option>
                                                 <option>AS</option>
@@ -115,11 +164,11 @@ class CreateProfile extends Component{
                                         </div>
                                         <div className="gaps">	
                                             <p>Address</p>
-                                            <input type="text" ref="address" name="address" placeholder="" required=""/>
+                                            <input onChange={this.onFieldChange} type="text" ref="address" value={address} name="address" placeholder="" required=""/>
                                         </div>
                                         <div className="gaps">
                                             <p>Drugs you are allergic to</p>
-                                            <textarea id="message" ref="drugs" name="drugs" placeholder="" title="Please enter Drugs you are allergic to"></textarea>
+                                            <textarea onChange={this.onFieldChange} id="message" ref="drugs" value={drugs} name="drugs" placeholder="" title="Please enter Drugs you are allergic to"/>
                                         </div>
                                     </div>
                                     <div className="clear"></div>
@@ -134,7 +183,33 @@ class CreateProfile extends Component{
 }
 
 const mapStateToProps = state => {
+    
+    let address = state.profile.address
+    let blood = state.profile.blood
+    let diseases = state.profile.diseases
+    let dob = state.profile.dob
+    let drugs = state.profile.drugs
+    let firstName = state.profile.firstName
+    let occupation = state.profile.occupation
+    let genotype = state.profile.genotype
+    let lastName = state.profile.lastName
+    let sex = state.profile.sex
+
+    if(dob){
+        dob = moment(dob).format('YYYY-MM-DD')
+    }
+
     return {
+        address,
+        blood,
+        diseases,
+        dob,
+        drugs,
+        firstName,
+        occupation,
+        genotype,
+        lastName,
+        sex,
         name: state.user.name
     }
 }
