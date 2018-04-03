@@ -8,11 +8,12 @@ class ErrorBoundary extends Component {
 
     componentDidCatch(error, info) {
         this.setState({hasError: true });
+        console.log('Error ',error, "/n Info",info)
     }
 
     render() {
         if (this.state.hasError) {
-            window.location = '/dashboard'
+            //window.location = '/dashboard'
             return <h1>Oops!!! Something went wrong</h1>;
         } else {
             return this.props.children;

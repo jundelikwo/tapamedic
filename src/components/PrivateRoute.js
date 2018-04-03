@@ -5,9 +5,9 @@ import { connect } from 'react-redux'
 const PrivateRoute = (props) => {
     let { component: Component } = props
     return (
-        <Route {...props.routeProps} render={() => (
+        <Route {...props.routeProps} render={(routeProps) => (
             props.loggedIn ? (
-                <Component/>
+                <Component {...routeProps}/>
                 ) : (
                 <Redirect to={{
                     pathname: '/login',

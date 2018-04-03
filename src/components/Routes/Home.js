@@ -4,6 +4,7 @@ import firebase from 'firebase'
 
 class Home extends Component{
     render(){
+        console.log('Props from Home',this.props)
         return(
             <div>
                 <h2>This is The Home Page</h2>

@@ -27,7 +27,7 @@ class Profile extends Component{
                             <div className="panel-heading" role="tab" id="headingOne">
                             <h4 className="panel-title">
                                 <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                My Data
+                                <span style={{ width: '80%', display: 'inline-block' }}>My Data</span><span style={{ width: '20%', display: 'inline-block', textAlign: 'right' }}><i className="fa fa-pencil" style={{ marginRight: '10px' }} />Edit</span>
                                 </a>
                             </h4>
                             </div>
