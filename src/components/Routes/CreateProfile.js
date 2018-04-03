@@ -12,8 +12,6 @@ class CreateProfile extends Component{
     }
     constructor(props){
         super(props)
-        this.onDateFocus = this.onDateFocus.bind(this)
-        this.onDateBlur = this.onDateBlur.bind(this)
         this.onFormSubmit = this.onFormSubmit.bind(this)
         this.onFieldChange = this.onFieldChange.bind(this)
     }
@@ -49,13 +47,12 @@ class CreateProfile extends Component{
         {
             field: document.getElementById('datepicker1'),
             firstDay: 1,
+            format: 'Do MMMM YYYY',
+            yearRange: [1920,2018],
             minDate: new Date(1900,12,1),
             maxDate: new Date()
         });
         // window.$( "#datepicker,#datepicker1,#datepicker2,#datepicker3" ).datepicker();
-    }
-    onDateFocus(){
-        this.refs.dob.value = ''
     }
     onFieldChange(evt){
         evt.preventDefault()
@@ -64,9 +61,6 @@ class CreateProfile extends Component{
         data[name] = value;
         data.dob = this.refs.dob.value
         this.setState(data)
-    }
-    onDateBlur(){
-        if (this.refs.dob.value == '') {this.refs.dob.value = 'mm/dd/yyyy'}
     }
     onFormSubmit(e){
         e.preventDefault()
@@ -131,7 +125,7 @@ class CreateProfile extends Component{
                                         </div>
                                         <div className="gaps">
                                             <p>Date of Birth</p>		
-                                            <input onChange={this.onFieldChange}  id="datepicker1" ref="dob" value={dob} name="dob" type="text" onFocus={this.onDateFocus} onBlur={this.onDateBlur} required="" />
+                                            <input onChange={this.onFieldChange}  id="datepicker1" ref="dob" value={dob} name="dob" type="text" required="" />
                                         </div>
                                         <div className="gaps">
                                             <p>Diseases you suffer from</p>
@@ -196,7 +190,7 @@ const mapStateToProps = state => {
     let sex = state.profile.sex
 
     if(dob){
-        dob = moment(dob).format('YYYY-MM-DD')
+        dob = moment(dob).format('Do MMMM YYYY')
     }
 
     return {
