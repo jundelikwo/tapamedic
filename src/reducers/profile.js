@@ -16,7 +16,7 @@ const initialState = {
 let profileReducer = (state = initialState, action) => {
     switch(action.type){
         case ADD_PROFILE_DATA :
-            return { ...action.data }
+            return { ...action.data.data }
         default :
             return { ...initialState }
     }

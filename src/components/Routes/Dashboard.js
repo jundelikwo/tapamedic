@@ -12,15 +12,17 @@ import TalkToADoc from './TalkToADoc'
 
 class Dashboard extends Component{
     render(){
+        const { match } = this.props
+        console.log('Dashboard',this.props)
         return (
             <div>
                 <Nav/>
                 <Header/>
-                <PrivateRoute exact path='/dashboard' component={Main}/>
-                <PrivateRoute exact path='/dashboard/questions' component={Questions}/>
-                <PrivateRoute exact path='/dashboard/talk-to-a-doc' component={TalkToADoc}/>
-                <PrivateRoute exact path='/dashboard/profile' component={Profile}/>
-                <PrivateRoute exact path='/dashboard/payment' component={Payment}/>
+                <PrivateRoute exact path={match.path} component={Main}/>
+                <PrivateRoute exact path={match.path + '/questions'} component={Questions}/>
+                <PrivateRoute exact path={match.path + '/talk-to-a-doc'} component={TalkToADoc}/>
+                <PrivateRoute exact path={match.path + '/profile'} component={Profile}/>
+                <PrivateRoute exact path={match.path + '/payment'} component={Payment}/>
                 <Footer/>
             </div>
         )

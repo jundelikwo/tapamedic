@@ -31,7 +31,7 @@ export var addDisplayName = (name) => {
 export var addUserData = (data) => {
     return (dispatch, getState) => {
         const { uid, role } = getState().user;
-        firebase.database().ref(`${role}s/${uid}/data`).update(data)
+        firebase.database().ref(`${role}s/${uid}/profile/data`).update(data)
             .then(() => {
                 console.log('Done')
                 var user = firebase.auth().currentUser;
@@ -57,9 +57,10 @@ export var addProfileData = (data) => {
 export var startAddProfileData = () => {
     return (dispatch, getState) => {
         const { uid, role } = getState().user;
-        let profileDataRef = firebase.database().ref(`${role}s/${uid}/data`)
+        let profileDataRef = firebase.database().ref(`${role}s/${uid}/profile`)
         
         profileDataRef.on('value',snapshot => {
+            console.log(`${role}s/${uid}/profile`)
             dispatch(addProfileData(snapshot.val()))
         })
         return profileDataRef

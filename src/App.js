@@ -15,16 +15,16 @@ class App extends Component {
   }
   render() {
     return (
-      <div>
-        <ErrorBoundary>
+      <ErrorBoundary>
+        <div>
           <Switch>
             <Route exact path="/" component={Home}/>
             <PrivateRoute path="/createprofile" component={CreateProfile}/>
             <PrivateRoute path="/dashboard" component={Dashboard}/>
             <Route path="/login" component={Login}/>
           </Switch>
-        </ErrorBoundary>
-      </div>
+        </div>
+      </ErrorBoundary>
     );
   }
 }

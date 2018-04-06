@@ -3,6 +3,7 @@ import IsLoggedIn from '../IsLoggedIn'
 
 class Questions extends Component{
     render(){
+        console.log('Questions',this.props)
         return(
             <div id="page-wrapper">
                 <div className="main-page">

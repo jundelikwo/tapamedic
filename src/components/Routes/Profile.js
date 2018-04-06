@@ -4,6 +4,21 @@ import moment from 'moment'
 import IsLoggedIn from '../IsLoggedIn'
 
 class Profile extends Component{
+    state = {
+        editable: false
+    }
+
+    constructor(props){
+        super(props)
+        this.editForm = this.editForm.bind(this)
+    }
+
+    editForm(e){
+        e.preventDefault();
+        console.log('Event',e)
+        e.stopPropagation();
+    }
+
     render(){
         const {
             address,
@@ -27,12 +42,13 @@ class Profile extends Component{
                             <div className="panel-heading" role="tab" id="headingOne">
                             <h4 className="panel-title">
                                 <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                <span style={{ width: '80%', display: 'inline-block' }}>My Data</span><span style={{ width: '20%', display: 'inline-block', textAlign: 'right' }}><i className="fa fa-pencil" style={{ marginRight: '10px' }} />Edit</span>
+                                    <span>My Data</span>
                                 </a>
                             </h4>
                             </div>
                             <div id="collapseOne" className="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
                             <div className="panel-body">
+                                <a role="button" onClick={this.editForm}><i className="fa fa-pencil" style={{ marginRight: '10px' }} />Edit</a>
                                 <form className="form-horizontal">
                                     <div className="form-group mb-n">
                                         <label className="col-md-2 control-label">First Name</label>
@@ -102,7 +118,7 @@ class Profile extends Component{
                             <div className="panel-heading" role="tab" id="headingTwo">
                             <h4 className="panel-title">
                                 <a className="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                    Product 2
+                                    <span>Product 2</span>
                                 </a>
                             </h4>
                             </div>
@@ -116,7 +132,7 @@ class Profile extends Component{
                             <div className="panel-heading" role="tab" id="headingThree">
                             <h4 className="panel-title">
                                 <a className="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                    Product 3
+                                    <span>Product 3</span>
                                 </a>
                             </h4>
                             </div>

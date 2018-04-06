@@ -6332,14 +6332,28 @@ text.highcharts-yaxis-title {
 .panel .panel-heading .panel-title a{
     display: block;
     height: 100%;
-    padding: 20px;
     background-color: #629aa9;
     color: #f5f5f5;
+    padding: 20px;
 }
+/* .panel .panel-heading .panel-title span{
+    padding: 20px;
+}
+.panel .panel-heading .panel-title span{
+    width: 80%; 
+    display: inline-block;
+}
+.panel .panel-heading .panel-title span + span{
+    width: 20%;
+    text-align: right;
+} */
 .panel .panel-heading .panel-title a.collapsed{
     color: #333;
     background-color: #f5f5f5;
 }
+/* .panel .panel-heading .panel-title a.collapsed span + span{
+    display: none;
+} */
 h4.asd label {
     font-size: 1em;
     padding-left: 1em;
