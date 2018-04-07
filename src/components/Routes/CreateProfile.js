@@ -52,7 +52,6 @@ class CreateProfile extends Component{
             minDate: new Date(1900,12,1),
             maxDate: new Date()
         });
-        // window.$( "#datepicker,#datepicker1,#datepicker2,#datepicker3" ).datepicker();
     }
     onFieldChange(evt){
         evt.preventDefault()
@@ -125,7 +124,7 @@ class CreateProfile extends Component{
                                         </div>
                                         <div className="gaps">
                                             <p>Date of Birth</p>		
-                                            <input onChange={this.onFieldChange}  id="datepicker1" ref="dob" value={dob} name="dob" type="text" required="" />
+                                            <input onChange={this.onFieldChange} id="datepicker1" ref="dob" value={dob} name="dob" type="text" required="" />
                                         </div>
                                         <div className="gaps">
                                             <p>Diseases you suffer from</p>
