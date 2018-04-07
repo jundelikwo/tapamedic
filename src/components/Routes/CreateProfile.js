@@ -67,7 +67,7 @@ class CreateProfile extends Component{
             address: this.refs.address.value,
             blood: this.refs.blood.value,
             diseases: this.refs.diseases.value,
-            dob: moment(this.refs.dob.value).unix(),
+            dob: moment(this.refs.dob.value, 'Do MMMM YYYY').unix(),
             drugs: this.refs.drugs.value,
             firstName: this.refs.firstName.value,
             occupation: this.refs.occupation.value,

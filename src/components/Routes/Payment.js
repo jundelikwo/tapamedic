@@ -61,7 +61,7 @@ const mapStateToProps = state => {
     return {
         uid: state.user.uid,
         role: state.user.role,
-        email: state.user.uid + '@payments.tapamedic.com'
+        email: state.user.phoneNumber + '@payments.tapamedic.com'
     }
 }
 
