@@ -4,7 +4,9 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 
-var paystack = require('paystack')(functions.config().paystack.key);
+const paystackKey = functions.config().paystack.key
+var paystack = require('paystack')(paystackKey);
+var request = require('request');
 
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
@@ -15,6 +17,7 @@ var paystack = require('paystack')(functions.config().paystack.key);
 
 exports.setUserRole = functions.auth.user().onCreate((event) =>{
     var user = event.data
+    var time = new Date().getTime()
     
     var customClaims;
     var databaseNode;
@@ -23,6 +26,29 @@ exports.setUserRole = functions.auth.user().onCreate((event) =>{
             role: 'patient'
         };
         databaseNode = "patients/"
+
+        const paystackOptions = {
+            url: "https://api.paystack.co/customer",
+            headers: {
+              'Authorization': 'Bearer ' + paystackKey,
+              'Content-Type': 'application/json'
+            },
+            form: {
+                "email": user.uid + '@payments.tapamedic.com',
+                "phone": user.phoneNumber,
+                metadata: {
+                    "role": "Patient"
+                }
+            }
+        }
+        request.post(paystackOptions,(error, response, body) => {
+            console.log('Error',error)
+            console.log('Body',body)
+            if (!error && response.statusCode === 200) {
+              var id = JSON.parse(body).data.id;
+              admin.database().ref(databaseNode + user.uid + '/paystack').set({ id })
+            }
+        })
     }else if(user.email){
         customClaims = {
             role: 'doctor'
@@ -32,7 +58,6 @@ exports.setUserRole = functions.auth.user().onCreate((event) =>{
     // Set custom user claims on this newly created user.
     return admin.auth().setCustomUserClaims(user.uid, customClaims)
     .then(() => {
-        var time = new Date().getTime()
         admin.database().ref(databaseNode + user.uid).set({memberSince: time})
         // Update real-time database to notify client to force refresh.
         const metadataRef = admin.database().ref("metadata/" + user.uid);
