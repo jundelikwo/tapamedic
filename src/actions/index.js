@@ -1,5 +1,5 @@
 import firebase from 'firebase'
-import { LOGIN, LOGOUT, ADD_ROLE, ADD_DISPLAY_NAME, ADD_PROFILE_DATA } from './types'
+import { LOGIN, LOGOUT, ADD_ROLE, ADD_DISPLAY_NAME, ADD_PROFILE_DATA, CHANGE_PROFILE_URL } from './types'
 
 export var login = (user) => {
     return {
@@ -64,5 +64,31 @@ export var startAddProfileData = () => {
             dispatch(addProfileData(snapshot.val()))
         })
         return profileDataRef
+    }
+}
+
+export var uploadProfilePhoto = (photo) => {
+    return (dispatch, getState) => {
+        const { uid, role } = getState().user;
+        const fileName = 'profile' + photo.name.substring(photo.name.lastIndexOf('.'))
+        let profilePhotoRef = firebase.storage().ref().child(`${role}s/${uid}/${fileName}`)
+        var metadata = {
+            uid,
+            role
+        };
+
+        profilePhotoRef.put(photo,metadata).then(snapshot => {
+            console.log('Snapshot',snapshot)
+            profilePhotoRef.getDownloadURL().then(url => {
+                dispatch(changeProfilePhoto(url))
+            })
+        })
+    }
+}
+
+export var changeProfilePhoto = (url) => {
+    return {
+        type: CHANGE_PROFILE_URL,
+        url
     }
 }

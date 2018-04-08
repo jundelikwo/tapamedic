@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import Pikaday from 'pikaday'
-import { addUserData } from '../../actions'
+import { addUserData, uploadProfilePhoto } from '../../actions'
 import IsLoggedIn from '../IsLoggedIn'
 
 class Profile extends Component{
@@ -16,6 +16,9 @@ class Profile extends Component{
         this.onFormSubmit = this.onFormSubmit.bind(this)
         this.onFieldChange = this.onFieldChange.bind(this)
         this.pikadayCallBack = this.pikadayCallBack.bind(this)
+        this.selectPhoto = this.selectPhoto.bind(this)
+        this.uploadPhoto = this.uploadPhoto.bind(this)
+        this.cancelPhotoChange = this.cancelPhotoChange.bind(this)
     }
     componentWillMount(){
         const {
@@ -28,7 +31,8 @@ class Profile extends Component{
             occupation,
             genotype,
             lastName,
-            sex
+            sex,
+            photoURL
         } = this.props
 
         this.setState({
@@ -41,7 +45,10 @@ class Profile extends Component{
             occupation,
             genotype,
             lastName,
-            sex
+            sex,
+            photoURL,
+            updatePhoto: false,
+            photo: null
         })
     }
     onFieldChange(evt){
@@ -51,6 +58,31 @@ class Profile extends Component{
         data[name] = value;
         //data.dob = this.refs.dob.value
         this.setState(data)
+    }
+    selectPhoto(evt){
+        evt.preventDefault()
+        let photo = this.refs.photo.files[0]
+        console.log('File',photo)
+        if(photo) {
+            this.setState({ photoURL: window.URL.createObjectURL(photo), updatePhoto: true, photo })
+        }
+    }
+    uploadPhoto(evt){
+        evt.preventDefault()
+        console.log('Upload Photo',this.state.photo)
+        this.props.dispatch(uploadProfilePhoto(this.state.photo))
+        this.setState({
+            updatePhoto: false,
+        })
+    }
+    cancelPhotoChange(evt){
+        evt.preventDefault()
+        this.refs.photo.value = ''
+        this.setState({
+            photoURL: this.props.photoURL,
+            updatePhoto: false,
+            photo: null
+        })
     }
     pikadayCallBack(date) {
         let dob = moment(date).format('Do MMMM YYYY')
@@ -98,7 +130,7 @@ class Profile extends Component{
     }
 
     render(){
-        const { formReadOnly } = this.state
+        const { formReadOnly, updatePhoto } = this.state
         const { wallet } = this.props
         const profileData = formReadOnly ? this.props : this.state
         const {
@@ -111,6 +143,7 @@ class Profile extends Component{
             occupation,
             genotype,
             lastName,
+            photoURL,
             sex
         } = profileData
 
@@ -139,7 +172,24 @@ class Profile extends Component{
                                         <span>Cancel</span>
                                     }
                                 </a>
-                                <form className="form-horizontal" onSubmit={this.onFormSubmit}>
+                                <div style={{ clear: 'both' }}/>
+                                <form className="form-horizontal"  encType="multipart/form-data" onSubmit={this.onFormSubmit}>
+                                    <div className="form-group mb-n">
+                                        <div className="col-md-8 text-center">
+                                            <img src={photoURL} style={{ width: '200px', height: '200px' }} alt="" />
+                                            {formReadOnly ? 
+                                                '' :
+                                                <input className='center-block' onChange={this.selectPhoto} type='file' ref="photo" name="photo" accept="image/*" readOnly={formReadOnly} />
+                                            }
+                                            {!formReadOnly && updatePhoto ?
+                                                <div>
+                                                    <button onClick={this.uploadPhoto} style={{ marginRight: '10px' }} className="btn btn-success">Upload</button>
+                                                    <button onClick={this.cancelPhotoChange} className="btn btn-danger">Cancel</button>
+                                                </div>
+                                                : ''
+                                            }        
+                                        </div>
+                                    </div>
                                     <div className="form-group mb-n">
                                         <label className="col-md-2 control-label">First Name</label>
                                         <div className="col-md-8">
@@ -288,7 +338,8 @@ const mapStateToProps = state => {
         genotype,
         lastName,
         sex,
-        wallet
+        wallet,
+        photoURL: state.user.photoURL
     }
 }
 
