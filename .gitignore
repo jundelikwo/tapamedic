@@ -12,6 +12,9 @@
 # firebase functions dependencies
 /functions/node_modules
 
+# firebase keys
+/functions/service-account.json
+
 # configurations
 /src/config
 

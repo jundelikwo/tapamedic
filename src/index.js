@@ -6,7 +6,7 @@ import { applyMiddleware, createStore, compose } from 'redux'
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
 import reducers from './reducers'
-import { login, logout, addRole, startAddProfileData } from './actions'
+import { login, logout, addRole, startAddProfileData, changeProfilePhoto } from './actions'
 import { FirebaseConfig } from './config'
 import { b64DecodeUnicode } from './functions'
 import './index.css';

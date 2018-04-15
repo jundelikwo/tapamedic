@@ -1510,6 +1510,10 @@ section#tables  p {
   -webkit-appearance: none;
   resize: none;
 }
+form.readOnly .form-control1, form.readOnly .form-control_2.input-sm{
+    border: 0;
+    border-bottom: 1px solid #ccc;
+}
 .general .tab-content {
     padding: 1.5em 0.5em 0;
 }

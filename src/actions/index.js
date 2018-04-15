@@ -1,5 +1,13 @@
 import firebase from 'firebase'
-import { LOGIN, LOGOUT, ADD_ROLE, ADD_DISPLAY_NAME, ADD_PROFILE_DATA, CHANGE_PROFILE_URL } from './types'
+import { 
+    LOGIN, 
+    LOGOUT, 
+    ADD_ROLE, 
+    ADD_DISPLAY_NAME, 
+    ADD_PROFILE_DATA, 
+    CHANGE_PROFILE_URL, 
+    FILE_UPLOAD_PROGRESS
+} from './types'
 
 export var login = (user) => {
     return {
@@ -61,13 +69,24 @@ export var startAddProfileData = () => {
         
         profileDataRef.on('value',snapshot => {
             console.log(`${role}s/${uid}/profile`)
-            dispatch(addProfileData(snapshot.val()))
+            let data = snapshot.val()
+            if(typeof data === 'object'){
+                var user = firebase.auth().currentUser;
+                let photoURL = data.photo
+                
+                if(photoURL && user.photoURL !== photoURL){
+                    user.updateProfile({
+                        photoURL
+                    })
+                }
+            }
+            dispatch(addProfileData(data))
         })
         return profileDataRef
     }
 }
 
-export var uploadProfilePhoto = (photo) => {
+export var uploadProfilePhoto = (photo, uploadFileFieldName) => {
     return (dispatch, getState) => {
         const { uid, role } = getState().user;
         const fileName = 'profile' + photo.name.substring(photo.name.lastIndexOf('.'))
@@ -76,12 +95,26 @@ export var uploadProfilePhoto = (photo) => {
             uid,
             role
         };
+        let uploadTask = profilePhotoRef.put(photo,metadata)
 
-        profilePhotoRef.put(photo,metadata).then(snapshot => {
+        uploadTask.then(snapshot => {
             console.log('Snapshot',snapshot)
-            profilePhotoRef.getDownloadURL().then(url => {
-                dispatch(changeProfilePhoto(url))
-            })
+            dispatch(changeProfilePhoto(window.URL.createObjectURL(photo)))
+        })
+
+        uploadTask.on('state_changed', snapshot => {
+            // Observe state change events such as progress, pause, and resume
+            // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+            var progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100) + '%';
+            dispatch(changeUploadProgress(uploadFileFieldName, progress))
+            switch (snapshot.state) {
+              case firebase.storage.TaskState.PAUSED: // or 'paused'
+                console.log('Upload is paused');
+                break;
+              case firebase.storage.TaskState.RUNNING: // or 'running'
+                console.log('Upload is running');
+                break;
+            }
         })
     }
 }
@@ -90,5 +123,13 @@ export var changeProfilePhoto = (url) => {
     return {
         type: CHANGE_PROFILE_URL,
         url
+    }
+}
+
+export var changeUploadProgress = (key, value) => {
+    return {
+        type: FILE_UPLOAD_PROGRESS,
+        key,
+        value
     }
 }

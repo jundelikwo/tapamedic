@@ -70,7 +70,7 @@ class Profile extends Component{
     uploadPhoto(evt){
         evt.preventDefault()
         console.log('Upload Photo',this.state.photo)
-        this.props.dispatch(uploadProfilePhoto(this.state.photo))
+        this.props.dispatch(uploadProfilePhoto(this.state.photo, 'profilePhoto'))
         this.setState({
             updatePhoto: false,
         })
@@ -131,7 +131,7 @@ class Profile extends Component{
 
     render(){
         const { formReadOnly, updatePhoto } = this.state
-        const { wallet } = this.props
+        const { wallet, fileUploadProgress } = this.props
         const profileData = formReadOnly ? this.props : this.state
         const {
             address,
@@ -146,7 +146,7 @@ class Profile extends Component{
             photoURL,
             sex
         } = profileData
-
+        
         return (
             <div id="page-wrapper">
                 <div className="main-page">
@@ -173,7 +173,9 @@ class Profile extends Component{
                                     }
                                 </a>
                                 <div style={{ clear: 'both' }}/>
-                                <form className="form-horizontal"  encType="multipart/form-data" onSubmit={this.onFormSubmit}>
+                                <form className={
+                                    formReadOnly ? 'form-horizontal readOnly' : 'form-horizontal'
+                                }  encType="multipart/form-data" onSubmit={this.onFormSubmit}>
                                     <div className="form-group mb-n">
                                         <div className="col-md-8 text-center">
                                             <img src={photoURL} style={{ width: '200px', height: '200px' }} alt="" />
@@ -187,7 +189,14 @@ class Profile extends Component{
                                                     <button onClick={this.cancelPhotoChange} className="btn btn-danger">Cancel</button>
                                                 </div>
                                                 : ''
-                                            }        
+                                            }  
+                                            {!formReadOnly && !updatePhoto && fileUploadProgress !== null ?
+                                                <div className="progress progress-striped active progress-right" style={{ width: '90%', margin: 'auto', float: 'none', height: '18px', position: 'relative' }}>
+                                                    <div className="bar green" style={{ width:fileUploadProgress }}></div> 
+                                                    <span className="pull-right" style={{ float: 'none!important', position: 'absolute', left: '50%' }}>{ fileUploadProgress }</span>
+                                                </div> 
+                                            : ''
+                                            }
                                         </div>
                                     </div>
                                     <div className="form-group mb-n">
@@ -339,7 +348,8 @@ const mapStateToProps = state => {
         lastName,
         sex,
         wallet,
-        photoURL: state.user.photoURL
+        photoURL: state.user.photoURL,
+        fileUploadProgress: state.fileUpload.profilePhoto
     }
 }
 

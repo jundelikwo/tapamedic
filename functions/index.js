@@ -2,13 +2,20 @@ const functions = require('firebase-functions');
 
 // The Firebase Admin SDK to access the Firebase Realtime Database.
 const admin = require('firebase-admin');
-admin.initializeApp(functions.config().firebase);
+//admin.initializeApp(functions.config().firebase);
+
+var serviceAccount = require("./service-account.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://tapamedic-7a09f.firebaseio.com"
+});
 
 const paystackKey = functions.config().paystack.key
 var paystack = require('paystack')(paystackKey);
 var request = require('request');
 
-const gcs = require('@google-cloud/storage')();
+const gcs = require('@google-cloud/storage')({keyFilename: 'service-account.json'});
 const spawn = require('child-process-promise').spawn;
 const path = require('path');
 const os = require('os');
@@ -146,7 +153,7 @@ exports.setProfilePicture = functions.storage.object().onChange((event) => {
 
     if (metadata.isResized) {
         console.log('Exiting: Already been resized')
-        return
+        return null
     }
 
     // Exit if this is a move or deletion event.
@@ -162,33 +169,58 @@ exports.setProfilePicture = functions.storage.object().onChange((event) => {
         return null;
     }
 
+    const uid = filePath.substr(filePath.indexOf('/')+1,filePath.lastIndexOf('/profile')-filePath.indexOf('/')-1)
+    console.log('uid',uid)
+    const role = filePath.substr(0,filePath.indexOf('/'))
+    console.log('role',role)
+
     // Download file from bucket.
     const bucket = gcs.bucket(fileBucket);
     const tempFilePath = path.join(os.tmpdir(), fileName);
+    const JPGFileName = 'profile.JPG'
+    const JPGFilePath = path.join(os.tmpdir(), JPGFileName)
     const options = {
         contentType: contentType,
         isResized: true
     };
-    return bucket.file(filePath).download({
+    const file = bucket.file(filePath)
+    const thumbFilePath = path.join(path.dirname(filePath), JPGFileName);
+
+    return file.download({
         destination: tempFilePath,
     }).then(() => {
         console.log('Image downloaded locally to', tempFilePath);
         // Resize image using ImageMagick.
-        return spawn('convert', [tempFilePath, '-resize', '200x200>', tempFilePath]);
+        return spawn('convert', [tempFilePath, '-resize', '200x200>', JPGFilePath]);
     }).then(() => {
         console.log('Resized image created at', tempFilePath);
-        // We add a 'thumb_' prefix to thumbnails file name. That's where we'll upload the thumbnail.
-        //const thumbFileName = `thumb_${fileName}`;
-        const thumbFilePath = path.join(path.dirname(filePath), fileName);
-        // Uploading the thumbnail.
-        return bucket.upload(tempFilePath, {
+        console.log('thumbFilePath at', thumbFilePath);
+        return bucket.upload(JPGFilePath, {
             destination: thumbFilePath,
             metadata: { metadata: options }
         });
         // Once the thumbnail has been uploaded delete the local file to free up disk space.
     }).then((test) => {
-        console.log('Test',test)
-        console.log('metadata',metadata)
-        return fs.unlinkSync(tempFilePath)
+        if(fileName !== JPGFileName){
+            file.delete().then(() => {
+                console.log(`Successfully deleted photo`)
+                return;
+            }).catch(err => {
+                console.log(`Failed to remove photo, error: ${err}`)
+                return;
+            });
+        }
+        fs.unlinkSync(tempFilePath)
+
+        return bucket.file(thumbFilePath).getSignedUrl({
+            action: 'read',
+            expires: '03-09-2491'
+          }).then(signedUrls => {
+              // signedUrls[0] contains the file's public URL
+              console.log('signedUrls[0]',signedUrls[0])
+              console.log('Test',test)
+              console.log('metadata',metadata)
+              return admin.database().ref(`${role}/${uid}/profile/`).update({photo: signedUrls[0]})
+          });
     });
 });

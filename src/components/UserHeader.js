@@ -189,7 +189,7 @@ class Header extends Component{
 						<li className="dropdown profile_details_drop">
 							<a className="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 								<div className="profile_img">	
-									<span className="prfil-img"><img src={this.props.photoURL} alt=""/> </span> 
+									<span className="prfil-img"><img style={{ height: '50px', width: '50px' }} src={this.props.photoURL} alt=""/> </span> 
 									<div className="user-name">
 										<p>Hi {this.props.firstName}</p>
 										<span>{this.props.lastName}</span>
@@ -237,7 +237,7 @@ const mapStateToProps = (state) => {
 	return {
 		firstName,
 		lastName,
-		photoURL: state.user.smallPhotoURL
+		photoURL: state.user.photoURL
 	}
 }
 
