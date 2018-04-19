@@ -13,7 +13,7 @@ class ErrorBoundary extends Component {
 
     render() {
         if (this.state.hasError) {
-            //window.location = '/dashboard'
+            window.location = '/dashboard'
             return <h1>Oops!!! Something went wrong</h1>;
         } else {
             return this.props.children;

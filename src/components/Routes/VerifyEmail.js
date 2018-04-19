@@ -30,6 +30,10 @@ class VerifyEmail extends Component{
                     <p>We have sent you a link to your email to verify it. Kindly go to your email and click it</p>
                     <p>If you got no email, </p>
                     <button onClick={this.sendEmailVerification} type="submit" className="btn btn-primary">Click me to resend Verification Link</button>
+                    <p>If you have verified your email, </p>
+                    <button onClick={()=>{
+                        window.location = window.location = '/dashboard'
+                    }} type="submit" className="btn btn-primary">Click me to continue</button>
                 </div>
             )
         }
