@@ -1,10 +1,10 @@
-import { ADD_PROFILE_DATA } from '../actions/types'
+import { ADD_PROFILE_DATA, LOGOUT } from '../actions/types'
 
 const initialState = {
     address: '',
     blood: '',
     diseases: '',
-    dob: 0,
+    dob: '',
     drugs: '',
     firstName: '',
     occupation: '',
@@ -19,6 +19,8 @@ let profileReducer = (state = initialState, action) => {
             if(action.data){
                 return { ...action.data.data }
             }
+            return { ...initialState }
+        case LOGOUT :
             return { ...initialState }
         default :
             return state

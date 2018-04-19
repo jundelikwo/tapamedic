@@ -3279,7 +3279,7 @@ button.btn.btn-default {
 }
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open > .dropdown-toggle.btn-primary {
     color: #fff;
-    background-color: #2a3342;
+    /* background-color: #2a3342; */
     border-color: rgba(0, 0, 0, 0.05);
 }
 .w3layouts-map {

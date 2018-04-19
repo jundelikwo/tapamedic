@@ -2,7 +2,8 @@ import firebase from 'firebase'
 import { 
     LOGIN, 
     LOGOUT, 
-    ADD_ROLE, 
+    ADD_ROLE,
+    TOGGLE_ROLE,
     ADD_DISPLAY_NAME, 
     ADD_PROFILE_DATA, 
     CHANGE_PROFILE_URL, 
@@ -26,6 +27,12 @@ export var addRole = (role) => {
     return {
         type: ADD_ROLE,
         role
+    }
+}
+
+export var toggleRole = () => {
+    return {
+        type: TOGGLE_ROLE
     }
 }
 

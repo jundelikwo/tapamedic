@@ -32,8 +32,11 @@ class Profile extends Component{
             genotype,
             lastName,
             sex,
-            photoURL
+            photoURL,
+            match
         } = this.props
+
+        let formReadOnly = match.isExact
 
         this.setState({
             address,
@@ -48,8 +51,25 @@ class Profile extends Component{
             sex,
             photoURL,
             updatePhoto: false,
-            photo: null
+            photo: null,
+            formReadOnly
         })
+    }
+    componentDidMount(){
+        let { datePicker, formReadOnly } = this.state
+        if(!formReadOnly){
+            datePicker = new Pikaday(
+            {
+                field: document.getElementById('datepicker1'),
+                firstDay: 1,
+                format: 'Do MMMM YYYY',
+                yearRange: [1920,2018],
+                minDate: new Date(1900,12,1),
+                maxDate: new Date(),
+                onSelect: this.pikadayCallBack
+            });
+        }
+        this.setState({ datePicker })
     }
     onFieldChange(evt){
         evt.preventDefault()
@@ -109,7 +129,6 @@ class Profile extends Component{
     toggleEditForm(e){
         let { formReadOnly, datePicker } = this.state
         if(formReadOnly){
-
             datePicker = new Pikaday(
             {
                 field: document.getElementById('datepicker1'),
@@ -121,7 +140,7 @@ class Profile extends Component{
                 onSelect: this.pikadayCallBack
             });
         }else{
-            if(datePicker.destroy){datePicker.destroy()}
+            if(datePicker && datePicker.destroy){datePicker.destroy()}
         }
         this.setState({ 
             formReadOnly: !formReadOnly,
@@ -202,13 +221,13 @@ class Profile extends Component{
                                     <div className="form-group mb-n">
                                         <label className="col-md-2 control-label">First Name</label>
                                         <div className="col-md-8">
-                                            <input onChange={this.onFieldChange} ref="firstName" name="firstName" type="text" className="form-control1" value={firstName} readOnly={formReadOnly} />
+                                            <input onChange={this.onFieldChange} ref="firstName" name="firstName" placeholder="First Name" type="text" className="form-control1" value={firstName} readOnly={formReadOnly} />
                                         </div>
                                     </div>
                                     <div className="form-group mb-n">
                                         <label className="col-md-2 control-label">Last Name</label>
                                         <div className="col-md-8">
-                                            <input onChange={this.onFieldChange} ref="lastName" name="lastName" type="text" className="form-control1" value={lastName} readOnly={formReadOnly} />
+                                            <input onChange={this.onFieldChange} ref="lastName" name="lastName" placeholder="Last Name" type="text" className="form-control1" value={lastName} readOnly={formReadOnly} />
                                         </div>
                                     </div>
                                     <div className="form-group mb-n">
@@ -224,19 +243,19 @@ class Profile extends Component{
                                     <div className="form-group mb-n">
                                         <label className="col-md-2 control-label">Date of Birth</label>
                                         <div className="col-md-8">
-                                            <input onChange={this.onFieldChange} type="text" id="datepicker1" ref="dob" name="dob" className="form-control1" value={dob} readOnly={formReadOnly} />
+                                            <input onChange={this.onFieldChange} type="text" placeholder="Your Date of Birth" id="datepicker1" ref="dob" name="dob" className="form-control1" value={dob} readOnly={formReadOnly} />
                                         </div>
                                     </div>
                                     <div className="form-group mb-n">
                                         <label className="col-md-2 control-label">Diseases You Suffer From</label>
                                         <div className="col-md-8">
-                                            <textarea onChange={this.onFieldChange} ref="diseases" name="diseases" type="text" className="form-control1" value={diseases} readOnly={formReadOnly}></textarea>
+                                            <textarea onChange={this.onFieldChange} ref="diseases" placeholder="Diseases You Suffer From" name="diseases" type="text" className="form-control1" value={diseases} readOnly={formReadOnly}></textarea>
                                         </div>
                                     </div>
                                     <div className="form-group mb-n">
                                         <label className="col-md-2 control-label">Occupation</label>
                                         <div className="col-md-8">
-                                            <input onChange={this.onFieldChange} ref='occupation' name='occupation' type="text" className="form-control1" value={occupation} readOnly={formReadOnly} />
+                                            <input onChange={this.onFieldChange} ref='occupation' placeholder="Your Occupation" name='occupation' type="text" className="form-control1" value={occupation} readOnly={formReadOnly} />
                                         </div>
                                     </div>
                                     <div className="form-group mb-n">
@@ -265,13 +284,13 @@ class Profile extends Component{
                                     <div className="form-group mb-n">
                                         <label className="col-md-2 control-label">Address</label>
                                         <div className="col-md-8">
-                                            <input onChange={this.onFieldChange} ref="address" name="address" type="text" className="form-control1" value={address} readOnly={formReadOnly} />
+                                            <input onChange={this.onFieldChange} ref="address" name="address" placeholder="Your Address" type="text" className="form-control1" value={address} readOnly={formReadOnly} />
                                         </div>
                                     </div>
                                     <div className="form-group mb-n">
                                         <label className="col-md-2 control-label">Drugs You Are Allergic To</label>
                                         <div className="col-md-8">
-                                            <textarea onChange={this.onFieldChange} ref="drugs" name="drugs" type="text" className="form-control1" value={drugs} readOnly={formReadOnly}></textarea>
+                                            <textarea onChange={this.onFieldChange} ref="drugs" name="drugs" placeholder="Drugs You Are Allergic To" type="text" className="form-control1" value={drugs} readOnly={formReadOnly}></textarea>
                                         </div>
                                     </div>
                                     {formReadOnly ? null :
@@ -317,22 +336,22 @@ class Profile extends Component{
 }
 
 const mapStateToProps = state => {
-    const err = 'Not Yet Set'
+    //const err = 'Not Yet Set'
 
-    let address = state.profile.address || err
-    let blood = state.profile.blood || err
-    let diseases = state.profile.diseases || err
-    let dob = state.profile.dob || err
-    let drugs = state.profile.drugs || err
-    let firstName = state.profile.firstName || err
-    let occupation = state.profile.occupation || err
-    let genotype = state.profile.genotype || err
-    let lastName = state.profile.lastName || err
-    let sex = state.profile.sex || err
+    let address = state.profile.address
+    let blood = state.profile.blood
+    let diseases = state.profile.diseases
+    let dob = state.profile.dob
+    let drugs = state.profile.drugs
+    let firstName = state.profile.firstName
+    let occupation = state.profile.occupation
+    let genotype = state.profile.genotype
+    let lastName = state.profile.lastName
+    let sex = state.profile.sex
     
     let wallet = state.wallet
 
-    if(dob !== err){
+    if(dob !== ''){
         dob = moment.unix(dob).format('Do MMMM YYYY')
     }
 

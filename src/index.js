@@ -38,6 +38,7 @@ firebase.auth().onAuthStateChanged(user => {
   }
   // On user login add new listener.
   if (user) {
+    firebase.database().goOnline();
     console.log('User',user)
     store.dispatch(login(user))
 
@@ -75,7 +76,7 @@ firebase.auth().onAuthStateChanged(user => {
     metadataRef.on('value', callback);
   } else {
     store.dispatch(logout())
-    firebase.off()
+    firebase.database().goOffline();
   }
 });
 

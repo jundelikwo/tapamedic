@@ -1,10 +1,20 @@
-import { LOGIN, LOGOUT, ADD_ROLE, ADD_PROFILE_DATA, ADD_DISPLAY_NAME, CHANGE_PROFILE_URL } from '../actions/types'
+import { 
+    LOGIN, 
+    LOGOUT, 
+    ADD_ROLE, 
+    ADD_PROFILE_DATA, 
+    ADD_DISPLAY_NAME, 
+    CHANGE_PROFILE_URL,
+    TOGGLE_ROLE
+} from '../actions/types'
 
 const initialState = {
     uid: null,
     phoneNumber: null,
+    email: null,
+    emailVerified: false,
     photoURL: '/images/default_avatar.png',
-    role: "",
+    role: "patient",
     name: ''
 }
 
@@ -16,16 +26,28 @@ let userReducer = (state = initialState , action ) => {
             let { role } = initialState
             if(action.user.phoneNumber){
                 role = 'patient'
+            } else if(action.user.email){
+                role = 'doctor'
             }
             return { 
                 uid: action.user.uid, 
                 phoneNumber: action.user.phoneNumber, 
+                email: action.user.email,
+                emailVerified: action.user.emailVerified,
                 name,
                 photoURL,
                 role
             }
         case ADD_ROLE:
             return { ...state, role: action.role }
+        case TOGGLE_ROLE:
+            role = state.role
+            if(role === 'patient'){
+                role = 'doctor'
+            }else{
+                role = 'patient'
+            }
+            return { ...state, role }
         case ADD_DISPLAY_NAME:
             return { ...state, name: action.name }
         case ADD_PROFILE_DATA :

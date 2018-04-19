@@ -1,4 +1,4 @@
-import { ADD_PROFILE_DATA } from '../actions/types'
+import { ADD_PROFILE_DATA, LOGOUT } from '../actions/types'
 
 const initialState = '0.00'
 
@@ -9,6 +9,8 @@ let walletReducer = (state = initialState, action) => {
                 return action.data.wallet || initialState
             }
             return initialState
+        case LOGOUT :
+            return { ...initialState }
         default:
             return state
     }
