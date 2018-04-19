@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import PrivateRoute from '../PrivateRoute'
-import IsLoggedIn from '../IsLoggedIn'
-import Header from '../UserHeader'
-import Main from '../UserMain'
-import Nav from '../UserNav'
-import Footer from '../UserFooter'
-import Profile from './Profile'
-import Payment from './Payment'
-import Questions from './Questions'
-import TalkToADoc from './TalkToADoc'
+import PrivateRoute from '../../PrivateRoute'
+import IsLoggedIn from '../../IsLoggedIn'
+import Header from '../../UserHeader'
+import Main from '../../UserMain'
+import Nav from '../../UserNav'
+import Footer from '../../UserFooter'
+import Profile from '../Profile/'
+import Payment from '../Payment/'
+import Questions from '../Questions/'
+import TalkToADoc from '../TalkToADoc/'
 
 class Dashboard extends Component{
     render(){

@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import Pikaday from 'pikaday'
-import { addUserData, uploadProfilePhoto } from '../../actions'
-import IsLoggedIn from '../IsLoggedIn'
+import { addUserData, uploadProfilePhoto } from '../../../actions'
+import IsLoggedIn from '../../IsLoggedIn'
 
 class Profile extends Component{
     state = {

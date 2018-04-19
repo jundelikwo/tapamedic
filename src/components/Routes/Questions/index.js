@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import IsLoggedIn from '../IsLoggedIn'
+import IsLoggedIn from '../../IsLoggedIn'
 
 class Questions extends Component{
     render(){

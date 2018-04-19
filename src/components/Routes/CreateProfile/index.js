@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import moment from 'moment'
 import Pikaday from 'pikaday'
-import { addUserData } from '../../actions'
-import IsLoggedIn from '../IsLoggedIn'
+import { addUserData } from '../../../actions'
+import IsLoggedIn from '../../IsLoggedIn'
 
 class CreateProfile extends Component{
     state = {

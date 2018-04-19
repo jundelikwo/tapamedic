@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import PaystackButton from 'react-paystack'
 import firebase from 'firebase'
 import { connect } from 'react-redux'
-import { PaystackPublicKey } from '../../config'
-import IsLoggedIn from '../IsLoggedIn'
+import { PaystackPublicKey } from '../../../config'
+import IsLoggedIn from '../../IsLoggedIn'
 
 class Payment extends Component {
 
