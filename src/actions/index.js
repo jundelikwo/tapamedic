@@ -7,9 +7,11 @@ import {
     ADD_DISPLAY_NAME, 
     ADD_PROFILE_DATA,
     ADD_DOCTOR_PROFILE_DATA,
+    ADD_SUPPORTED_LANGUAGES,
     CHANGE_PROFILE_URL, 
     FILE_UPLOAD_PROGRESS
 } from './types'
+import { lang } from 'moment';
 
 export var login = (user) => {
     return {
@@ -150,5 +152,23 @@ export var changeUploadProgress = (key, value) => {
         type: FILE_UPLOAD_PROGRESS,
         key,
         value
+    }
+}
+
+export var startAddSupportedLanguages = () => {
+    return (dispatch) => {
+        let langRef = firebase.database().ref('languages').orderByValue().equalTo(true)
+        langRef.once('value', snapshot => {
+            let langs = Object.keys(snapshot.val())
+            console.log('langs',langs)
+            dispatch(addSupportedLanguages(langs))
+        })
+    }
+}
+
+export var addSupportedLanguages = (lang) => {
+    return {
+        type: ADD_SUPPORTED_LANGUAGES,
+        lang
     }
 }

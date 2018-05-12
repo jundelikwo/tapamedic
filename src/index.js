@@ -6,7 +6,7 @@ import { applyMiddleware, createStore, compose } from 'redux'
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
 import reducers from './reducers'
-import { login, logout, addRole, startAddProfileData } from './actions'
+import { login, logout, addRole, startAddProfileData, startAddSupportedLanguages } from './actions'
 import { FirebaseConfig } from './config'
 import { b64DecodeUnicode } from './functions'
 import './index.css';
@@ -28,6 +28,7 @@ let store = createStore(reducers, {}, compose(
   window.devToolsExtension ? window.devToolsExtension() : f => f
 ))
 
+store.dispatch(startAddSupportedLanguages())
 
 let callback = null;
 let metadataRef = null;
