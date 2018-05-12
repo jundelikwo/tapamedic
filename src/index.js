@@ -49,8 +49,13 @@ firebase.auth().onAuthStateChanged(user => {
       
       if(payload1.role){
         store.dispatch(addRole(payload1.role))
-        profileDataRef = store.dispatch(startAddProfileData())
-        console.log('profileDataRef',profileDataRef)
+        if(user.phoneNumber){
+          profileDataRef = store.dispatch(startAddProfileData())
+          console.log('profileDataRef',profileDataRef)
+        }else if(user.email && user.emailVerified){
+          profileDataRef = store.dispatch(startAddProfileData())
+          console.log('profileDataRef',profileDataRef)
+        }
       }
     });
     

@@ -5,7 +5,8 @@ import {
     ADD_ROLE,
     TOGGLE_ROLE,
     ADD_DISPLAY_NAME, 
-    ADD_PROFILE_DATA, 
+    ADD_PROFILE_DATA,
+    ADD_DOCTOR_PROFILE_DATA,
     CHANGE_PROFILE_URL, 
     FILE_UPLOAD_PROGRESS
 } from './types'
@@ -69,15 +70,22 @@ export var addProfileData = (data) => {
     }
 }
 
+export var addDoctorProfileData = (data) => {
+    return {
+        type: ADD_DOCTOR_PROFILE_DATA,
+        data
+    }
+}
+
 export var startAddProfileData = () => {
     return (dispatch, getState) => {
-        const { uid, role } = getState().user;
+        const { uid, role, phoneNumber } = getState().user;
         let profileDataRef = firebase.database().ref(`${role}s/${uid}/profile`)
         
         profileDataRef.on('value',snapshot => {
             console.log(`${role}s/${uid}/profile`)
             let data = snapshot.val()
-            if(typeof data === 'object'){
+            if(data instanceof Object){
                 var user = firebase.auth().currentUser;
                 let photoURL = data.photo
                 
@@ -87,16 +95,20 @@ export var startAddProfileData = () => {
                     })
                 }
             }
-            dispatch(addProfileData(data))
+            if(phoneNumber){
+                dispatch(addProfileData(data))
+            }else{
+                dispatch(addDoctorProfileData(data))
+            }
         })
         return profileDataRef
     }
 }
 
-export var uploadProfilePhoto = (photo, uploadFileFieldName) => {
+export var uploadProfilePhoto = (photo, uploadFileFieldName, photoName) => {
     return (dispatch, getState) => {
         const { uid, role } = getState().user;
-        const fileName = 'profile' + photo.name.substring(photo.name.lastIndexOf('.'))
+        const fileName = photoName + photo.name.substring(photo.name.lastIndexOf('.'))
         let profilePhotoRef = firebase.storage().ref().child(`${role}s/${uid}/${fileName}`)
         var metadata = {
             uid,

@@ -28,8 +28,8 @@ const fs = require('fs');
 //  response.send("Hello from Firebase!");
 // });
 
-exports.setUserRole = functions.auth.user().onCreate((event) =>{
-    var user = event.data
+exports.setUserRole = functions.auth.user().onCreate(user => {
+    //var user = event.data
     var time = new Date().getTime()
     
     var customClaims;
@@ -39,29 +39,6 @@ exports.setUserRole = functions.auth.user().onCreate((event) =>{
             role: 'patient'
         };
         databaseNode = "patients/"
-
-        // const paystackOptions = {
-        //     url: "https://api.paystack.co/customer",
-        //     headers: {
-        //       'Authorization': 'Bearer ' + paystackKey,
-        //       'Content-Type': 'application/json'
-        //     },
-        //     form: {
-        //         "email": user.phoneNumber + '@payments.tapamedic.com',
-        //         "phone": user.phoneNumber,
-        //         metadata: {
-        //             "role": "Patient"
-        //         }
-        //     }
-        // }
-        // request.post(paystackOptions,(error, response, body) => {
-        //     console.log('Error',error)
-        //     console.log('Body',body)
-        //     if (!error && response.statusCode === 200) {
-        //       var id = JSON.parse(body).data.id;
-        //       admin.database().ref(databaseNode + user.uid + '/paystack').set({ id })
-        //     }
-        // })
     }else if(user.email){
         customClaims = {
             role: 'doctor'
@@ -71,7 +48,11 @@ exports.setUserRole = functions.auth.user().onCreate((event) =>{
     // Set custom user claims on this newly created user.
     return admin.auth().setCustomUserClaims(user.uid, customClaims)
     .then(() => {
-        admin.database().ref(databaseNode + user.uid).set({memberSince: time})
+        if(databaseNode === "doctors/"){
+            admin.database().ref(databaseNode + user.uid).update({ approved: false, memberSince: time })
+        }else{
+            admin.database().ref(databaseNode + user.uid).set({memberSince: time})
+        }
         // Update real-time database to notify client to force refresh.
         const metadataRef = admin.database().ref("metadata/" + user.uid);
         // Set the refresh time to the current UTC timestamp.
@@ -83,8 +64,9 @@ exports.setUserRole = functions.auth.user().onCreate((event) =>{
     });
 })
 
-exports.verifyPaystack = functions.database.ref('/patients/{uid}/payment').onWrite(event => {
-    const val = event.data.val();
+exports.verifyPaystack = functions.database.ref('/patients/{uid}/payment').onWrite((change, context) => {
+    const val = change.after.val();
+    console.log('verifyPaystack change',change,'context: ',context)
     // const uid = event.params.uid
     // const phoneNumber = event.auth.variable['phone_number']
     // console.log('event',event)
@@ -100,14 +82,14 @@ exports.verifyPaystack = functions.database.ref('/patients/{uid}/payment').onWri
         if( !error && body.status ){
             const { amount, reference, customer } = body.data
             id = customer.email.substring(0,customer.email.lastIndexOf('@'))
-            if(id !== event.auth.variable['phone_number']){
+            if(id !== context.auth.token.phone_number){
                 return;
             }
             paystackId = customer.id
 
-            return admin.database().ref(`/patients/${event.params.uid}/paystack/paymentHistory/${reference}`).once('value').then((snapshot) => {
+            return admin.database().ref(`/patients/${context.params.uid}/paystack/paymentHistory/${reference}`).once('value').then((snapshot) => {
                 if(!snapshot.val()){
-                    return admin.database().ref(`/patients/${event.params.uid}/profile/wallet`).once('value').then((snapshot) => {
+                    return admin.database().ref(`/patients/${context.params.uid}/profile/wallet`).once('value').then((snapshot) => {
                         wallet = snapshot.val()
                         data = {
                             'payment': null,
@@ -115,7 +97,7 @@ exports.verifyPaystack = functions.database.ref('/patients/{uid}/payment').onWri
                             'profile/wallet': wallet + (amount / 100)
                         }
                         data['paystack/paymentHistory/' + reference] = true
-                        return admin.database().ref(`/patients/${event.params.uid}`).update(data)
+                        return admin.database().ref(`/patients/${context.params.uid}`).update(data)
                     })
                 }else{
                     return;
@@ -125,17 +107,15 @@ exports.verifyPaystack = functions.database.ref('/patients/{uid}/payment').onWri
     })
 })
 
-exports.setProfilePicture = functions.storage.object().onChange((event) => {
-    const object = event.data; // The Storage object.
+exports.resizePicture = functions.storage.object().onFinalize((object) => {
     
     const fileBucket = object.bucket; // The Storage bucket that contains the file.
     const filePath = object.name; // File path in the bucket.
     const contentType = object.contentType; // File content type.
-    const resourceState = object.resourceState; // The resourceState is 'exists' or 'not_exists' (for file/folder deletions).
-    const metageneration = object.metageneration; // Number of times metadata has been generated. New objects have a value of 1
-    const metadata = event.data.metadata
+    // const resourceState = object.resourceState; // The resourceState is 'exists' or 'not_exists' (for file/folder deletions).
+    // const metageneration = object.metageneration; // Number of times metadata has been generated. New objects have a value of 1
+    const metadata = object.metadata
     
-    console.log('setProfilePicture',event)
     // Exit if this is triggered on a file that is not an image.
     if (!contentType.startsWith('image/')) {
         console.log('This is not an image.');
@@ -156,18 +136,18 @@ exports.setProfilePicture = functions.storage.object().onChange((event) => {
         return null
     }
 
-    // Exit if this is a move or deletion event.
-    if (resourceState === 'not_exists') {
-        console.log('This is a deletion event.');
-        return null;
-    }
+    // // Exit if this is a move or deletion event.
+    // if (resourceState === 'not_exists') {
+    //     console.log('This is a deletion event.');
+    //     return null;
+    // }
     
-    // Exit if file exists but is not new and is only being triggered
-    // because of a metadata change.
-    if (resourceState === 'exists' && metageneration > 1) {
-        console.log('This is a metadata change event.');
-        return null;
-    }
+    // // Exit if file exists but is not new and is only being triggered
+    // // because of a metadata change.
+    // if (resourceState === 'exists' && metageneration > 1) {
+    //     console.log('This is a metadata change event.');
+    //     return null;
+    // }
 
     const uid = filePath.substr(filePath.indexOf('/')+1,filePath.lastIndexOf('/profile')-filePath.indexOf('/')-1)
     console.log('uid',uid)

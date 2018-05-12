@@ -10,7 +10,7 @@ let walletReducer = (state = initialState, action) => {
             }
             return initialState
         case LOGOUT :
-            return { ...initialState }
+            return initialState
         default:
             return state
     }
