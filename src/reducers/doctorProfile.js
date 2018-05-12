@@ -19,7 +19,8 @@ let doctorProfileReducer = (state = initialState, action) => {
         case ADD_DOCTOR_PROFILE_DATA :
             if(action.data){
                 let mdcn_photo = action.data.mdcn_photo || initialState.mdcn_photo
-                return { ...action.data.data, mdcn_photo }
+                let location = action.data.location
+                return { ...action.data.data, mdcn_photo, location }
             }
             return { ...initialState }
         case LOGOUT :
