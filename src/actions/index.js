@@ -44,10 +44,10 @@ export var addDisplayName = (name) => {
     }
 }
 
-export var addUserData = (data) => {
+export var addUserData = (data, path='/data') => {
     return (dispatch, getState) => {
         const { uid, role } = getState().user;
-        firebase.database().ref(`${role}s/${uid}/profile/data`).update(data)
+        firebase.database().ref(`${role}s/${uid}/profile${path}`).update(data)
             .then(() => {
                 console.log('Done')
                 var user = firebase.auth().currentUser;

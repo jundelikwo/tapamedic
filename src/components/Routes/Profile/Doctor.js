@@ -147,11 +147,13 @@ class Profile extends Component{
             mdcn_folio: this.refs.mdcn_folio.value,
             mdcn_membership: this.refs.mdcn_membership.value,
             specialty: this.refs.specialty.value,
-            university: this.refs.university.value/*,
-            location: this.refs.location.value*/
+            university: this.refs.university.value
         }
         console.log('data',data)
-        this.props.dispatch(addUserData(data));
+        this.props.dispatch(addUserData({
+            data,
+            location: this.refs.location.value
+        }, ''));
         this.setState({ formReadOnly: true })
     }
     toggleEditForm(e){
