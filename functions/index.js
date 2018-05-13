@@ -87,7 +87,7 @@ exports.verifyPaystack = functions.database.ref('/patients/{uid}/payment').onWri
             }
             paystackId = customer.id
 
-            return admin.database().ref(`/patients/${context.params.uid}/paystack/paymentHistory/${reference}`).once('value').then((snapshot) => {
+            return admin.database().ref(`/patients/${context.params.uid}/paystack/paymentHistory`).orderByValue().equalTo(reference).once('value').then((snapshot) => {
                 if(!snapshot.val()){
                     return admin.database().ref(`/patients/${context.params.uid}/profile/wallet`).once('value').then((snapshot) => {
                         wallet = snapshot.val()
@@ -96,7 +96,7 @@ exports.verifyPaystack = functions.database.ref('/patients/{uid}/payment').onWri
                             'paystack/id': paystackId,
                             'profile/wallet': wallet + (amount / 100)
                         }
-                        data['paystack/paymentHistory/' + reference] = true
+                        admin.database().ref(`/patients/${context.params.uid}/paystack/paymentHistory/`).push(reference)
                         return admin.database().ref(`/patients/${context.params.uid}`).update(data)
                     })
                 }else{
