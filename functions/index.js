@@ -119,15 +119,30 @@ exports.resizePicture = functions.storage.object().onFinalize((object) => {
         console.log('This is not an image.');
         return null;
     }
-    
-    // Get the file name.
-    const fileName = path.basename(filePath);
 
     if (metadata.isResized) {
         console.log('Exiting: Already been resized')
         return null
     }
+    
+    if(filePath.indexOf('/profile.') !== -1){
+        console.log("Yeah I'm a profile image")
+        return profileFunction(object)
+    }
+    return null
+});
 
+function profileFunction(object){
+
+    const fileBucket = object.bucket; // The Storage bucket that contains the file.
+    const filePath = object.name; // File path in the bucket.
+    const contentType = object.contentType; // File content type.
+    const metadata = object.metadata
+
+    // Get the file name.
+    const fileName = path.basename(filePath);
+    
+    console.log('filePath',filePath)
     const uid = filePath.substr(filePath.indexOf('/')+1,filePath.lastIndexOf('/profile')-filePath.indexOf('/')-1)
     console.log('uid',uid)
     const role = filePath.substr(0,filePath.indexOf('/'))
@@ -174,12 +189,12 @@ exports.resizePicture = functions.storage.object().onFinalize((object) => {
         return bucket.file(thumbFilePath).getSignedUrl({
             action: 'read',
             expires: '03-09-2491'
-          }).then(signedUrls => {
-              // signedUrls[0] contains the file's public URL
-              console.log('signedUrls[0]',signedUrls[0])
-              console.log('Test',test)
-              console.log('metadata',metadata)
-              return admin.database().ref(`${role}/${uid}/profile/`).update({photo: signedUrls[0]})
-          });
+            }).then(signedUrls => {
+                // signedUrls[0] contains the file's public URL
+                console.log('signedUrls[0]',signedUrls[0])
+                console.log('Test',test)
+                console.log('metadata',metadata)
+                return admin.database().ref(`${role}/${uid}/profile/`).update({photo: signedUrls[0]})
+            });
     });
-});
+}
