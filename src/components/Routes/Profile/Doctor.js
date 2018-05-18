@@ -19,6 +19,8 @@ class Profile extends Component{
         this.selectPhoto = this.selectPhoto.bind(this)
         this.uploadPhoto = this.uploadPhoto.bind(this)
         this.cancelPhotoChange = this.cancelPhotoChange.bind(this)
+        this.displayLanguages = this.displayLanguages.bind(this)
+        this.selectLanguage = this.selectLanguage.bind(this)
     }
     componentWillMount(){
         const {
@@ -137,6 +139,31 @@ class Profile extends Component{
         let dob = moment(date).format('YYYY')
         this.setState({ dob })
     }
+    selectLanguage(langRef){
+        return () => {
+            console.log('langRef',langRef)
+            this.setState({
+                [langRef] : !this.state[langRef]
+            })
+        }
+    }
+    displayLanguages(){
+        const { languages } = this.props
+        const { formReadOnly } = this.state
+        console.log('formReadOnly',formReadOnly)
+        let langFormFields = Object.keys(languages)
+        
+        return langFormFields.map(lang => {
+            const isChecked = formReadOnly ? languages[lang]: this.state[lang]
+            return (
+                <div key={lang} className="checkbox-inline">
+                    <label>
+                        <input type="checkbox" ref={lang} checked={isChecked} disabled={formReadOnly} onChange={this.selectLanguage(lang)} /> {lang}
+                    </label>
+                </div>
+            )
+        })
+    }
     onFormSubmit(e){
         e.preventDefault()
         if(this.state.datePicker.destroy){this.state.datePicker.destroy()}
@@ -149,11 +176,20 @@ class Profile extends Component{
             specialty: this.refs.specialty.value,
             university: this.refs.university.value
         }
-        console.log('data',data)
-        this.props.dispatch(addUserData({
+        const { languages } = this.props
+        let langFields = Object.keys(languages)
+        let spokenLang = {}
+
+        langFields.forEach(lang => {
+            spokenLang[lang] = this.refs[lang].checked
+        })
+
+        const formData = {
             data,
-            location: this.refs.location.value
-        }, ''));
+            location: this.refs.location.value,
+            languages: spokenLang
+        }
+        this.props.dispatch(addUserData(formData, ''));
         this.setState({ formReadOnly: true })
     }
     toggleEditForm(e){
@@ -262,6 +298,12 @@ class Profile extends Component{
                                         </div>
                                     </div>
                                     <div className="form-group mb-n">
+                                        <label className="col-md-2 control-label">Languages</label>
+                                        <div className="col-md-8">
+                                            {this.displayLanguages()}
+                                        </div>
+                                    </div>
+                                    <div className="form-group mb-n">
                                         <label className="col-md-2 control-label">MDCN Folio Number</label>
                                         <div className="col-md-8">
                                             <input onChange={this.onFieldChange} ref='mdcn_folio' placeholder="Your MDCN Folio Number" name='mdcn_folio' type="text" className="form-control1" value={mdcn_folio} readOnly={formReadOnly} />
@@ -366,9 +408,11 @@ class Profile extends Component{
 const mapStateToProps = state => {
     //const err = 'Not Yet Set'
 
+    let supportedLanguages = state.languages
+
     let graduation = state.doctorProfile.graduation
     let firstName = state.doctorProfile.firstName
-    let languages = state.doctorProfile.languages
+    let doctorLanguages = state.doctorProfile.languages || {}
     let mdcn_photo = state.doctorProfile.mdcn_photo
     let lastName = state.doctorProfile.lastName
     let location = state.doctorProfile.location
@@ -380,6 +424,11 @@ const mapStateToProps = state => {
     
     let wallet = state.wallet
 
+    let languages = {};
+    supportedLanguages.map(lang => {
+        languages[lang] = doctorLanguages[lang]
+    })
+    console.log('languages',languages)
 
     return {
         graduation,

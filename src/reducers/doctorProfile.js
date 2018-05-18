@@ -20,7 +20,7 @@ let doctorProfileReducer = (state = initialState, action) => {
             if(action.data){
                 let mdcn_photo = action.data.mdcn_photo || initialState.mdcn_photo
                 let location = action.data.location
-                return { ...action.data.data, mdcn_photo, location }
+                return { ...action.data.data, mdcn_photo, location, languages: action.data.languages }
             }
             return { ...initialState }
         case LOGOUT :
