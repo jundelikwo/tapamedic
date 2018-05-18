@@ -112,8 +112,6 @@ exports.resizePicture = functions.storage.object().onFinalize((object) => {
     const fileBucket = object.bucket; // The Storage bucket that contains the file.
     const filePath = object.name; // File path in the bucket.
     const contentType = object.contentType; // File content type.
-    // const resourceState = object.resourceState; // The resourceState is 'exists' or 'not_exists' (for file/folder deletions).
-    // const metageneration = object.metageneration; // Number of times metadata has been generated. New objects have a value of 1
     const metadata = object.metadata
     
     // Exit if this is triggered on a file that is not an image.
@@ -124,30 +122,11 @@ exports.resizePicture = functions.storage.object().onFinalize((object) => {
     
     // Get the file name.
     const fileName = path.basename(filePath);
-    // Exit if the image is already a thumbnail.
-    // if (fileName.startsWith('thumb_')) {
-    //     console.log('Already a Thumbnail.');
-    //     return null;
-    // }
-    
 
     if (metadata.isResized) {
         console.log('Exiting: Already been resized')
         return null
     }
-
-    // // Exit if this is a move or deletion event.
-    // if (resourceState === 'not_exists') {
-    //     console.log('This is a deletion event.');
-    //     return null;
-    // }
-    
-    // // Exit if file exists but is not new and is only being triggered
-    // // because of a metadata change.
-    // if (resourceState === 'exists' && metageneration > 1) {
-    //     console.log('This is a metadata change event.');
-    //     return null;
-    // }
 
     const uid = filePath.substr(filePath.indexOf('/')+1,filePath.lastIndexOf('/profile')-filePath.indexOf('/')-1)
     console.log('uid',uid)

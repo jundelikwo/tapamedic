@@ -81,7 +81,7 @@ class Profile extends Component{
             mdcn_membership,
             specialty,
             university,
-            photoURL,
+            photoURL: this.state.photoURL || photoURL
         })
     }
     componentDidMount(){
@@ -193,7 +193,7 @@ class Profile extends Component{
             mdcn_membership,
             specialty,
             university,
-            photoURL,
+            photoURL
         } = profileData
         
         return (
