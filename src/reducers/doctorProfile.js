@@ -4,7 +4,7 @@ const initialState = {
     graduation: '',
     firstName: '',
     languages: '',
-    mdcn_photo: '/images/default_avatar.png',
+    mdcnPhoto: '/images/default_avatar.png',
     lastName: '',
     location: '',
     mdcn_folio: '',
@@ -18,9 +18,9 @@ let doctorProfileReducer = (state = initialState, action) => {
     switch(action.type){
         case ADD_DOCTOR_PROFILE_DATA :
             if(action.data){
-                let mdcn_photo = action.data.mdcn_photo || initialState.mdcn_photo
+                let mdcnPhoto = action.data.mdcnPhoto || initialState.mdcnPhoto
                 let location = action.data.location
-                return { ...action.data.data, mdcn_photo, location, languages: action.data.languages }
+                return { ...action.data.data, mdcnPhoto, location, languages: action.data.languages }
             }
             return { ...initialState }
         case LOGOUT :

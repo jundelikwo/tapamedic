@@ -118,10 +118,12 @@ export var uploadProfilePhoto = (photo, uploadFileFieldName, photoName) => {
         };
         let uploadTask = profilePhotoRef.put(photo,metadata)
 
-        uploadTask.then(snapshot => {
-            console.log('Snapshot',snapshot)
-            dispatch(changeProfilePhoto(window.URL.createObjectURL(photo)))
-        })
+        if(photoName === "profile"){
+            uploadTask.then(snapshot => {
+                console.log('Snapshot',snapshot)
+                dispatch(changeProfilePhoto(window.URL.createObjectURL(photo)))
+            })
+        }
 
         uploadTask.on('state_changed', snapshot => {
             // Observe state change events such as progress, pause, and resume

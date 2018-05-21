@@ -27,7 +27,7 @@ class Profile extends Component{
             graduation,
             firstName,
             languages,
-            mdcn_photo,
+            mdcnPhotoURL,
             lastName,
             location,
             mdcn_folio,
@@ -44,7 +44,7 @@ class Profile extends Component{
             graduation,
             firstName,
             languages,
-            mdcn_photo,
+            mdcnPhotoURL,
             lastName,
             location,
             mdcn_folio,
@@ -62,7 +62,7 @@ class Profile extends Component{
             graduation,
             firstName,
             languages,
-            mdcn_photo,
+            mdcnPhotoURL,
             lastName,
             location,
             mdcn_folio,
@@ -73,16 +73,16 @@ class Profile extends Component{
         } = newProps
 
         this.setState({
-            graduation,
-            firstName,
-            languages,
-            mdcn_photo,
-            lastName,
-            location,
-            mdcn_folio,
-            mdcn_membership,
-            specialty,
-            university,
+            graduation: this.state.graduation || graduation,
+            firstName: this.state.firstName || firstName,
+            languages: this.state.languages || languages,
+            mdcnPhotoURL: this.state.mdcnPhotoURL || mdcnPhotoURL,
+            lastName: this.state.lastName || lastName,
+            location: this.state.location || location,
+            mdcn_folio: this.state.mdcn_folio || mdcn_folio,
+            mdcn_membership: this.state.mdcn_membership || mdcn_membership,
+            specialty: this.state.specialty || specialty,
+            university: this.state.university || university,
             photoURL: this.state.photoURL || photoURL
         })
     }
@@ -110,30 +110,37 @@ class Profile extends Component{
         //data.dob = this.refs.dob.value
         this.setState(data)
     }
-    selectPhoto(evt){
-        evt.preventDefault()
-        let photo = this.refs.photo.files[0]
-        console.log('File',photo)
-        if(photo) {
-            this.setState({ photoURL: window.URL.createObjectURL(photo), updatePhoto: true, photo })
+    selectPhoto(photoRef,photoObj,updatePhoto){
+        return evt => {
+            evt.preventDefault()
+            let photo = this.refs[photoRef].files[0]
+            console.log('File',photo)
+            if(photo) {
+                this.setState({ [photoObj]: window.URL.createObjectURL(photo), [updatePhoto]: true, [photoRef]: photo })
+            }
         }
     }
-    uploadPhoto(evt){
-        evt.preventDefault()
-        console.log('Upload Photo',this.state.photo)
-        this.props.dispatch(uploadProfilePhoto(this.state.photo, 'profilePhoto','profile'))
-        this.setState({
-            updatePhoto: false,
-        })
+    uploadPhoto(photoRef,uploadFileFieldName,updatePhoto,photoName){
+        return evt => {
+            evt.preventDefault()
+            console.log('Upload Photo',this.state[photoRef])
+            this.props.dispatch(uploadProfilePhoto(this.state[photoRef], uploadFileFieldName,photoName))
+            //this.props.dispatch(uploadProfilePhoto(this.state[photoRef], "profilePhoto","profile"))
+            this.setState({
+                [updatePhoto]: false,
+            })
+        }
     }
-    cancelPhotoChange(evt){
-        evt.preventDefault()
-        this.refs.photo.value = ''
-        this.setState({
-            photoURL: this.props.photoURL,
-            updatePhoto: false,
-            photo: null
-        })
+    cancelPhotoChange(photoRef,photoObj,updatePhoto){
+        return evt => {
+            evt.preventDefault()
+            this.refs[photoRef].value = ''
+            this.setState({
+                [photoObj]: this.props[photoObj],
+                [updatePhoto]: false,
+                [photoRef]: null
+            })
+        }
     }
     pikadayCallBack(date) {
         let dob = moment(date).format('YYYY')
@@ -215,14 +222,14 @@ class Profile extends Component{
     }
 
     render(){
-        const { formReadOnly, updatePhoto } = this.state
-        const { wallet, fileUploadProgress } = this.props
+        const { formReadOnly, updatePhoto, updateMDCNPhoto } = this.state
+        const { wallet, profilePhotoUploadProgress, mdcnPhotoUploadProgress } = this.props
         const profileData = formReadOnly ? this.props : this.state
         const {
             graduation,
             firstName,
             languages,
-            mdcn_photo,
+            mdcnPhotoURL,
             lastName,
             location,
             mdcn_folio,
@@ -267,19 +274,19 @@ class Profile extends Component{
                                             <img src={photoURL} style={{ width: '200px', height: '200px' }} alt="" />
                                             {formReadOnly ? 
                                                 '' :
-                                                <input className='center-block' onChange={this.selectPhoto} type='file' ref="photo" name="photo" accept="image/*" readOnly={formReadOnly} />
+                                                <input className='center-block' onChange={this.selectPhoto('photo','photoURL','updatePhoto')} type='file' ref="photo" name="photo" accept="image/*" readOnly={formReadOnly} />
                                             }
                                             {!formReadOnly && updatePhoto ?
                                                 <div>
-                                                    <button onClick={this.uploadPhoto} style={{ marginRight: '10px' }} className="btn btn-success">Upload</button>
-                                                    <button onClick={this.cancelPhotoChange} className="btn btn-danger">Cancel</button>
+                                                    <button onClick={this.uploadPhoto("photo","profilePhoto","updatePhoto","profile")} style={{ marginRight: '10px' }} className="btn btn-success">Upload</button>
+                                                    <button onClick={this.cancelPhotoChange('photo','photoURL','updatePhoto')} className="btn btn-danger">Cancel</button>
                                                 </div>
                                                 : ''
                                             }  
-                                            {!formReadOnly && !updatePhoto && fileUploadProgress !== null ?
+                                            {!formReadOnly && !updatePhoto && profilePhotoUploadProgress !== null ?
                                                 <div className="progress progress-striped active progress-right" style={{ width: '90%', margin: 'auto', float: 'none', height: '18px', position: 'relative' }}>
-                                                    <div className="bar green" style={{ width:fileUploadProgress }}></div> 
-                                                    <span className="pull-right" style={{ float: 'none!important', position: 'absolute', left: '50%' }}>{ fileUploadProgress }</span>
+                                                    <div className="bar green" style={{ width:profilePhotoUploadProgress }}></div> 
+                                                    <span className="pull-right" style={{ float: 'none!important', position: 'absolute', left: '50%' }}>{ profilePhotoUploadProgress }</span>
                                                 </div> 
                                             : ''
                                             }
@@ -318,22 +325,22 @@ class Profile extends Component{
                                     <div className="form-group mb-n">
                                         <label className="col-md-2 control-label">MDCN License Photo</label>
                                         <div className="col-md-8 text-center">
-                                            <img src={mdcn_photo} style={{ width: '200px', height: '200px' }} alt="" />
+                                            <img src={mdcnPhotoURL} style={{ width: '200px', height: '200px' }} alt="" />
                                             {formReadOnly ? 
                                                 '' :
-                                                <input className='center-block' onChange={this.selectPhoto} type='file' ref="mdcn_photo" name="mdcn_photo" accept="image/*" readOnly={formReadOnly} />
+                                                <input className='center-block' onChange={this.selectPhoto('mdcnPhoto','mdcnPhotoURL','updateMDCNPhoto')} type='file' ref="mdcnPhoto" name="mdcnPhoto" accept="image/*" readOnly={formReadOnly} />
                                             }
-                                            {!formReadOnly && updatePhoto ?
+                                            {!formReadOnly && updateMDCNPhoto ?
                                                 <div>
-                                                    <button onClick={this.uploadPhoto} style={{ marginRight: '10px' }} className="btn btn-success">Upload</button>
-                                                    <button onClick={this.cancelPhotoChange} className="btn btn-danger">Cancel</button>
+                                                    <button onClick={this.uploadPhoto("mdcnPhoto","mdcnPhoto","updateMDCNPhoto","mdcnPhoto")} style={{ marginRight: '10px' }} className="btn btn-success">Upload</button>
+                                                    <button onClick={this.cancelPhotoChange('mdcnPhoto','mdcnPhotoURL','updateMDCNPhoto')} className="btn btn-danger">Cancel</button>
                                                 </div>
                                                 : ''
                                             }  
-                                            {!formReadOnly && !updatePhoto && fileUploadProgress !== null ?
+                                            {!formReadOnly && !updateMDCNPhoto && mdcnPhotoUploadProgress !== null ?
                                                 <div className="progress progress-striped active progress-right" style={{ width: '90%', margin: 'auto', float: 'none', height: '18px', position: 'relative' }}>
-                                                    <div className="bar green" style={{ width:fileUploadProgress }}></div> 
-                                                    <span className="pull-right" style={{ float: 'none!important', position: 'absolute', left: '50%' }}>{ fileUploadProgress }</span>
+                                                    <div className="bar green" style={{ width:mdcnPhotoUploadProgress }}></div> 
+                                                    <span className="pull-right" style={{ float: 'none!important', position: 'absolute', left: '50%' }}>{ mdcnPhotoUploadProgress }</span>
                                                 </div> 
                                             : ''
                                             }
@@ -413,7 +420,7 @@ const mapStateToProps = state => {
     let graduation = state.doctorProfile.graduation
     let firstName = state.doctorProfile.firstName
     let doctorLanguages = state.doctorProfile.languages || {}
-    let mdcn_photo = state.doctorProfile.mdcn_photo
+    let mdcnPhotoURL = state.doctorProfile.mdcnPhoto
     let lastName = state.doctorProfile.lastName
     let location = state.doctorProfile.location
     let mdcn_folio = state.doctorProfile.mdcn_folio
@@ -428,13 +435,12 @@ const mapStateToProps = state => {
     supportedLanguages.map(lang => {
         languages[lang] = doctorLanguages[lang]
     })
-    console.log('languages',languages)
 
     return {
         graduation,
         firstName,
         languages,
-        mdcn_photo,
+        mdcnPhotoURL,
         lastName,
         location,
         mdcn_folio,
@@ -443,7 +449,8 @@ const mapStateToProps = state => {
         university,
         wallet,
         photoURL: state.user.photoURL,
-        fileUploadProgress: state.fileUpload.profilePhoto
+        profilePhotoUploadProgress: state.fileUpload.profilePhoto,
+        mdcnPhotoUploadProgress: state.fileUpload.mdcnPhoto
     }
 }
 

@@ -127,12 +127,15 @@ exports.resizePicture = functions.storage.object().onFinalize((object) => {
     
     if(filePath.indexOf('/profile.') !== -1){
         console.log("Yeah I'm a profile image")
-        return profileFunction(object)
+        return photoFunc(object,'profile','200x200>','profile',"photo")
+    }else if(filePath.indexOf('/mdcnPhoto.') !== -1){
+        console.log("Yeah I'm a mdcnPhoto image")
+        return photoFunc(object,'mdcnPhoto','200x200>','profile','mdcnPhoto')
     }
     return null
 });
 
-function profileFunction(object){
+function photoFunc(object,nameOfFile,resizedImgSize,photoPath,dbName){
 
     const fileBucket = object.bucket; // The Storage bucket that contains the file.
     const filePath = object.name; // File path in the bucket.
@@ -143,7 +146,7 @@ function profileFunction(object){
     const fileName = path.basename(filePath);
     
     console.log('filePath',filePath)
-    const uid = filePath.substr(filePath.indexOf('/')+1,filePath.lastIndexOf('/profile')-filePath.indexOf('/')-1)
+    const uid = filePath.substr(filePath.indexOf('/')+1,filePath.lastIndexOf('/'+nameOfFile)-filePath.indexOf('/')-1)
     console.log('uid',uid)
     const role = filePath.substr(0,filePath.indexOf('/'))
     console.log('role',role)
@@ -151,7 +154,7 @@ function profileFunction(object){
     // Download file from bucket.
     const bucket = gcs.bucket(fileBucket);
     const tempFilePath = path.join(os.tmpdir(), fileName);
-    const JPGFileName = 'profile.JPG'
+    const JPGFileName = nameOfFile+'.JPG'
     const JPGFilePath = path.join(os.tmpdir(), JPGFileName)
     const options = {
         contentType: contentType,
@@ -165,7 +168,7 @@ function profileFunction(object){
     }).then(() => {
         console.log('Image downloaded locally to', tempFilePath);
         // Resize image using ImageMagick.
-        return spawn('convert', [tempFilePath, '-resize', '200x200>', JPGFilePath]);
+        return spawn('convert', [tempFilePath, '-resize', resizedImgSize, JPGFilePath]);
     }).then(() => {
         console.log('Resized image created at', tempFilePath);
         console.log('thumbFilePath at', thumbFilePath);
@@ -194,7 +197,7 @@ function profileFunction(object){
                 console.log('signedUrls[0]',signedUrls[0])
                 console.log('Test',test)
                 console.log('metadata',metadata)
-                return admin.database().ref(`${role}/${uid}/profile/`).update({photo: signedUrls[0]})
+                return admin.database().ref(`${role}/${uid}/${photoPath}/`).update({[dbName]: signedUrls[0]})
             });
     });
 }

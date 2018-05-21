@@ -1,7 +1,8 @@
 import { FILE_UPLOAD_PROGRESS, LOGOUT } from '../actions/types'
 
 const initialState = {
-    profilePhoto: null
+    profilePhoto: null,
+    mdcnPhoto: null
 }
 
 let fileUploadReducer = (state = initialState, action) => {
