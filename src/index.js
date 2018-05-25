@@ -47,10 +47,8 @@ firebase.auth().onAuthStateChanged(user => {
     user.getIdTokenResult().then((idTokenResult) => {
       console.log('idTokenResult',idTokenResult)
       store.dispatch(addClaims(idTokenResult.claims))
-      if(user){
-        profileDataRef = store.dispatch(startAddProfileData())
-        console.log('profileDataRef',profileDataRef)
-      }
+      profileDataRef = store.dispatch(startAddProfileData())
+      console.log('profileDataRef',profileDataRef)
     })
     
     // Check if refresh is required.
@@ -63,7 +61,6 @@ firebase.auth().onAuthStateChanged(user => {
       user.getIdToken(true).then(() => {
         user.getIdTokenResult().then((idTokenResult) => {
           console.log('idTokenResult',idTokenResult)
-          if(profileDataRef){profileDataRef.off()}
           store.dispatch(addClaims(idTokenResult.claims))
         })
       })

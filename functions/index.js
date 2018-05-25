@@ -42,7 +42,8 @@ exports.setUserRole = functions.auth.user().onCreate(user => {
     }else if(user.email){
         customClaims = {
             role: 'doctor',
-            approved: false
+            approved: false,
+            review: false
         };
         databaseNode = "doctors/"
     }
@@ -84,7 +85,7 @@ exports.verifyPaystack = functions.database.ref('/patients/{uid}/payment').onWri
             const { amount, reference, customer } = body.data
             id = customer.email.substring(0,customer.email.lastIndexOf('@'))
             if(id !== context.auth.token.phone_number){
-                return;
+                return null;
             }
             paystackId = customer.id
 
@@ -101,7 +102,7 @@ exports.verifyPaystack = functions.database.ref('/patients/{uid}/payment').onWri
                         return admin.database().ref(`/patients/${context.params.uid}`).update(data)
                     })
                 }else{
-                    return;
+                    return null;
                 }
               })
         }
@@ -182,10 +183,10 @@ function photoFunc(object,nameOfFile,resizedImgSize,photoPath,dbName){
         if(fileName !== JPGFileName){
             file.delete().then(() => {
                 console.log(`Successfully deleted photo`)
-                return;
+                return null;
             }).catch(err => {
                 console.log(`Failed to remove photo, error: ${err}`)
-                return;
+                return null;
             });
         }
         fs.unlinkSync(tempFilePath)
@@ -207,34 +208,53 @@ exports.shouldReviewDoctor = functions.database.ref('/doctors/{uid}/profile').on
     const { data, languages, location, mdcnPhoto, photo } = change.after.val()
     const uid = context.params.uid
 
-    if(notEmpty(location) && notEmpty(mdcnPhoto) && notEmpty(photo) && data instanceof Object && languages instanceof Object){
+    if(notEmpty(location) && notEmpty(mdcnPhoto) && notEmpty(photo) && data instanceof Object && languages instanceof Object && languages !== {}){
         const { firstName, graduation, lastName, mdcn_folio, mdcn_membership, specialty, university } = data
         console.log('Passed stage 1')
         if(notEmpty(firstName) && notEmpty(graduation) && notEmpty(lastName) && notEmpty(mdcn_folio) && notEmpty(mdcn_membership) && notEmpty(specialty) && notEmpty(university)){
             console.log('Passed stage 2')
-            return admin.database().ref(`/doctors/${uid}/approved`).once('value').then(snapshot => {
-                console.log('Snapshot approved',snapshot.val())
-                if(!snapshot.val().approved){
-                    return admin.auth().setCustomUserClaims(uid, { review: true, approved: false, role: 'doctor' }).then(() => {
-                        admin.database().ref(`metadata/${uid}`).update({ refreshTime:  new Date().getTime() })
-                        return admin.database().ref(`/doctors/${uid}/`).update({ review: true })
+            return admin.database().ref(`/doctors/${uid}/review`).once('value').then(snapshot => {
+                console.log('Snapshot review',snapshot.val())
+                if(!snapshot.val()){
+                    return admin.database().ref(`/doctors/${uid}/approved`).once('value').then(snap => {
+                        console.log('Snapshot approved',snap.val())
+                        if(!snap.val().approved){
+                            return admin.auth().setCustomUserClaims(uid, { review: true, approved: false, role: 'doctor' }).then(() => {
+                                admin.database().ref(`metadata/${uid}`).update({ refreshTime:  new Date().getTime() })
+                                return admin.database().ref(`/doctors/${uid}/`).update({ review: true })
+                            })
+                        }
+                        return null;
                     })
                 }
-                return;
+                return null;
             })
         }
-        return;
+        return null;
     }else{
         console.log('Failed stage 1')
-        return;
+        return null;
     }
 })
 
 function notEmpty(input){
     if(typeof input === 'string'){
         const val = input.trim()
-        return !!val.length
+        return Boolean(val.length)
     }else{
-        return;
+        return null;
     }
 }
+
+exports.shouldApproveDoctor = functions.database.ref('/doctors/{uid}/approved').onWrite((change, context) => {
+    const uid = context.params.uid
+    const approved = change.after.val()
+    if(approved){
+        return admin.auth().setCustomUserClaims(uid, { review: false, approved: true, role: 'doctor' }).then(() => {
+            console.log('approved')
+            admin.database().ref(`metadata/${uid}`).update({ refreshTime:  new Date().getTime() })
+            return admin.database().ref(`/doctors/${uid}/`).update({ approved: true, review: false })
+        })
+    }
+    return null;
+})
