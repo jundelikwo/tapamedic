@@ -7,6 +7,7 @@ import Dashboard from './components/Routes/Dashboard/'
 import Home from './components/Routes/Home/'
 import Login from './components/Routes/Login/'
 import ErrorBoundary from './components/ErrorBoundary'
+import './App.css';
 
 class App extends Component {
   componentDidMount(){

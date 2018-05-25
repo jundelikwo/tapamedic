@@ -10,7 +10,6 @@ class Home extends Component{
                 <Link to="/login">Login</Link>
                 <Link to="/createProfile">createProfile</Link>
                 <Link to="/dashboard">dashboard</Link>
-                {/* <button onClick={() => firebase.auth().signOut()}>Logout</button> */}
             </div>
         )
     }

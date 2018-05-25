@@ -24,6 +24,7 @@ class Profile extends Component{
     }
     componentWillMount(){
         const {
+            review,
             graduation,
             firstName,
             languages,
@@ -39,6 +40,7 @@ class Profile extends Component{
         } = this.props
 
         let formReadOnly = match.isExact
+        formReadOnly = review ? true : formReadOnly
 
         this.setState({
             graduation,
@@ -201,6 +203,7 @@ class Profile extends Component{
     }
     toggleEditForm(e){
         let { formReadOnly, datePicker } = this.state
+        const { approved, review } = this.props
         if(formReadOnly){
             datePicker = new Pikaday(
             {
@@ -215,15 +218,16 @@ class Profile extends Component{
         }else{
             if(datePicker && datePicker.destroy){datePicker.destroy()}
         }
+
         this.setState({ 
-            formReadOnly: !formReadOnly,
+            formReadOnly: review ? true : !formReadOnly,
             datePicker
         })
     }
 
     render(){
         const { formReadOnly, updatePhoto, updateMDCNPhoto } = this.state
-        const { wallet, profilePhotoUploadProgress, mdcnPhotoUploadProgress } = this.props
+        const { approved, review, wallet, profilePhotoUploadProgress, mdcnPhotoUploadProgress } = this.props
         const profileData = formReadOnly ? this.props : this.state
         const {
             graduation,
@@ -244,6 +248,12 @@ class Profile extends Component{
                 <div className="main-page">
                     <div className="panel-group tool-tips widget-shadow" id="accordion" role="tablist" aria-multiselectable="true">
                         <h3 className="title1">My Profile<span style={{ float: 'right' }}>&#8358;{wallet}</span></h3>
+                        {review ?
+                            <div className="alert alert-success" role="alert">
+                                <strong>Well done!</strong> Your application is under review we will reach back to you within 2 - 3 working days
+                            </div>
+                            : null
+                        }
                         <div className="panel panel-default">
                             <div className="panel-heading" role="tab" id="headingOne">
                             <h4 className="panel-title">
@@ -254,16 +264,19 @@ class Profile extends Component{
                             </div>
                             <div id="collapseOne" className="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
                             <div className="panel-body">
-                                <a role="button" style={{ float: 'right' }} onClick={this.toggleEditForm}>
-                                    {formReadOnly ? 
-                                        <span>
-                                            <i className="fa fa-pencil" style={{ marginRight: '10px' }} />
-                                            Edit
-                                        </span>
-                                        : 
-                                        <span>Cancel</span>
-                                    }
-                                </a>
+                                {!review ?
+                                    <a role="button" style={{ float: 'right' }} onClick={this.toggleEditForm}>
+                                        {formReadOnly ? 
+                                            <span>
+                                                <i className="fa fa-pencil" style={{ marginRight: '10px' }} />
+                                                Edit
+                                            </span>
+                                            : 
+                                            <span>Cancel</span>
+                                        }
+                                    </a>
+                                    : null
+                                }
                                 <div style={{ clear: 'both' }}/>
                                 <form className={
                                     formReadOnly ? 'form-horizontal readOnly' : 'form-horizontal'
@@ -437,6 +450,8 @@ const mapStateToProps = state => {
     })
 
     return {
+        approved: state.doctorProfile.approved,
+        review: state.doctorProfile.review,
         graduation,
         firstName,
         languages,
