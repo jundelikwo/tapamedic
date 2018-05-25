@@ -41,7 +41,8 @@ exports.setUserRole = functions.auth.user().onCreate(user => {
         databaseNode = "patients/"
     }else if(user.email){
         customClaims = {
-            role: 'doctor'
+            role: 'doctor',
+            approved: false
         };
         databaseNode = "doctors/"
     }
@@ -200,4 +201,40 @@ function photoFunc(object,nameOfFile,resizedImgSize,photoPath,dbName){
                 return admin.database().ref(`${role}/${uid}/${photoPath}/`).update({[dbName]: signedUrls[0]})
             });
     });
+}
+
+exports.shouldReviewDoctor = functions.database.ref('/doctors/{uid}/profile').onWrite((change, context) => {
+    const { data, languages, location, mdcnPhoto, photo } = change.after.val()
+    const uid = context.params.uid
+
+    if(notEmpty(location) && notEmpty(mdcnPhoto) && notEmpty(photo) && data instanceof Object && languages instanceof Object){
+        const { firstName, graduation, lastName, mdcn_folio, mdcn_membership, specialty, university } = data
+        console.log('Passed stage 1')
+        if(notEmpty(firstName) && notEmpty(graduation) && notEmpty(lastName) && notEmpty(mdcn_folio) && notEmpty(mdcn_membership) && notEmpty(specialty) && notEmpty(university)){
+            console.log('Passed stage 2')
+            return admin.database().ref(`/doctors/${uid}/approved`).once('value').then(snapshot => {
+                console.log('Snapshot approved',snapshot.val())
+                if(!snapshot.val().approved){
+                    return admin.auth().setCustomUserClaims(uid, { review: true, approved: false, role: 'doctor' }).then(() => {
+                        admin.database().ref(`metadata/${uid}`).update({ refreshTime:  new Date().getTime() })
+                        return admin.database().ref(`/doctors/${uid}/`).update({ review: true })
+                    })
+                }
+                return;
+            })
+        }
+        return;
+    }else{
+        console.log('Failed stage 1')
+        return;
+    }
+})
+
+function notEmpty(input){
+    if(typeof input === 'string'){
+        const val = input.trim()
+        return !!val.length
+    }else{
+        return;
+    }
 }

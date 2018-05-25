@@ -25,7 +25,7 @@ try {
 // Initialize store
 let store = createStore(reducers, {}, compose(
   applyMiddleware(thunk),
-  window.devToolsExtension ? window.devToolsExtension() : f => f
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 ))
 
 store.dispatch(startAddSupportedLanguages())
@@ -45,20 +45,18 @@ firebase.auth().onAuthStateChanged(user => {
 
     let payload1 = {}
     let profileDataRef  = null
-    user.getIdToken(true).then(idToken => {
-      payload1 = JSON.parse(b64DecodeUnicode(idToken.split('.')[1]))
-      
+    user.getIdTokenResult().then((idTokenResult) => {
+      console.log('idTokenResult',idTokenResult)
+      payload1.role = idTokenResult.claims.role
+
       if(payload1.role){
         store.dispatch(addRole(payload1.role))
-        if(user.phoneNumber){
-          profileDataRef = store.dispatch(startAddProfileData())
-          console.log('profileDataRef',profileDataRef)
-        }else if(user.email && user.emailVerified){
+        if(user){
           profileDataRef = store.dispatch(startAddProfileData())
           console.log('profileDataRef',profileDataRef)
         }
       }
-    });
+    })
     
     // Check if refresh is required.
     metadataRef = firebase.database().ref('metadata/' + user.uid + '/refreshTime');
@@ -67,16 +65,19 @@ firebase.auth().onAuthStateChanged(user => {
       // Note this is always triggered on first call. Further optimization could be
       // added to avoid the initial trigger when the token is issued and already contains
       // the latest claims.
-      user.getIdToken(true).then(idToken => {
-        const payload = JSON.parse(b64DecodeUnicode(idToken.split('.')[1]))
-        
-        if(payload.role !== payload1.role){
-          // store.dispatch(login(user))
-          if(profileDataRef){profileDataRef.off()}
-          store.dispatch(addRole(payload.role))
-          store.dispatch(startAddProfileData())
-        }
-      });
+      user.getIdToken(true).then(() => {
+        user.getIdTokenResult().then((idTokenResult) => {
+          console.log('idTokenResult',idTokenResult)
+          const payload = idTokenResult.claims.role
+    
+          if(payload !== payload1.role){
+            // store.dispatch(login(user))
+            if(profileDataRef){profileDataRef.off()}
+            store.dispatch(addRole(payload))
+            store.dispatch(startAddProfileData())
+          }
+        })
+      })
     };
     // Subscribe new listener to changes on that node.
     metadataRef.on('value', callback);

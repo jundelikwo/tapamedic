@@ -53,7 +53,7 @@ export var addUserData = (data, path='/data') => {
             .then(() => {
                 console.log('Done')
                 var user = firebase.auth().currentUser;
-                const { firstName, lastName } = data;
+                const { firstName, lastName } = role === 'doctor' ? data.data : data;
                 if( firstName + lastName ){
                     user.updateProfile({
                         displayName: firstName + ' ' + lastName
