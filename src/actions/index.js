@@ -2,7 +2,7 @@ import firebase from 'firebase'
 import { 
     LOGIN, 
     LOGOUT, 
-    ADD_ROLE,
+    ADD_CLAIMS,
     TOGGLE_ROLE,
     ADD_DISPLAY_NAME, 
     ADD_PROFILE_DATA,
@@ -26,10 +26,10 @@ export var logout = () => {
     }
 }
 
-export var addRole = (role) => {
+export var addClaims = (claims) => {
     return {
-        type: ADD_ROLE,
-        role
+        type: ADD_CLAIMS,
+        claims
     }
 }
 

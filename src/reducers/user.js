@@ -1,7 +1,7 @@
 import { 
     LOGIN, 
     LOGOUT, 
-    ADD_ROLE, 
+    ADD_CLAIMS, 
     ADD_PROFILE_DATA, 
     ADD_DISPLAY_NAME, 
     CHANGE_PROFILE_URL,
@@ -38,8 +38,8 @@ let userReducer = (state = initialState , action ) => {
                 photoURL,
                 role
             }
-        case ADD_ROLE:
-            return { ...state, role: action.role }
+        case ADD_CLAIMS:
+            return { ...state, role: action.claims.role || state.role }
         case TOGGLE_ROLE:
             role = state.role
             if(role === 'patient'){

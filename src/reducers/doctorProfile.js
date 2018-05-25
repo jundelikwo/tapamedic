@@ -1,6 +1,8 @@
-import { ADD_DOCTOR_PROFILE_DATA, LOGOUT } from '../actions/types'
+import { ADD_CLAIMS, ADD_DOCTOR_PROFILE_DATA, LOGOUT } from '../actions/types'
 
 const initialState = {
+    approved: null,
+    review: null,
     graduation: '',
     firstName: '',
     languages: '',
@@ -20,9 +22,15 @@ let doctorProfileReducer = (state = initialState, action) => {
             if(action.data){
                 let mdcnPhoto = action.data.mdcnPhoto || initialState.mdcnPhoto
                 let location = action.data.location
-                return { ...action.data.data, mdcnPhoto, location, languages: action.data.languages }
+                return { ...state, ...action.data.data, mdcnPhoto, location, languages: action.data.languages }
             }
-            return { ...initialState }
+            return { ...state }
+        case ADD_CLAIMS:
+            let claims = {
+                approved: action.claims.approved !== undefined ? action.claims.approved : state.approved,
+                review: action.claims.review !== undefined ? action.claims.review : state.review
+            }
+            return { ...state, ...claims }
         case LOGOUT :
             return { ...initialState }
         default :

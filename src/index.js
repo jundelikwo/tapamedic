@@ -6,7 +6,7 @@ import { applyMiddleware, createStore, compose } from 'redux'
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
 import reducers from './reducers'
-import { login, logout, addRole, startAddProfileData, startAddSupportedLanguages } from './actions'
+import { login, logout, addClaims, startAddProfileData, startAddSupportedLanguages } from './actions'
 import { FirebaseConfig } from './config'
 import { b64DecodeUnicode } from './functions'
 import './index.css';
@@ -43,18 +43,13 @@ firebase.auth().onAuthStateChanged(user => {
     console.log('User',user)
     store.dispatch(login(user))
 
-    let payload1 = {}
     let profileDataRef  = null
     user.getIdTokenResult().then((idTokenResult) => {
       console.log('idTokenResult',idTokenResult)
-      payload1.role = idTokenResult.claims.role
-
-      if(payload1.role){
-        store.dispatch(addRole(payload1.role))
-        if(user){
-          profileDataRef = store.dispatch(startAddProfileData())
-          console.log('profileDataRef',profileDataRef)
-        }
+      store.dispatch(addClaims(idTokenResult.claims))
+      if(user){
+        profileDataRef = store.dispatch(startAddProfileData())
+        console.log('profileDataRef',profileDataRef)
       }
     })
     
@@ -68,14 +63,8 @@ firebase.auth().onAuthStateChanged(user => {
       user.getIdToken(true).then(() => {
         user.getIdTokenResult().then((idTokenResult) => {
           console.log('idTokenResult',idTokenResult)
-          const payload = idTokenResult.claims.role
-    
-          if(payload !== payload1.role){
-            // store.dispatch(login(user))
-            if(profileDataRef){profileDataRef.off()}
-            store.dispatch(addRole(payload))
-            store.dispatch(startAddProfileData())
-          }
+          if(profileDataRef){profileDataRef.off()}
+          store.dispatch(addClaims(idTokenResult.claims))
         })
       })
     };
