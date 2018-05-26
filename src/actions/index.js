@@ -46,19 +46,21 @@ export var addDisplayName = (name) => {
     }
 }
 
-export var addUserData = (data, path='/data') => {
+export var addUserData = (data, path='/data', shouldCallthen=true) => {
     return (dispatch, getState) => {
         const { uid, role } = getState().user;
         firebase.database().ref(`${role}s/${uid}/profile${path}`).update(data)
             .then(() => {
-                console.log('Done')
-                var user = firebase.auth().currentUser;
-                const { firstName, lastName } = role === 'doctor' ? data.data : data;
-                if( firstName + lastName ){
-                    user.updateProfile({
-                        displayName: firstName + ' ' + lastName
-                    }).then(() => dispatch(addDisplayName(user.displayName)))
-                    .catch((e) => console.log(e,'Failed'))
+                if(shouldCallthen){
+                    console.log('Done')
+                    var user = firebase.auth().currentUser;
+                    const { firstName, lastName } = role === 'doctor' ? data.data : data;
+                    if( firstName + lastName ){
+                        user.updateProfile({
+                            displayName: firstName + ' ' + lastName
+                        }).then(() => dispatch(addDisplayName(user.displayName)))
+                        .catch((e) => console.log(e,'Failed'))
+                    }
                 }
             })
             .catch( e => console.log(e,'Failed'))

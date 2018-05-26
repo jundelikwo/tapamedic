@@ -218,7 +218,7 @@ exports.shouldReviewDoctor = functions.database.ref('/doctors/{uid}/profile').on
                 if(!snapshot.val()){
                     return admin.database().ref(`/doctors/${uid}/approved`).once('value').then(snap => {
                         console.log('Snapshot approved',snap.val())
-                        if(!snap.val().approved){
+                        if(!snap.val()){
                             return admin.auth().setCustomUserClaims(uid, { review: true, approved: false, role: 'doctor' }).then(() => {
                                 admin.database().ref(`metadata/${uid}`).update({ refreshTime:  new Date().getTime() })
                                 return admin.database().ref(`/doctors/${uid}/`).update({ review: true })
