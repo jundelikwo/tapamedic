@@ -15,7 +15,8 @@ const initialState = {
     emailVerified: false,
     photoURL: '/images/default_avatar.png',
     role: "patient",
-    name: ''
+    name: '',
+    language: 'English'
 }
 
 let userReducer = (state = initialState , action ) => {
@@ -30,6 +31,7 @@ let userReducer = (state = initialState , action ) => {
                 role = 'doctor'
             }
             return { 
+                ...state,
                 uid: action.user.uid, 
                 phoneNumber: action.user.phoneNumber, 
                 email: action.user.email,

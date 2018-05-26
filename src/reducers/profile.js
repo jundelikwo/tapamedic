@@ -17,9 +17,9 @@ let profileReducer = (state = initialState, action) => {
     switch(action.type){
         case ADD_PROFILE_DATA :
             if(action.data){
-                return { ...action.data.data }
+                return { ...state, ...action.data.data }
             }
-            return { ...initialState }
+            return { ...state }
         case LOGOUT :
             return { ...initialState }
         default :

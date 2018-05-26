@@ -1,19 +1,14 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import RenderRole from '../../RenderRole'
 import IsLoggedIn from '../../IsLoggedIn'
+import Doctor from './Doctor'
+import Patient from './Patient'
 
 class Questions extends Component{
     render(){
-        console.log('Questions',this.props)
-        return(
-            <div id="page-wrapper">
-                <div className="main-page">
-                    <div className="blank-page widget-shadow scroll" id="style-2 div1">
-                        Questions Page
-                    </div>
-                </div>
-            </div>
-        )
+        return <RenderRole {...this.props} patient={Patient} doctor={Doctor} />
     }
 }
 
 export default IsLoggedIn(Questions)
+//export default Dashboard
