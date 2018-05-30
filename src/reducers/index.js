@@ -5,6 +5,7 @@ import walletReducer from './wallet'
 import fileUploadReducer from './fileUpload'
 import doctorProfileReducer from './doctorProfile'
 import languagesReducer from './languages'
+import questionsReducer from './questions'
 
 let reducers = combineReducers({
     user: userReducer,
@@ -12,7 +13,8 @@ let reducers = combineReducers({
     wallet: walletReducer,
     fileUpload: fileUploadReducer,
     doctorProfile: doctorProfileReducer,
-    languages: languagesReducer
+    languages: languagesReducer,
+    questions: questionsReducer
 })
 
 export default reducers

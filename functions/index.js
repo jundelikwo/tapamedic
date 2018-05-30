@@ -258,3 +258,17 @@ exports.shouldApproveDoctor = functions.database.ref('/doctors/{uid}/approved').
     }
     return null;
 })
+
+exports.onAskQuestion = functions.database.ref('patients/{uid}/questions/{questionId}').onCreate((snapshot, context) => {
+    const { uid, questionId } = context.params
+    const { language, text } = snapshot.val()
+    let questionRef = admin.database().ref('questions').push({
+        language,
+        text,
+        patientId: uid,
+        answered: false
+    })
+    return questionRef.then(() => {
+        return admin.database().ref(`patients/${uid}/questions/${questionId}`).update({ questionId: questionRef.key })
+    })
+})

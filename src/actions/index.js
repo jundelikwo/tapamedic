@@ -3,13 +3,16 @@ import {
     LOGIN, 
     LOGOUT, 
     ADD_CLAIMS,
+    ADD_PATIENT_QUESTION_TO_STORE,
     TOGGLE_ROLE,
     ADD_DISPLAY_NAME, 
     ADD_PROFILE_DATA,
     ADD_DOCTOR_PROFILE_DATA,
     ADD_SUPPORTED_LANGUAGES,
     CHANGE_PROFILE_URL, 
-    FILE_UPLOAD_PROGRESS
+    FILE_UPLOAD_PROGRESS,
+    REMOVE_PATIENT_QUESTION_FROM_STORE,
+    CHANGE_ASKED_QUESTION_STATUS
 } from './types'
 import { lang } from 'moment';
 
@@ -174,5 +177,40 @@ export var addSupportedLanguages = (lang) => {
     return {
         type: ADD_SUPPORTED_LANGUAGES,
         lang
+    }
+}
+
+export var addPatientQuestionToStore = question => {
+    return {
+        type: ADD_PATIENT_QUESTION_TO_STORE,
+        question
+    }
+}
+
+export var removePatientQuestionFromStore = () => {
+    return {
+        type: REMOVE_PATIENT_QUESTION_FROM_STORE
+    }
+}
+
+export var askQuestion = (text) => {
+    return (dispatch, getState) => {
+        dispatch(changeAskedQuestionStatus(true))
+        const {  role, uid, language } = getState().user;
+        let question = {
+            text,
+            language
+        }
+        let questionRef = firebase.database().ref(`${role}s/${uid}/questions`).push(question)
+        questionRef.then(()=>{
+            dispatch(changeAskedQuestionStatus(false))
+        })
+    }
+}
+
+export var changeAskedQuestionStatus = status => {
+    return {
+        type: CHANGE_ASKED_QUESTION_STATUS,
+        status
     }
 }
