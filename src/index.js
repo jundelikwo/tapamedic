@@ -6,7 +6,7 @@ import { applyMiddleware, createStore, compose } from 'redux'
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
 import reducers from './reducers'
-import { login, logout, addClaims, startAddProfileData, startAddSupportedLanguages } from './actions'
+import { login, logout, addClaims, startAddProfileData, startAddSupportedLanguages, startAddListOfPatientQuestions } from './actions'
 import { FirebaseConfig } from './config'
 import { b64DecodeUnicode } from './functions'
 import './index.css';
@@ -49,6 +49,9 @@ firebase.auth().onAuthStateChanged(user => {
       store.dispatch(addClaims(idTokenResult.claims))
       profileDataRef = store.dispatch(startAddProfileData())
       console.log('profileDataRef',profileDataRef)
+      if(idTokenResult.claims.role === "patient"){
+        store.dispatch(startAddListOfPatientQuestions())
+      }
     })
     
     // Check if refresh is required.

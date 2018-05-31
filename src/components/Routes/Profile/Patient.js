@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { NavLink } from 'react-router-dom'
 import moment from 'moment'
 import Pikaday from 'pikaday'
 import { addUserData, uploadProfilePhoto } from '../../../actions'
@@ -19,6 +20,7 @@ class Profile extends Component{
         this.selectPhoto = this.selectPhoto.bind(this)
         this.uploadPhoto = this.uploadPhoto.bind(this)
         this.cancelPhotoChange = this.cancelPhotoChange.bind(this)
+        this.displayQuestions = this.displayQuestions.bind(this)
     }
     componentWillMount(){
         const {
@@ -177,6 +179,28 @@ class Profile extends Component{
             datePicker
         })
     }
+    displayQuestions(){
+        let { questions } = this.props
+        if(!questions.length){
+            return(
+                <div class="well">
+                    <strong style={{ fontWeight: 'bold' }}>Ooops! No Questions to display</strong>
+                    <p>If you have asked one of our doctors a question before please kindly give us a second to load it</p>
+                    <p>If you haven't <NavLink to="/dashboard/questions">Click Me</NavLink> to ask a question</p>
+                </div>
+            )
+        }else{
+            return questions.map(question => {
+                return(
+                    <li style={{ 
+                        borderBottom: '1px solid #eee',
+                        padding: '14.35px 0',
+                        fontSize: '0.9em'
+                    }}>{question.text}</li>
+                )
+            })
+        }
+    }
 
     render(){
         const { formReadOnly, updatePhoto } = this.state
@@ -334,13 +358,15 @@ class Profile extends Component{
                             <div className="panel-heading" role="tab" id="headingTwo">
                             <h4 className="panel-title">
                                 <a className="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                    <span>Questions asked</span>
+                                    <span>Questions I asked</span>
                                 </a>
                             </h4>
                             </div>
                             <div id="collapseTwo" className="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
                             <div className="panel-body">
-                                Eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Anim pariatur cliche reprehenderit, enim  Food truck quinoa nesciunt laborum eiusmod. apiente ea proident. Ad vegan excepteur butcher vice lomo.  labore sustainable VHS.
+                                <ul className="list-unstyled">
+                                    {this.displayQuestions()}
+                                </ul>
                             </div>
                             </div>
                         </div>
@@ -397,6 +423,7 @@ const mapStateToProps = state => {
         lastName,
         sex,
         wallet,
+        questions: state.questions.questionsIAsked,
         photoURL: state.user.photoURL,
         fileUploadProgress: state.fileUpload.profilePhoto
     }

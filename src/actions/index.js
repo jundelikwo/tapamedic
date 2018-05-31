@@ -4,6 +4,8 @@ import {
     LOGOUT, 
     ADD_CLAIMS,
     ADD_PATIENT_QUESTION_TO_STORE,
+    ADD_MY_LIST_OF_QUESTIONS,
+    ADD_MY_QUESTION,
     TOGGLE_ROLE,
     ADD_DISPLAY_NAME, 
     ADD_PROFILE_DATA,
@@ -212,5 +214,47 @@ export var changeAskedQuestionStatus = status => {
     return {
         type: CHANGE_ASKED_QUESTION_STATUS,
         status
+    }
+}
+
+export var startAddListOfPatientQuestions = () => {
+    return (dispatch, getState) => {
+        console.log('startAddListOfPatientQuestions')
+        const { uid, role } = getState().user;
+        let questionsRef = firebase.database().ref(`${role}s/${uid}/questions`)
+        
+        questionsRef.once('value',snapshot => {
+            var res = snapshot.val() || {}
+            var keys = Object.keys(res) || []
+            var questions = keys.map((id) => {
+                return {
+                    ...res[id],
+                    id
+                }
+            })
+            dispatch(addListOfPatientQuestions(questions))
+        })
+
+        questionsRef.on('child_changed', (snapshot) => {
+            var question = {
+                id: snapshot.key,
+                ...snapshot.val()
+            }
+            dispatch(addMyQuestion(question))
+        })
+    }
+}
+
+export var addListOfPatientQuestions = questions => {
+    return {
+        type: ADD_MY_LIST_OF_QUESTIONS,
+        questions
+    }
+}
+
+export var addMyQuestion = question => {
+    return {
+        type: ADD_MY_QUESTION,
+        question
     }
 }
