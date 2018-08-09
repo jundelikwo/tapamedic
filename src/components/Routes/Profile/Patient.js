@@ -190,13 +190,13 @@ class Profile extends Component{
                 </div>
             )
         }else{
-            return questions.map(question => {
+            return questions.map(({id,text}) => {
                 return(
-                    <li style={{ 
+                    <li key={id} style={{ 
                         borderBottom: '1px solid #eee',
                         padding: '14.35px 0',
                         fontSize: '0.9em'
-                    }}>{question.text}</li>
+                    }}>{text}</li>
                 )
             })
         }

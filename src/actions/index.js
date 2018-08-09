@@ -221,7 +221,7 @@ export var startAddListOfPatientQuestions = () => {
     return (dispatch, getState) => {
         console.log('startAddListOfPatientQuestions')
         const { uid, role } = getState().user;
-        let questionsRef = firebase.database().ref(`${role}s/${uid}/questions`)
+        let questionsRef = firebase.database().ref('questions').orderByChild('patientId').equalTo(uid)
         
         questionsRef.once('value',snapshot => {
             var res = snapshot.val() || {}
