@@ -5,6 +5,7 @@ import {
     ADD_CLAIMS,
     ADD_PATIENT_QUESTION_TO_STORE,
     ADD_MY_LIST_OF_QUESTIONS,
+    ADD_LIST_OF_QUESTIONS,
     ADD_MY_QUESTION,
     TOGGLE_ROLE,
     ADD_DISPLAY_NAME, 
@@ -256,5 +257,32 @@ export var addMyQuestion = question => {
     return {
         type: ADD_MY_QUESTION,
         question
+    }
+}
+
+export var startAddQuestionsList = () => {
+    return (dispatch, getState) => {
+        const { role } = getState().user;
+        let questionsRef = firebase.database().ref('questions')       
+        
+        questionsRef.once('value',snapshot => {
+            var res = snapshot.val() || {}
+            var keys = Object.keys(res) || []
+            var questions = keys.map((id) => {
+                return {
+                    ...res[id],
+                    id
+                }
+            })
+            console.log('add list of questions', questions)
+            dispatch(addListOfQuestions(questions))
+        })
+    }   
+}
+
+var addListOfQuestions = questions => {
+    return {
+        type: ADD_LIST_OF_QUESTIONS,
+        questions
     }
 }

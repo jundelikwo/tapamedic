@@ -2,6 +2,7 @@ import {
     ADD_PATIENT_QUESTION_TO_STORE, 
     ADD_MY_LIST_OF_QUESTIONS,
     ADD_MY_QUESTION,
+    ADD_LIST_OF_QUESTIONS,
     REMOVE_PATIENT_QUESTION_FROM_STORE,
     LOGOUT,
     CHANGE_ASKED_QUESTION_STATUS
@@ -22,6 +23,8 @@ let questionsReducer = (state = initialState, action) => {
             return { ...state, questionsIAsked: action.questions }
         case ADD_MY_QUESTION:
             return { ...state, questionsIAsked: [ ...state.questionsIAsked, action.question ] }
+        case ADD_LIST_OF_QUESTIONS:
+            return { ...state, questions: action.questions }
         case REMOVE_PATIENT_QUESTION_FROM_STORE:
             return { ...state, ask:initialState.ask }
         case CHANGE_ASKED_QUESTION_STATUS:
