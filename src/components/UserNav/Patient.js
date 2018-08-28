@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom'
 import firebase from 'firebase'
-import IsLoggedIn from './IsLoggedIn'
+import IsLoggedIn from '../IsLoggedIn'
 
 class Nav extends Component{
   componentDidMount(){

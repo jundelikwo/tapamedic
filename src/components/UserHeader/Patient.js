@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
 import firebase from 'firebase'
-import IsLoggedIn from './IsLoggedIn'
+import IsLoggedIn from '../IsLoggedIn'
 
 class Header extends Component{
     render(){
