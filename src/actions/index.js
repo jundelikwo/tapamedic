@@ -266,14 +266,14 @@ export var startAddQuestionsList = () => {
         let questionsRef = firebase.database().ref('questions')       
         
         questionsRef.once('value',snapshot => {
-            var res = snapshot.val() || {}
-            var keys = Object.keys(res) || []
-            var questions = keys.map((id) => {
-                return {
-                    ...res[id],
-                    id
-                }
-            })
+            var questions = snapshot.val() || {}
+            // var keys = Object.keys(res) || []
+            // var questions = keys.map((id) => {
+            //     return {
+            //         ...res[id],
+            //         id
+            //     }
+            // })
             console.log('add list of questions', questions)
             dispatch(addListOfQuestions(questions))
         })

@@ -22,7 +22,7 @@ class Questions extends Component{
 
 const mapStateToProps = state => {
     return {
-        shouldFetchQuestions: !state.questions.questions.length
+        shouldFetchQuestions: !Object.keys(state.questions.questions).length
     }
 }
 

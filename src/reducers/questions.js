@@ -11,7 +11,7 @@ import {
 const initialState = {
     ask: '',
     askedQuestionStatus: false,
-    questions: [],
+    questions: {},
     questionsIAsked: []
 }
 

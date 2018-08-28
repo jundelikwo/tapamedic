@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import IsLoggedIn from '../../IsLoggedIn'
+import QuestionsList from '../../QuestionsList'
 import { addPatientQuestionToStore, removePatientQuestionFromStore, askQuestion } from '../../../actions'
 
 class Questions extends Component{
@@ -69,6 +70,7 @@ class Questions extends Component{
                         <div className="clearfix" />
                     </div>
                 </div>
+                <QuestionsList/>
             </div>
         )
     }

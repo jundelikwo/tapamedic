@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import IsLoggedIn from '../../IsLoggedIn'
+import QuestionsList from '../../QuestionsList'
 
 class Questions extends Component{
     render(){
@@ -11,6 +12,7 @@ class Questions extends Component{
                         Questions Page
                     </div>
                 </div>
+                <QuestionsList/>
             </div>
         )
     }
