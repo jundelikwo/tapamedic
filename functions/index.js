@@ -262,13 +262,20 @@ exports.shouldApproveDoctor = functions.database.ref('/doctors/{uid}/approved').
 exports.onAskQuestion = functions.database.ref('patients/{uid}/questions/{questionId}').onCreate((snapshot, context) => {
     const { uid, questionId } = context.params
     const { language, text } = snapshot.val()
+    const time = new Date().getTime()
+    const slug = text.toLowerCase().replace(/ /g,'-') + '-' + time
     let questionRef = admin.database().ref('questions').push({
         language,
         text,
         patientId: uid,
-        answered: false
+        questionId,
+        answered: false,
+        answers: 0,
+        slug
     })
     return questionRef.then(() => {
-        return admin.database().ref(`patients/${uid}/questions/${questionId}`).update({ questionId: questionRef.key })
+        return admin.database().ref(`patients/${uid}/questions/${questionId}`).update({ questionId: questionRef.key, answers: 0 }).then(() => {
+            return admin.database().ref(`answers/${questionRef.key}`).set({ slug, answersCount: 0 })
+        })
     })
 })
