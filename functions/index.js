@@ -283,14 +283,21 @@ exports.onAskQuestion = functions.database.ref('patients/{uid}/questions/{questi
 exports.onCreateNewAnswer = functions.database.ref('answers/{questionId}/answers/{uid}').onCreate((snapshot, context) => {
     const { uid, questionId } = context.params
     const { text } = snapshot.val()
-    const time = new Date().getTime()
+    const user = context.auth
+    const answerMeta = {
+        name: user.token.name,
+        photo: user.token.picture
+    }
+
+    console.log('answerMeta',answerMeta)
     
     return admin.database().ref(`doctors/${uid}/answers/${questionId}`).update({ text }).then(() => {
         return admin.database().ref(`answers/${questionId}/answersCount`).once('value').then((snap) => {
             const count = Number(snap.val()) + 1
-
             return admin.database().ref(`answers/${questionId}`).update({ answersCount: count }).then(() => {
-                return admin.database().ref(`questions/${questionId}`).update({ answers: count, answered: true })  
+                return admin.database().ref(`questions/${questionId}`).update({ answers: count, answered: true }).then(() => {
+                    return admin.database().ref(`answers/${questionId}/answers/${uid}`).update(answerMeta)
+                })
             })
         })
     })
