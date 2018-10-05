@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux'
+import { NavLink } from 'react-router-dom';
 
 class QuestionsList extends Component {
     renderQuestions() {
@@ -8,16 +9,21 @@ class QuestionsList extends Component {
         const questionKeys = Object.keys(questions)
 
         return questionKeys.map(key => {
-            const { text,language } = questions[key]
+            const { text,language,slug } = questions[key]
+            const linkAddress = "/dashboard/questions/" + slug
             return (
-                <a key={key} className="questions">
+                <NavLink key={key} to={{
+                    pathname: linkAddress,
+                    state: { key }
+                }} className="questions">
                     <div className="main-page">
                         <div className="blank-page widget-shadow scroll" id="style-2 div1">
                             <p>Question added &nbsp;&nbsp;*&nbsp;&nbsp; Language {language}</p>
                             <h2>{text}</h2>
+                            <button className="btn btn-primary">View Answers</button>
                         </div>
                     </div>
-                </a>
+                </NavLink>
             )
         })
     }

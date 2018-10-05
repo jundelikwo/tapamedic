@@ -7,6 +7,7 @@ import Main from '../UserMain'
 import Nav from '../../UserNav/'
 import Footer from '../../UserFooter'
 import VerifyEmail from '../VerifyEmail'
+import Answers from '../Answers/'
 import Profile from '../Profile/'
 import Questions from '../Questions/'
 import TalkToADoc from '../TalkToADoc/'
@@ -21,6 +22,7 @@ class DoctorDashboard extends Component{
                     <Header/>
                     <PrivateRoute exact path={match.path} component={Main}/>
                     <PrivateRoute exact path={match.path + '/questions'} component={Questions}/>
+                    <PrivateRoute exact path={match.path + '/questions/:slug'} component={Answers}/>
                     <PrivateRoute exact path={match.path + '/talk-to-a-doc'} component={TalkToADoc}/>
                     <PrivateRoute path={match.path + '/profile'} component={Profile}/>
                     <PrivateRoute path={match.path + '/verifyEmail'} component={VerifyEmail}/>

@@ -215,8 +215,10 @@ i.nav_icon {
     -moz-osx-font-smoothing: grayscale;
 }
 a.questions{
-    margin-bottom: 10px;
     color: #333;
+}
+a.questions .main-page{
+    margin-bottom: 10px;
 }
 a.questions:hover h2{
     text-decoration: underline;

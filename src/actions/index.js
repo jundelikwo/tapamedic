@@ -265,7 +265,7 @@ export var startAddQuestionsList = () => {
         const { role } = getState().user;
         let questionsRef = firebase.database().ref('questions')       
         
-        questionsRef.once('value',snapshot => {
+        questionsRef.on('value',snapshot => {
             var questions = snapshot.val() || {}
             // var keys = Object.keys(res) || []
             // var questions = keys.map((id) => {
@@ -284,5 +284,27 @@ var addListOfQuestions = questions => {
     return {
         type: ADD_LIST_OF_QUESTIONS,
         questions
+    }
+}
+
+export var fetchAnswer = slug => {
+    return (dispatch, getState) => {
+        let answersRef = firebase.database().ref('answers').orderByChild('slug').equalTo(slug)
+
+        answersRef.once('value',snapshot => {
+            let val = snapshot.val()
+            let key = Object.keys(val)[0]
+            let answer = {
+                [slug]: { ...val[key], key }
+            }
+            console.log('Answer for',slug, ' answer',answer)
+        })
+    }
+}
+
+export var answerAQuestion = (id,answer) => {
+    return (dispatch, getState) => {
+        const { uid, role } = getState().user;
+        firebase.database().ref(`answers/${id}/answers/${uid}`).update({ text: answer })
     }
 }

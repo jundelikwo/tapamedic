@@ -6,8 +6,10 @@ import fileUploadReducer from './fileUpload'
 import doctorProfileReducer from './doctorProfile'
 import languagesReducer from './languages'
 import questionsReducer from './questions'
+import answersReducer from './answers'
 
 let reducers = combineReducers({
+    answers: answersReducer,
     user: userReducer,
     profile: profileReducer,
     wallet: walletReducer,

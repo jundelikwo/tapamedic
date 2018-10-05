@@ -183,7 +183,7 @@ class Profile extends Component{
         let { questions } = this.props
         if(!questions.length){
             return(
-                <div class="well">
+                <div className="well">
                     <strong style={{ fontWeight: 'bold' }}>Ooops! No Questions to display</strong>
                     <p>If you have asked one of our doctors a question before please kindly give us a second to load it</p>
                     <p>If you haven't <NavLink to="/dashboard/questions">Click Me</NavLink> to ask a question</p>

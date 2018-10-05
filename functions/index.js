@@ -275,7 +275,23 @@ exports.onAskQuestion = functions.database.ref('patients/{uid}/questions/{questi
     })
     return questionRef.then(() => {
         return admin.database().ref(`patients/${uid}/questions/${questionId}`).update({ questionId: questionRef.key, answers: 0 }).then(() => {
-            return admin.database().ref(`answers/${questionRef.key}`).set({ slug, answersCount: 0 })
+            return admin.database().ref(`answers/${questionRef.key}`).set({ slug, answersCount: 0, text })
+        })
+    })
+})
+
+exports.onCreateNewAnswer = functions.database.ref('answers/{questionId}/answers/{uid}').onCreate((snapshot, context) => {
+    const { uid, questionId } = context.params
+    const { text } = snapshot.val()
+    const time = new Date().getTime()
+    
+    return admin.database().ref(`doctors/${uid}/answers/${questionId}`).update({ text }).then(() => {
+        return admin.database().ref(`answers/${questionId}/answersCount`).once('value').then((snap) => {
+            const count = Number(snap.val()) + 1
+
+            return admin.database().ref(`answers/${questionId}`).update({ answersCount: count }).then(() => {
+                return admin.database().ref(`questions/${questionId}`).update({ answers: count, answered: true })  
+            })
         })
     })
 })
