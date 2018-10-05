@@ -4,6 +4,7 @@ import RenderRole from '../../RenderRole'
 import IsLoggedIn from '../../IsLoggedIn'
 import Doctor from './Doctor'
 import Patient from './Patient'
+import AnswersList from '../../AnswersList'
 
 import { fetchAnswers } from '../../../actions/'
 
@@ -16,7 +17,14 @@ class Answers extends Component{
     }
 
     render(){
-        return <RenderRole {...this.props} patient={Patient} doctor={Doctor} />
+        return (
+            <RenderRole
+                content={<AnswersList match={this.props.match}/>}
+                {...this.props}
+                patient={Patient}
+                doctor={Doctor} 
+            />
+        )
     }
 }
 

@@ -69,6 +69,7 @@ class Answers extends Component{
                         </form>
                     </div>
                 </div>
+                {this.props.content}
             </div>
         )
     }

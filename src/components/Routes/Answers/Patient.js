@@ -14,6 +14,7 @@ class Answers extends Component{
                         <h2 style={{ fontSize: '1.35rem', fontWeight: 'bold' }}>{toTitleCase(this.props.title)}</h2>
                     </div>
                 </div>
+                {this.props.content}
             </div>
         )
     }
