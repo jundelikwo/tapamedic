@@ -7,6 +7,7 @@ import {
     ADD_MY_LIST_OF_QUESTIONS,
     ADD_LIST_OF_QUESTIONS,
     ADD_MY_QUESTION,
+    ADD_ANSWERS_TO_A_QUESTIONS,
     TOGGLE_ROLE,
     ADD_DISPLAY_NAME, 
     ADD_PROFILE_DATA,
@@ -287,18 +288,25 @@ var addListOfQuestions = questions => {
     }
 }
 
-export var fetchAnswer = slug => {
+export var fetchAnswers = slug => {
     return (dispatch, getState) => {
         let answersRef = firebase.database().ref('answers').orderByChild('slug').equalTo(slug)
 
         answersRef.once('value',snapshot => {
             let val = snapshot.val()
             let key = Object.keys(val)[0]
-            let answer = {
+            let answers = {
                 [slug]: { ...val[key], key }
             }
-            console.log('Answer for',slug, ' answer',answer)
+            dispatch(saveAnswers(answers))
         })
+    }
+}
+
+const saveAnswers = answers => {
+    return {
+        type: ADD_ANSWERS_TO_A_QUESTIONS,
+        answers
     }
 }
 

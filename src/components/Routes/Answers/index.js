@@ -5,14 +5,14 @@ import IsLoggedIn from '../../IsLoggedIn'
 import Doctor from './Doctor'
 import Patient from './Patient'
 
-import { fetchAnswer } from '../../../actions/'
+import { fetchAnswers } from '../../../actions/'
 
 class Answers extends Component{
     componentWillMount(){
         console.log('Answers Props',this.props)
         const { slug } = this.props
         const { id } = this.props
-        this.props.dispatch(fetchAnswer(slug))
+        this.props.dispatch(fetchAnswers(slug))
     }
 
     render(){
