@@ -36,7 +36,11 @@ class Nav extends Component{
                   <span className="icon-bar"></span>
                   <span className="icon-bar"></span>
                   </button>
-                  <h1><NavLink to="/" className="navbar-brand" href="index.html"><span className="fa fa-area-chart"></span> tapamedic.com<span className="dashboard_text">Design dashboard</span></NavLink></h1>
+                  <h1 style={{ margin: 0, height: '120px' }}>
+                    <NavLink to="/" style={{ padding: 0, marginTop: '-40px' }} className="navbar-brand" href="index.html">
+                      <img style={{ height: '200px', width: '100%' }} src="/images/logo.svg"/>
+                    </NavLink>
+                  </h1>
                 </div>
                 <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                   <ul className="sidebar-menu">
