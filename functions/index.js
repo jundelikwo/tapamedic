@@ -302,3 +302,36 @@ exports.onCreateNewAnswer = functions.database.ref('answers/{questionId}/answers
         })
     })
 })
+
+exports.setActiveDoctor = functions.database.ref('/doctors/{uid}/status').onWrite((change, context) => {
+    const uid = context.params.uid
+    const status = change.after.val()
+    const { approved, name, picture } = context.auth.token
+    console.log('status',status)
+    console.log('user',context.auth)
+    console.log('token',context.auth.token)
+    console.log('approved',approved)
+    if(!approved){
+        return false;
+    }
+
+    if(status === 'online'){
+        console.log("Hooray I'm online")
+        return admin.database().ref(`onlineDoctors/online/${uid}`).update({ name, picture }).then(() => {
+            return admin.database().ref(`onlineDoctors/busy/`).update({ [uid]: null })
+        })
+    }else if(status === 'offline'){
+        console.log("Nooooo I'm offline")
+        return admin.database().ref(`onlineDoctors/online/`).update({ [uid]: null }).then(() => {
+            return admin.database().ref(`onlineDoctors/busy/`).update({ [uid]: null })
+        })
+    }else if(status === 'busy'){
+        console.log("Nooooo I'm busy")
+        return admin.database().ref(`onlineDoctors/busy/${uid}`).update({ name, picture }).then(() => {
+            return admin.database().ref(`onlineDoctors/online/`).update({ [uid]: null })
+        })
+    }
+
+    return false;
+})
+
