@@ -292,14 +292,18 @@ export var fetchAnswers = slug => {
     return (dispatch, getState) => {
         let answersRef = firebase.database().ref('answers').orderByChild('slug').equalTo(slug)
 
-        answersRef.once('value',snapshot => {
-            let val = snapshot.val()
-            let key = Object.keys(val)[0]
-            let answers = {
-                [slug]: { ...val[key], key }
-            }
-            dispatch(saveAnswers(answers))
-        })
+        if(!getState().answers.answers[slug]){
+            console.log('fetching....',slug);
+            answersRef.on('value',snapshot => {
+                console.log('fetched',snapshot.val())
+                let val = snapshot.val()
+                let key = Object.keys(val)[0]
+                let answers = {
+                    [slug]: { ...val[key], key }
+                }
+                dispatch(saveAnswers(answers))
+            })
+        }
     }
 }
 
@@ -314,5 +318,32 @@ export var answerAQuestion = (id,answer) => {
     return (dispatch, getState) => {
         const { uid, role } = getState().user;
         firebase.database().ref(`answers/${id}/answers/${uid}`).update({ text: answer })
+    }
+}
+
+
+export var goOnline = () => {
+    return (dispatch, getState) => {
+        const { uid, role } = getState().user;
+        const userRef = firebase.database().ref(`${role}s/${uid}/status`)
+        firebase.database().ref('.info/connected').on('value',snap=>{
+            if(snap.val()){
+                //userRef.onDisconnect().remove();
+                userRef.onDisconnect().set('offline');
+                userRef.set('online')
+            }
+        })
+    }
+}
+
+export var goOffline = () => {
+    return (dispatch, getState) => {
+        console.log('goOffline')
+        const { uid, role } = getState().user;
+        const userRef = firebase.database().ref(`${role}s/${uid}/status`)
+        userRef.set('offline').then(() => {
+            console.log('I am offline')
+            //dispatch(logout())
+        })
     }
 }

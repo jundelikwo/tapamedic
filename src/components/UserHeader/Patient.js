@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
 import firebase from 'firebase'
+
+import { goOffline } from '../../actions/'
 import IsLoggedIn from '../IsLoggedIn'
 
 class Header extends Component{
@@ -205,6 +207,7 @@ class Header extends Component{
 								<li> <a><i className="fa fa-suitcase"></i> My Wallet</a> </li> 
 								<li> <a onClick={(e) => {
 									e.preventDefault()
+									this.props.dispatch(goOffline())
 									firebase.auth().signOut()
 								}}><i className="fa fa-sign-out"></i> Logout</a> </li>
 							</ul>

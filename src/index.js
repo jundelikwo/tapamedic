@@ -6,7 +6,15 @@ import { applyMiddleware, createStore, compose } from 'redux'
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
 import reducers from './reducers'
-import { login, logout, addClaims, startAddProfileData, startAddSupportedLanguages, startAddListOfPatientQuestions } from './actions'
+import {
+  login,
+  logout,
+  addClaims,
+  goOnline,
+  startAddProfileData,
+  startAddSupportedLanguages,
+  startAddListOfPatientQuestions 
+} from './actions'
 import { FirebaseConfig } from './config'
 import { b64DecodeUnicode } from './functions'
 import './index.css';
@@ -42,6 +50,7 @@ firebase.auth().onAuthStateChanged(user => {
     firebase.database().goOnline();
     console.log('User',user)
     store.dispatch(login(user))
+    store.dispatch(goOnline())
 
     let profileDataRef  = null
     user.getIdTokenResult().then((idTokenResult) => {

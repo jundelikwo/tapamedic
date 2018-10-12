@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom'
 import firebase from 'firebase'
+import { connect } from 'react-redux'
+
+import { goOffline } from '../../actions/'
 import IsLoggedIn from '../IsLoggedIn'
 
 class Nav extends Component{
@@ -77,6 +80,7 @@ class Nav extends Component{
                     <li className="treeview">
                     <a onClick={(e) => {
                       e.preventDefault()
+                      this.props.dispatch(goOffline())
                       firebase.auth().signOut()
                     }}>
                         <i className="fa fa-sign-out"></i> <span>Logout</span>
@@ -98,5 +102,5 @@ const activeStyle = {
   borderLeftColor: '#3c8dbc'
 }
 
-export default IsLoggedIn(Nav)
+export default IsLoggedIn(connect(null)(Nav))
 //export default Nav
