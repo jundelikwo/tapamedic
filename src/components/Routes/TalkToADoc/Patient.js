@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
+import DoctorItem from '../../DoctorItem'
 import IsLoggedIn from '../../IsLoggedIn'
 
 class Patient extends Component{
@@ -9,23 +10,7 @@ class Patient extends Component{
         let doctorsId = Object.keys(doctors)
         return doctorsId.map(id=>{
             console.log('id',id,'doctor',doctors[id]);   
-            const { name, picture } = doctors[id]
-            return (
-                <div key={id} style={{ borderBottom: '2px solid grey', marginBottom: '10px', paddingBottom: '10px' }}>
-                    <div style={{ padding: '0' }}>
-                        <div style={{ float: 'none' }}>
-                            <div className="profile_img">
-                                <span className="prfil-img"><img style={{ height: '75px', width: '75px' }} src={picture} alt=""/> </span> 
-                                <div className="user-name">
-                                    <p>Dr. {name}</p>
-                                    <button className="btn btn-primary">Start</button>
-                                </div>
-                                <div className="clearfix"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )
+            return <DoctorItem key={id} doctor={doctors[id]} />
         })
     }
 
