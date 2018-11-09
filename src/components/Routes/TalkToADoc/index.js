@@ -1,6 +1,11 @@
 import React, { Component } from 'react'
 import IsLoggedIn from '../../IsLoggedIn'
 
+import RenderRole from '../../RenderRole'
+import Patient from './Patient'
+
+let Doctor = () => <div/>
+
 class TalkToADoc extends Component{
     render(){
         return(
@@ -10,6 +15,11 @@ class TalkToADoc extends Component{
                         TalkToADoc Page
                     </div>
                 </div>
+                <RenderRole 
+                    {...this.props}
+                    patient={Patient}
+                    doctor={Doctor} 
+                />
             </div>
         )
     }

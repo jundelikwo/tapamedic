@@ -6,6 +6,7 @@ import {
     ADD_PATIENT_QUESTION_TO_STORE,
     ADD_MY_LIST_OF_QUESTIONS,
     ADD_LIST_OF_QUESTIONS,
+    ADD_LIST_OF_ONLINE_DOCTORS,
     ADD_MY_QUESTION,
     ADD_ANSWERS_TO_A_QUESTIONS,
     TOGGLE_ROLE,
@@ -56,6 +57,8 @@ export var addDisplayName = (name) => {
 export var addUserData = (data, path='/data', shouldCallthen=true) => {
     return (dispatch, getState) => {
         const { uid, role } = getState().user;
+        console.log('path',`${role}s/${uid}/profile${path}`)
+        console.log('data',data)
         firebase.database().ref(`${role}s/${uid}/profile${path}`).update(data)
             .then(() => {
                 if(shouldCallthen){
@@ -345,5 +348,29 @@ export var goOffline = () => {
             console.log('I am offline')
             //dispatch(logout())
         })
+    }
+}
+
+export var fetchLoggedInDoctors = () => {
+    return (dispatch, getState) => {
+        if(getState().user.role === 'patient'){
+            firebase.database().ref('onlineDoctors').on('value',snapshot => {
+                let doctors = snapshot.val();
+                doctors = doctors || {}
+                doctors.online = doctors.online || {}
+                doctors.busy = doctors.busy || {}
+                console.log('onlineDoctors',doctors)
+                if(doctors){
+                    dispatch(saveOnlineDoctors(doctors))
+                }
+            })
+        }
+    }
+}
+
+const saveOnlineDoctors = doctors => {
+    return {
+        type: ADD_LIST_OF_ONLINE_DOCTORS,
+        doctors
     }
 }

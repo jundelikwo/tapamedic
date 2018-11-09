@@ -11,6 +11,7 @@ import {
   logout,
   addClaims,
   goOnline,
+  fetchLoggedInDoctors,
   startAddProfileData,
   startAddSupportedLanguages,
   startAddListOfPatientQuestions 
@@ -51,6 +52,7 @@ firebase.auth().onAuthStateChanged(user => {
     console.log('User',user)
     store.dispatch(login(user))
     store.dispatch(goOnline())
+    store.dispatch(fetchLoggedInDoctors())
 
     let profileDataRef  = null
     user.getIdTokenResult().then((idTokenResult) => {

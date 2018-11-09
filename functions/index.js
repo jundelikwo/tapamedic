@@ -170,7 +170,8 @@ function photoFunc(object,nameOfFile,resizedImgSize,photoPath,dbName){
     }).then(() => {
         console.log('Image downloaded locally to', tempFilePath);
         // Resize image using ImageMagick.
-        return spawn('convert', [tempFilePath, '-resize', resizedImgSize, JPGFilePath]);
+		return spawn('convert', [tempFilePath, '-resize', resizedImgSize, '-channel', 'RGBA', '-blur', '0x24',  JPGFilePath]);
+        //return spawn('convert', [tempFilePath, '-resize', resizedImgSize, JPGFilePath]);
     }).then(() => {
         console.log('Resized image created at', tempFilePath);
         console.log('thumbFilePath at', thumbFilePath);
