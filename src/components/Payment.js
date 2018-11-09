@@ -2,13 +2,11 @@ import React, { Component } from 'react'
 import PaystackButton from 'react-paystack'
 import firebase from 'firebase'
 import { connect } from 'react-redux'
-import { PaystackPublicKey } from '../../../config'
-import IsLoggedIn from '../../IsLoggedIn'
+import { PaystackPublicKey } from '../config'
 
 class Payment extends Component {
     state = {
         key: PaystackPublicKey, //PAYSTACK PUBLIC KEY
-        amount: 10000 //equals NGN100,
     }
 
     callback = (response) => {
@@ -34,24 +32,18 @@ class Payment extends Component {
 
   render() {
     return (
-        <div id="page-wrapper">
-            <div className="main-page">
-                <div className="blank-page widget-shadow scroll" id="style-2 div1">
-                    <p>
-                    <PaystackButton
-                        text="Make Payment"
-                        class="payButton"
-                        callback={this.callback}
-                        close={this.close}
-                        reference={this.getReference()}
-                        email={this.props.email}
-                        amount={this.state.amount}
-                        paystackkey={this.state.key}
-                    />
-                    </p>
-                </div>
-            </div>
-        </div>
+        <PaystackButton
+            text="Make Payment"
+            class="payButton btn btn-info"
+            callback={this.callback}
+            close={this.close}
+            reference={this.getReference()}
+            disabled={true}
+            embed={true}
+            email={this.props.email}
+            amount={this.props.amount*100}
+            paystackkey={this.state.key}
+        />
     );
   }
 }
@@ -64,4 +56,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default IsLoggedIn(connect(mapStateToProps)(Payment));
+export default connect(mapStateToProps)(Payment);
