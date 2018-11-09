@@ -18,7 +18,7 @@ class AnswersList extends Component {
                                     <div className="profile_img">
                                         <span className="prfil-img"><img style={{ height: '50px', width: '50px' }} src={photo} alt=""/> </span> 
     									<div className="user-name">
-    										<p>{name}</p>
+    										<p>Dr. {name}</p>
     									</div>
                                         <div className="clearfix"></div>
                                     </div>
