@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import ReactModal from 'react-responsive-modal'
 
+import { initiateConsultation } from '../actions'
 import Payment from './Payment'
 import { ConsultationFee } from '../config'
 
@@ -13,7 +14,10 @@ class HireDocModal extends Component{
             <div>
                 <h2 className="text-center h4" style={{ fontWeight: 'bold' }}>Hire this Doctor</h2>
                 <p>Are you sure you want to talk to Dr. {name}?</p>
-                <button className="btn btn-success">Yes</button>
+                <button className="btn btn-success" onClick={()=>{
+                    this.props.dispatch(initiateConsultation(id))
+                    this.props.closeModal()
+                }}>Yes</button>
                 &nbsp;
                 <button className="btn btn-danger" onClick={this.props.closeModal}>No</button>
             </div>

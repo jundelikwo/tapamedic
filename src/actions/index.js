@@ -374,3 +374,9 @@ const saveOnlineDoctors = doctors => {
         doctors
     }
 }
+
+export var initiateConsultation = (doctorId) => {
+    return (dispatch, getState) => {
+        console.log('initiateConsultation',doctorId)
+    }
+}
