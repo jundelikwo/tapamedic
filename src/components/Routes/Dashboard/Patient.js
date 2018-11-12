@@ -7,7 +7,6 @@ import Nav from '../../UserNav/'
 import Footer from '../../UserFooter'
 import Answers from '../Answers/'
 import Profile from '../Profile/'
-import Payment from '../Payment/'
 import Questions from '../Questions/'
 import TalkToADoc from '../TalkToADoc/'
 
@@ -23,7 +22,6 @@ class PatientDashboard extends Component{
                 <PrivateRoute exact path={match.path + '/questions/:slug'} component={Answers}/>
                 <PrivateRoute exact path={match.path + '/talk-to-a-doc'} component={TalkToADoc}/>
                 <PrivateRoute path={match.path + '/profile'} component={Profile}/>
-                <PrivateRoute exact path={match.path + '/payment'} component={Payment}/>
                 <Footer/>
             </div>
         )

@@ -173,11 +173,6 @@ class Header extends Component{
 								<span>My Profile</span>
 							</NavLink>
 						</li>
-						<li className="dropdown head-dpdn">
-							<NavLink to="/dashboard/payment" activeStyle={activeStyle} exact>
-								<span>Make Payment</span>
-							</NavLink>
-						</li>
 					</div>
 					<div className="clearfix"> </div>
 				</div>
