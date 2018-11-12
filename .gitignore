@@ -15,6 +15,9 @@
 # firebase keys
 /functions/service-account.json
 
+# firebase cache
+.firebase/
+
 # configurations
 /src/config
 

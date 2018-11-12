@@ -38,8 +38,8 @@ class Payment extends Component {
             callback={this.callback}
             close={this.close}
             reference={this.getReference()}
-            disabled={true}
-            embed={true}
+            //disabled={true}
+            //embed={true}
             email={this.props.email}
             amount={this.props.amount*100}
             paystackkey={this.state.key}
