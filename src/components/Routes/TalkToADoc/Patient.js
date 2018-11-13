@@ -9,7 +9,8 @@ class Patient extends Component{
     state = {
         showHireForm: false,
         id: 0,
-        name: ''
+        name: '',
+        picture: ''
     }
 
     constructor(){
@@ -18,12 +19,12 @@ class Patient extends Component{
         this.closeModal = this.closeModal.bind(this)
     }
 
-    showModal(name,id){
-        this.setState({ name, id, showHireForm: true })
+    showModal(name,id,picture){
+        this.setState({ name, id, picture, showHireForm: true })
     }
 
     closeModal(){
-        this.setState({ name: '', id: 0, showHireForm: false })
+        this.setState({ name: '', id: 0, picture: '', showHireForm: false })
     }
 
     renderDoctors(field){
@@ -37,7 +38,7 @@ class Patient extends Component{
 
     render(){
         let doctors = this.props.doctors
-        const { showHireForm, name, id } = this.state
+        const { showHireForm, name, id, picture } = this.state
         console.log('Patient',doctors)
         let numDoctors = Object.keys(doctors['online']).length + Object.keys(doctors['busy']).length
         return numDoctors ? (
@@ -45,7 +46,7 @@ class Patient extends Component{
                 <h2 className="text-center h2">Available Doctors</h2>
                 {this.renderDoctors('online')}
                 {this.renderDoctors('busy')}
-                <HireDocModal closeModal={this.closeModal} showHireForm={showHireForm} name={name} id={id} />
+                <HireDocModal closeModal={this.closeModal} showHireForm={showHireForm} name={name} id={id} picture={picture} />
             </div>
         ):(
             <div>

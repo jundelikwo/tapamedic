@@ -336,3 +336,26 @@ exports.setActiveDoctor = functions.database.ref('/doctors/{uid}/status').onWrit
     return false;
 })
 
+exports.initializeConsultation = functions.database.ref('/patients/{uid}/consultation/{consultId}').onCreate((snapshot, context) => {
+    const { consultId, uid } = context.params
+    const { name, picture } = context.auth.token
+    const doctorId = snapshot.val().doctor
+    console.log('Menanma')
+    return admin.database().ref(`consultation/${consultId}`).set({ 
+        doctor: {
+            id: doctorId,
+            name: snapshot.val().name,
+            photo: snapshot.val().picture
+        },
+        patient: {
+            id: uid,
+            name,
+            photo: picture
+        },
+        initTime: new Date().getTime(), 
+        started: false 
+    }).then(() => {
+        console.log('doctor initializeConsultation')
+        return admin.database().ref(`doctors/${doctorId}/consultation/${consultId}`).set({ name, picture })
+    })
+})

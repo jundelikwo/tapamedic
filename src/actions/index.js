@@ -375,8 +375,10 @@ const saveOnlineDoctors = doctors => {
     }
 }
 
-export var initiateConsultation = (doctorId) => {
+export var initiateConsultation = (id, name, picture) => {
     return (dispatch, getState) => {
-        console.log('initiateConsultation',doctorId)
+        const { uid } = getState().user;
+        console.log('initiateConsultation',{ doctor: id, name, picture })
+        firebase.database().ref(`patients/${uid}/consultation`).push({ doctor: id, name, picture })
     }
 }

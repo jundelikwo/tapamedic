@@ -16,13 +16,14 @@ class HireDocModal extends Component{
     }
     componentWillReceiveProps(newProps){
         if(newProps.hasEnoughMoney && !this.props.hasEnoughMoney){
-            this.props.dispatch(initiateConsultation(this.props.id))
+            const { name, id, picture } = this.props
+            this.props.dispatch(initiateConsultation(id,name,picture))
             this.setState({ showPaystack: false})
             this.props.closeModal()
         }
     }
     renderContent(){
-        const { showHireForm, name, id, wallet, hasEnoughMoney } = this.props
+        const { showHireForm, name, id, picture, wallet, hasEnoughMoney } = this.props
         const { showPaystack } = this.state
         console.log('wallet',wallet,'hasEnoughMoney',hasEnoughMoney)
         return !showPaystack ? (
@@ -32,7 +33,7 @@ class HireDocModal extends Component{
                 <p>Are you sure you want to continue?</p>
                 <button className="btn btn-success" onClick={()=>{
                     if(hasEnoughMoney){
-                        this.props.dispatch(initiateConsultation(id))
+                        this.props.dispatch(initiateConsultation(id,name,picture))
                         this.props.closeModal()
                     }else{
                         this.setState({ showPaystack: true })

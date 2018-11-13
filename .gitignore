@@ -18,6 +18,9 @@
 # firebase cache
 .firebase/
 
+# firebase RESOURCE_DIR
+%RESOURCE_DIR%/
+
 # configurations
 /src/config
 

@@ -12,8 +12,8 @@ class DoctorItem extends Component {
                             <div className="user-name">
                                 <p>Dr. {name}</p>
                                 <button className="btn btn-primary" onClick={() => {
-                                    this.props.showModal(name,id)
-                                }}>Start</button>
+                                    this.props.showModal(name,id,picture)
+                                }}>Consult</button>
                             </div>
                             <div className="clearfix"></div>
                         </div>
