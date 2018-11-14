@@ -356,6 +356,14 @@ exports.initializeConsultation = functions.database.ref('/patients/{uid}/consult
         started: false 
     }).then(() => {
         console.log('doctor initializeConsultation')
-        return admin.database().ref(`doctors/${doctorId}/consultation/${consultId}`).set({ name, picture })
+        return admin.database().ref(`doctors/${doctorId}/consultation/${consultId}`).set({ name, picture, accepted: false })
+    })
+})
+
+exports.deleteConsultation = functions.database.ref('/consultation/{consultId}').onDelete((snapshot, context) => {
+    const original = snapshot.val()
+    const consultId = context.params.consultId
+    return admin.database().ref(`doctors/${original.doctor.id}/consultation/${consultId}`).remove().then(() => {
+        return admin.database().ref(`patients/${original.patient.id}/consultation/${consultId}`).remove()
     })
 })
