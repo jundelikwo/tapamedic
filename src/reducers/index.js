@@ -8,9 +8,11 @@ import doctorsReducer from './doctors'
 import languagesReducer from './languages'
 import questionsReducer from './questions'
 import answersReducer from './answers'
+import consultationsReducer from './consultations'
 
 let reducers = combineReducers({
     answers: answersReducer,
+    consultations: consultationsReducer,
     user: userReducer,
     profile: profileReducer,
     wallet: walletReducer,

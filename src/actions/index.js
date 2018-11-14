@@ -3,6 +3,7 @@ import {
     LOGIN, 
     LOGOUT, 
     ADD_CLAIMS,
+    ADD_CONSULTATION,
     ADD_PATIENT_QUESTION_TO_STORE,
     ADD_MY_LIST_OF_QUESTIONS,
     ADD_LIST_OF_QUESTIONS,
@@ -17,6 +18,7 @@ import {
     CHANGE_PROFILE_URL, 
     FILE_UPLOAD_PROGRESS,
     REMOVE_PATIENT_QUESTION_FROM_STORE,
+    REMOVE_CONSULTATION,
     CHANGE_ASKED_QUESTION_STATUS
 } from './types'
 import { lang } from 'moment';
@@ -379,6 +381,53 @@ export var initiateConsultation = (id, name, picture) => {
     return (dispatch, getState) => {
         const { uid } = getState().user;
         console.log('initiateConsultation',{ doctor: id, name, picture })
-        firebase.database().ref(`patients/${uid}/consultation`).push({ doctor: id, name, picture })
+        firebase.database().ref(`patients/${uid}/consultation`).push({ accepted: false, doctor: id, name, picture })
+    }
+}
+
+export var startFetchConsultations = () => {
+    return (dispatch, getState) => {
+        const { uid, role } = getState().user;
+        firebase.database().ref(`/${role}s/${uid}/consultation`).on('value',snapshot => {
+            const consultations = snapshot.val()
+            console.log('Consultation',consultations)
+            if(consultations){
+                console.log('CONSULTATION LIST',Object.keys(consultations))
+                Object.keys(consultations).forEach(key => {
+                    dispatch(fetchConsultation(key))
+                })
+            }
+        })
+    }
+}
+
+const fetchConsultation = key => {
+    return (dispatch, getState) => {
+        firebase.database().ref(`consultation/${key}`).on('value',snap=>{
+            const consultation = snap.val()
+            console.log('Consultation key : ',key,':data',consultation)
+            if(consultation){
+                dispatch(addConsultation(key,consultation))
+            }else{
+                const consultations = getState().consultations
+                delete consultations[key]
+                dispatch(removeConsultation(consultations))
+            }
+        })
+    }
+}
+
+const addConsultation = (key,consultation) => {
+    return {
+        type: ADD_CONSULTATION,
+        key,
+        consultation
+    }
+}
+
+const removeConsultation = consultations => {
+    return {
+        type: REMOVE_CONSULTATION,
+        consultations
     }
 }

@@ -340,6 +340,7 @@ exports.initializeConsultation = functions.database.ref('/patients/{uid}/consult
     const { consultId, uid } = context.params
     const { name, picture } = context.auth.token
     const doctorId = snapshot.val().doctor
+    const initTime = new Date().getTime()
     console.log('Menanma')
     return admin.database().ref(`consultation/${consultId}`).set({ 
         doctor: {
@@ -352,11 +353,12 @@ exports.initializeConsultation = functions.database.ref('/patients/{uid}/consult
             name,
             photo: picture
         },
-        initTime: new Date().getTime(), 
+        initTime, 
+        accepted: false,
         started: false 
     }).then(() => {
         console.log('doctor initializeConsultation')
-        return admin.database().ref(`doctors/${doctorId}/consultation/${consultId}`).set({ name, picture, accepted: false })
+        return admin.database().ref(`doctors/${doctorId}/consultation/${consultId}`).set({ name, patient: uid, picture, accepted: false, initTime })
     })
 })
 

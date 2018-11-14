@@ -14,7 +14,8 @@ import {
   fetchLoggedInDoctors,
   startAddProfileData,
   startAddSupportedLanguages,
-  startAddListOfPatientQuestions 
+  startAddListOfPatientQuestions,
+  startFetchConsultations
 } from './actions'
 import { FirebaseConfig } from './config'
 import { b64DecodeUnicode } from './functions'
@@ -53,6 +54,7 @@ firebase.auth().onAuthStateChanged(user => {
     store.dispatch(login(user))
     store.dispatch(goOnline())
     store.dispatch(fetchLoggedInDoctors())
+    store.dispatch(startFetchConsultations())
 
     let profileDataRef  = null
     user.getIdTokenResult().then((idTokenResult) => {
