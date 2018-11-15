@@ -15,6 +15,11 @@ const paystackKey = functions.config().paystack.key
 var paystack = require('paystack')(paystackKey);
 var request = require('request');
 
+const waitingTime = 3 // time in minutes
+const consultationCost = 600 // in Naira
+const doctorCut = 400 // in Naira
+const ourCut = 200 // in Naira
+
 const gcs = require('@google-cloud/storage')({keyFilename: 'service-account.json'});
 const spawn = require('child-process-promise').spawn;
 const path = require('path');
@@ -374,4 +379,45 @@ exports.rejectConsultation = functions.database.ref('doctors/{uid}/consultation/
     const consultId = context.params.consultId
     console.log('rejectConsultation')
     return admin.database().ref(`consultation/${consultId}`).remove()
+})
+
+exports.acceptConsultation = functions.database.ref('doctors/{uid}/consultation/{consultId}/accepted').onUpdate((snapshot, context) => {
+    const { consultId, uid } = context.params
+    let time = new Date().getTime()
+    console.log('acceptConsultation',time)
+    if(snapshot.after.val()){
+        console.log('Hooray you acceptConsultation')
+        return admin.database().ref(`consultation/${consultId}`).once('value',snapshot => {
+            const { initTime,patient } = snapshot.val()
+            if((time - initTime)/1000/60 > waitingTime){
+                console.log('oops timeout')
+                return admin.database().ref(`doctors/${uid}/consultation/${consultId}/accepted`).remove()
+            }
+            console.log('yeah still time')
+            return admin.database().ref(`patients/${patient.id}/profile/wallet`).once('value',snap => {
+                const wallet = snap.val()
+                if(wallet >= consultationCost){
+                    return admin.database().ref(`doctors/${uid}/profile/wallet`).once('value',walSnap => {
+                        console.log('Finally accepted')
+                        time = new Date()
+                        console.log('startTime',time.getFullYear(),'/',time.getMonth() + 1,'/',time.getDate())
+                        let doctorWallet = walSnap.val() || 0
+                        doctorWallet += doctorCut
+                        return admin.database().ref('/').update({
+                            [`consultation/${consultId}/accepted`]: true,
+                            [`consultation/${consultId}/started`]: true,
+                            [`consultation/${consultId}/startTime`]: time.getTime(),
+                            [`patients/${patient.id}/consultation/${consultId}/accepted`]: true,
+                            [`patients/${patient.id}/profile/wallet`]: wallet - consultationCost,
+                            [`doctors/${uid}/wallet`]: doctorWallet,
+                            [`payments/${time.getFullYear()}/${time.getMonth() + 1}/${time.getDate()}/${consultId}`]: ourCut
+                        })
+                    })
+                }
+                console.log('insufficient funds')
+                return admin.database().ref(`doctors/${uid}/consultation/${consultId}/accepted`).remove()
+            })
+        })
+    }
+    return null;
 })
