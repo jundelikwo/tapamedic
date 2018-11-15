@@ -369,3 +369,9 @@ exports.deleteConsultation = functions.database.ref('/consultation/{consultId}')
         return admin.database().ref(`patients/${original.patient.id}/consultation/${consultId}`).remove()
     })
 })   
+
+exports.rejectConsultation = functions.database.ref('doctors/{uid}/consultation/{consultId}/accepted').onDelete((snapshot, context) => {
+    const consultId = context.params.consultId
+    console.log('rejectConsultation')
+    return admin.database().ref(`consultation/${consultId}`).remove()
+})
