@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
+import ConsultationsList from '../../ConsultationsList'
 import DoctorItem from '../../DoctorItem'
 import HireDocModal from '../../HireDocModal'
 import IsLoggedIn from '../../IsLoggedIn'
@@ -27,7 +28,7 @@ class Patient extends Component{
         this.setState({ name: '', id: 0, picture: '', showHireForm: false })
     }
 
-    renderDoctors(field){
+    renderDoctorsList(field){
         let doctors = this.props.doctors[field]
         let doctorsId = Object.keys(doctors)
         return doctorsId.map(id=>{
@@ -36,7 +37,7 @@ class Patient extends Component{
         })
     }
 
-    render(){
+    renderDoctors(){
         let doctors = this.props.doctors
         const { showHireForm, name, id, picture } = this.state
         console.log('Patient',doctors)
@@ -44,8 +45,8 @@ class Patient extends Component{
         return numDoctors ? (
             <div>
                 <h2 className="text-center h2">Available Doctors</h2>
-                {this.renderDoctors('online')}
-                {this.renderDoctors('busy')}
+                {this.renderDoctorsList('online')}
+                {this.renderDoctorsList('busy')}
                 <HireDocModal closeModal={this.closeModal} showHireForm={showHireForm} name={name} id={id} picture={picture} />
             </div>
         ):(
@@ -54,10 +55,17 @@ class Patient extends Component{
             </div>
         )
     }
+
+    render(){
+        console.log('Consultation TalkToADoc',this.props.consultations)
+        console.log('ConsultationList TalkToADoc',this.props.consultationsList)
+        return this.props.consultationsList.length ? <ConsultationsList/> : this.renderDoctors()
+    }
 }
 
 const mapStateToProps = state => {
     return {
+        consultationsList: Object.keys(state.consultations),
         doctors: state.doctors
     }
 }

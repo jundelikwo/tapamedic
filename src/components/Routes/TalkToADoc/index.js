@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import IsLoggedIn from '../../IsLoggedIn'
 
 import RenderRole from '../../RenderRole'
+import Doctor from './Doctor'
 import Patient from './Patient'
 
-let Doctor = () => <div>Hello</div>
 
 class TalkToADoc extends Component{
     render(){

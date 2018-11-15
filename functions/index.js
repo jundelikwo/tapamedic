@@ -368,4 +368,4 @@ exports.deleteConsultation = functions.database.ref('/consultation/{consultId}')
     return admin.database().ref(`doctors/${original.doctor.id}/consultation/${consultId}`).remove().then(() => {
         return admin.database().ref(`patients/${original.patient.id}/consultation/${consultId}`).remove()
     })
-})
+})   

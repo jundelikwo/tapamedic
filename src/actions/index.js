@@ -409,7 +409,7 @@ const fetchConsultation = key => {
             if(consultation){
                 dispatch(addConsultation(key,consultation))
             }else{
-                const consultations = getState().consultations
+                const consultations = {...getState().consultations}
                 delete consultations[key]
                 dispatch(removeConsultation(consultations))
             }
@@ -431,3 +431,16 @@ const removeConsultation = consultations => {
         consultations
     }
 }
+
+const toggleConsultation = accepted => {
+    return id => {
+        return (dispatch, getState) => {
+            const { uid } = getState().user;
+            console.log(`doctors/${uid}/consultation/${id}`,accepted)
+            firebase.database().ref(`doctors/${uid}/consultation/${id}`).update({ accepted })
+        }
+    }
+}
+
+export var acceptConsultation = toggleConsultation(true)
+export var rejectConsultation = toggleConsultation(null)
