@@ -87,9 +87,12 @@ exports.verifyPaystack = functions.database.ref('/patients/{uid}/payment').onWri
         console.log('Error',error)
         console.log('Body',body)
         if( !error && body.status ){
-            const { amount, reference, customer } = body.data
+            const { amount, reference, customer, status } = body.data
             id = customer.email.substring(0,customer.email.lastIndexOf('@'))
             if(id !== context.auth.token.phone_number){
+                return null;
+            }
+            if(status !== 'success'){
                 return null;
             }
             paystackId = customer.id
@@ -398,7 +401,7 @@ exports.acceptConsultation = functions.database.ref('doctors/{uid}/consultation/
                 const wallet = snap.val()
                 if(wallet >= consultationCost){
                     return admin.database().ref(`doctors/${uid}/profile/wallet`).once('value',walSnap => {
-                        console.log('Finally accepted')
+                        console.log('Finally accepted',walSnap.val())
                         time = new Date()
                         console.log('startTime',time.getFullYear(),'/',time.getMonth() + 1,'/',time.getDate())
                         let doctorWallet = walSnap.val() || 0
@@ -409,7 +412,7 @@ exports.acceptConsultation = functions.database.ref('doctors/{uid}/consultation/
                             [`consultation/${consultId}/startTime`]: time.getTime(),
                             [`patients/${patient.id}/consultation/${consultId}/accepted`]: true,
                             [`patients/${patient.id}/profile/wallet`]: wallet - consultationCost,
-                            [`doctors/${uid}/wallet`]: doctorWallet,
+                            [`doctors/${uid}/profile/wallet`]: doctorWallet,
                             [`payments/${time.getFullYear()}/${time.getMonth() + 1}/${time.getDate()}/${consultId}`]: ourCut
                         })
                     })
