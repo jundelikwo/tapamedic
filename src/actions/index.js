@@ -19,7 +19,9 @@ import {
     FILE_UPLOAD_PROGRESS,
     REMOVE_PATIENT_QUESTION_FROM_STORE,
     REMOVE_CONSULTATION,
-    CHANGE_ASKED_QUESTION_STATUS
+    CHANGE_ASKED_QUESTION_STATUS,
+    ENTERING_MESSAGES_ROUTE,
+    LEAVING_MESSAGES_ROUTE
 } from './types'
 import { lang } from 'moment';
 
@@ -444,3 +446,24 @@ const toggleConsultation = accepted => {
 
 export var acceptConsultation = toggleConsultation(true)
 export var rejectConsultation = toggleConsultation(null)
+
+export var enterMessagesRoute = consultId => {
+    return {
+        type: ENTERING_MESSAGES_ROUTE,
+        consultId
+    }
+}
+
+export var leaveMessagesRoute = () => {
+    return {
+        type: LEAVING_MESSAGES_ROUTE
+    }
+}
+
+export var sendMessage = (consultId,message) => {
+    return (dispatch,getState) => {
+        const { uid } = getState().user;
+        console.log('Send Message', message," : consultId",consultId," : user",uid)
+        firebase.database().ref(`/messages/${consultId}/`).push({ user: uid, message })
+    }
+}

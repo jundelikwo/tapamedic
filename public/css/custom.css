@@ -101,4 +101,12 @@
     .navbar-top-links .dropdown-alerts {
         margin-left: auto;
     }
+    div.footer.messages {
+        /*margin-left: 230px;*/
+        width: auto;
+        right: 0;
+        left: 230px;
+        bottom: 0;
+        position: absolute;
+    }
 }

@@ -1,14 +1,68 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
+
 import IsLoggedIn from './IsLoggedIn'
+import { sendMessage } from '../actions'
+import { ConsultationDurationSeconds } from '../config'
 
 class Footer extends Component{
+    state = {
+        message: ""
+    }
+
+    onWriteMsg = evt => {
+        evt.preventDefault()
+        this.setState({ message: evt.target.value })
+    }
+
+    sendMsg = evt => {
+        evt.preventDefault()
+        if(this.state.message.length){
+            this.props.dispatch(sendMessage(this.props.consultId,this.state.message))
+        }
+    }
+
+    renderMessageForm = () => {
+        const { message } = this.state
+        let sendBtnClass = message.length ? "btn btn-primary" : "btn disabled"
+        return (
+            <form className="form-horizontal readOnly" onSubmit={this.sendMsg}>
+                <div className="form-group mb-n" style={{ marginBottom: 0 }}>
+                    <div className="col-sm-8" style={{ height: 30 }}>
+                        <textarea placeholder="Write your message" onChange={this.onWriteMsg} value={message} className="form-control1" style={{ padding: 0, margin: 0, height: 30 }} />
+                    </div>
+                    <div className="col-sm-4">
+                        <button className="btn btn-danger" style={{ marginRight: 5 }}><i className="fa fa-video-camera"/></button>
+                        <button className="btn btn-danger" style={{ marginRight: 5 }}><i className="fa fa-phone"/></button>
+                        <button className="btn btn-info" style={{ marginRight: 5 }}><i className="fa fa-image"/></button>
+                        <button type="submit" className={sendBtnClass}>Send</button>
+                    </div>
+                </div>
+            </form>
+        )
+    }
+
     render(){
-        return(
-            <div className="footer">
-                <p>&copy; 2018 Tapamedic.com. All Rights Reserved | Design by <a href="https://w3layouts.com/" target="_blank" rel="noopener noreferrer">w3layouts</a></p>
+        const { isMessagesRoute, consultations, consultId } = this.props
+        let allowWrite = false;
+        if(isMessagesRoute){
+            allowWrite = new Date().getTime() <= consultations[consultId].startTime + ConsultationDurationSeconds
+        }
+        return (
+            <div className="footer messages">
+                {allowWrite ? this.renderMessageForm() : (
+                    <p>&copy; 2018 Tapamedic.com. All Rights Reserved | Design by <a href="https://w3layouts.com/" target="_blank" rel="noopener noreferrer">w3layouts</a></p>
+                )}       
             </div>
         )
     }
 }
 
-export default IsLoggedIn(Footer)
+const mapStateToProps = ({ consultations, router }) => {
+    return {
+        ...router,
+        consultations,
+    }
+}
+
+export default connect(mapStateToProps)(IsLoggedIn(Footer))
