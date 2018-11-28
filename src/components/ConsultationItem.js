@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { NavLink } from 'react-router-dom';
 
 import { acceptConsultation, rejectConsultation } from '../actions';
 
@@ -32,18 +33,23 @@ class ConsultationItem extends Component{
 
         if(accepted === true){
             return (
-                <div style={{ borderBottom: '2px solid grey', marginBottom: '10px', paddingBottom: '10px' }}>
-                    <div style={{ float: 'none' }}>
-                        <div className="profile_img">
-                            <span className="prfil-img"><img style={{ height: '75px', width: '75px' }} src={photo} alt=""/> </span> 
-                            <div className="user-name">
-                                <p>{name}</p>
-                                <button className="btn btn-success">View Messages</button>
+                <NavLink to={{
+                    pathname: "/dashboard/talk-to-a-doc/messages",
+                    state: { consultId }
+                }}>
+                    <div style={{ borderBottom: '2px solid grey', marginBottom: '10px', paddingBottom: '10px' }}>
+                        <div style={{ float: 'none' }}>
+                            <div className="profile_img">
+                                <span className="prfil-img"><img style={{ height: '75px', width: '75px' }} src={photo} alt=""/> </span> 
+                                <div className="user-name">
+                                    <p>{name}</p>
+                                    <button className="btn btn-success">View Messages</button>
+                                </div>
+                                <div className="clearfix"></div>
                             </div>
-                            <div className="clearfix"></div>
                         </div>
                     </div>
-                </div>
+                </NavLink>
             )
         }else{
             return(

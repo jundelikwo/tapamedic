@@ -5,8 +5,13 @@ import RenderRole from '../../RenderRole'
 import Doctor from './Doctor'
 import Patient from './Patient'
 
+import { resizePageWrapper } from '../../../functions'
 
 class TalkToADoc extends Component{
+    componentDidMount(){
+        resizePageWrapper()
+    }
+
     render(){
         return(
             <div id="page-wrapper">

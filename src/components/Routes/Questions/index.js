@@ -6,6 +6,7 @@ import Doctor from './Doctor'
 import Patient from './Patient'
 
 import { startAddQuestionsList } from '../../../actions/'
+import { resizePageWrapper } from '../../../functions'
 
 class Questions extends Component{
     componentWillMount(){
@@ -13,6 +14,10 @@ class Questions extends Component{
             console.log('Fetching Questions')
             this.props.dispatch(startAddQuestionsList())
         }
+    }
+
+    componentDidMount(){
+        resizePageWrapper()
     }
 
     render(){

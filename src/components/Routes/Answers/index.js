@@ -7,6 +7,7 @@ import Patient from './Patient'
 import AnswersList from '../../AnswersList'
 
 import { fetchAnswers } from '../../../actions/'
+import { resizePageWrapper } from '../../../functions'
 
 class Answers extends Component{
     componentWillMount(){
@@ -14,6 +15,10 @@ class Answers extends Component{
         const { slug } = this.props
         const { id } = this.props
         this.props.dispatch(fetchAnswers(slug))
+    }
+
+    componentDidMount(){
+        resizePageWrapper()
     }
 
     render(){

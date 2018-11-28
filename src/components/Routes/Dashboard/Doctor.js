@@ -11,6 +11,7 @@ import Answers from '../Answers/'
 import Profile from '../Profile/'
 import Questions from '../Questions/'
 import TalkToADoc from '../TalkToADoc/'
+import Messages from '../Messages/'
 
 class DoctorDashboard extends Component{
     render(){
@@ -24,6 +25,7 @@ class DoctorDashboard extends Component{
                     <PrivateRoute exact path={match.path + '/questions'} component={Questions}/>
                     <PrivateRoute exact path={match.path + '/questions/:slug'} component={Answers}/>
                     <PrivateRoute exact path={match.path + '/talk-to-a-doc'} component={TalkToADoc}/>
+                    <PrivateRoute exact path={match.path + '/talk-to-a-doc/messages'} component={Messages}/>
                     <PrivateRoute path={match.path + '/profile'} component={Profile}/>
                     <PrivateRoute path={match.path + '/verifyEmail'} component={VerifyEmail}/>
                     <Footer/>
