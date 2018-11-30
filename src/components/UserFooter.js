@@ -3,11 +3,17 @@ import { connect } from 'react-redux'
 
 import IsLoggedIn from './IsLoggedIn'
 import { sendMessage } from '../actions'
-import { ConsultationDurationSeconds } from '../config'
+import { ConsultationDurationMilliSeconds } from '../config'
 
 class Footer extends Component{
     state = {
         message: ""
+    }
+
+    componentDidMount(){
+        if(this.props.isMessagesRoute){
+            window.scrollTo(0,window.document.body.scrollHeight);
+        }
     }
 
     onWriteMsg = evt => {
@@ -19,6 +25,8 @@ class Footer extends Component{
         evt.preventDefault()
         if(this.state.message.length){
             this.props.dispatch(sendMessage(this.props.consultId,this.state.message))
+            this.setState({ message: "" })
+            window.scrollTo(0,window.document.body.scrollHeight);
         }
     }
 
@@ -46,10 +54,12 @@ class Footer extends Component{
         const { isMessagesRoute, consultations, consultId } = this.props
         let allowWrite = false;
         if(isMessagesRoute){
-            allowWrite = new Date().getTime() <= consultations[consultId].startTime + ConsultationDurationSeconds
+            if(consultId in consultations){
+                allowWrite = new Date().getTime() <= consultations[consultId].startTime + ConsultationDurationMilliSeconds
+            }
         }
         return (
-            <div className="footer messages">
+            <div className={allowWrite ? "footer messages" : "footer"}>
                 {allowWrite ? this.renderMessageForm() : (
                     <p>&copy; 2018 Tapamedic.com. All Rights Reserved | Design by <a href="https://w3layouts.com/" target="_blank" rel="noopener noreferrer">w3layouts</a></p>
                 )}       

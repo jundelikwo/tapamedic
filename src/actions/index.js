@@ -21,7 +21,8 @@ import {
     REMOVE_CONSULTATION,
     CHANGE_ASKED_QUESTION_STATUS,
     ENTERING_MESSAGES_ROUTE,
-    LEAVING_MESSAGES_ROUTE
+    LEAVING_MESSAGES_ROUTE,
+    ADD_MESSAGES
 } from './types'
 import { lang } from 'moment';
 
@@ -396,7 +397,9 @@ export var startFetchConsultations = () => {
             if(consultations){
                 console.log('CONSULTATION LIST',Object.keys(consultations))
                 Object.keys(consultations).forEach(key => {
-                    dispatch(fetchConsultation(key))
+                    if(!(key in getState().consultations)){
+                        dispatch(fetchConsultation(key))
+                    }
                 })
             }
         })
@@ -410,6 +413,7 @@ const fetchConsultation = key => {
             console.log('Consultation key : ',key,':data',consultation)
             if(consultation){
                 dispatch(addConsultation(key,consultation))
+                dispatch(fetchMessages(key))
             }else{
                 const consultations = {...getState().consultations}
                 delete consultations[key]
@@ -465,5 +469,23 @@ export var sendMessage = (consultId,message) => {
         const { uid } = getState().user;
         console.log('Send Message', message," : consultId",consultId," : user",uid)
         firebase.database().ref(`/messages/${consultId}/`).push({ user: uid, message })
+    }
+}
+
+const fetchMessages = key => {
+    return (dispatch,getState) => {
+        if(!(key in getState().messages)){
+            firebase.database().ref(`messages/${key}`).on('value',snap=>{
+                dispatch(addMessages(key,snap.val()))
+            })
+        }
+    }
+}
+
+const addMessages = (key,messages) => {
+    return {
+        type: ADD_MESSAGES,
+        key,
+        messages
     }
 }

@@ -424,3 +424,21 @@ exports.acceptConsultation = functions.database.ref('doctors/{uid}/consultation/
     }
     return null;
 })
+
+exports.addLastMessageToConsultation = functions.database.ref('messages/{consultId}/{messageId}').onCreate((snapshot, context) => {
+    const { message, photo, user } = snapshot.val()
+    const { consultId, messageId } = context.params
+    if(message){
+        let text = message.substr(0,30)
+        if(message.length > 30){
+            text += '...'
+        }
+        return admin.database().ref(`consultation/${consultId}/lastMessage`).set({
+            user,
+            message: text
+        })
+    }else if(photo){
+        return null
+    }
+    return null
+})

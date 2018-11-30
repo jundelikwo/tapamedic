@@ -3,18 +3,15 @@ import { connect } from 'react-redux'
 
 import IsLoggedIn from '../../IsLoggedIn'
 import RenderRole from '../../RenderRole'
-//import Doctor from './Doctor'
-//import Patient from './Patient'
+import Doctor from './Doctor'
+import Patient from './Patient'
 import { enterMessagesRoute, leaveMessagesRoute } from '../../../actions'
 import { resizePageWrapper } from '../../../functions'
-
-let Doctor,Patient
-Doctor = Patient = () => (<div>Hello</div>)
-
+import { ConsultationDurationMilliSeconds } from '../../../config'
 
 class Messages extends Component{
     componentWillMount(){
-        this.props.dispatch(enterMessagesRoute(this.props.consultId))
+        this.props.dispatch(enterMessagesRoute(this.props.location.state.consultId))
     }
 
     componentDidMount(){
@@ -26,28 +23,29 @@ class Messages extends Component{
     }
 
     render(){
-        console.log('Messages',this.props)
+        const { consultations, location } = this.props
+        const { consultId } = location.state
+        let consultationOnGoing = false
+        if(consultId in consultations){
+            consultationOnGoing = new Date().getTime() <= consultations[consultId].startTime + ConsultationDurationMilliSeconds
+        }
         return(
-            <div id="page-wrapper">
-                <div className="main-page">
-                    <div className="blank-page widget-shadow scroll" id="style-2 div1">      
-                        <RenderRole 
-                            {...this.props}
-                            patient={Patient}
-                            doctor={Doctor} 
-                        />
-                    </div>
+            <div id="page-wrapper" className={consultationOnGoing ? 'consultation-on-going' : ''} style={{ display: 'flex', flexDirection: 'column' }}>
+                <div className="main-page" style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+                    <RenderRole 
+                        {...this.props}
+                        patient={Patient}
+                        doctor={Doctor} 
+                    />
                 </div>
             </div>
         )
     }
 }
 
-const mapStateToProps = (state, ownProps) => {
-    const { consultId } = ownProps.location.state
+const mapStateToProps = state => {
     return {
-        consultation: state.consultations[consultId],
-        consultId
+        consultations: state.consultations
     }
 }
 

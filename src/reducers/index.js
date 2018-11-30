@@ -10,6 +10,7 @@ import questionsReducer from './questions'
 import answersReducer from './answers'
 import consultationsReducer from './consultations'
 import routerReducer from './router'
+import messagesReducer from './messages'
 
 let reducers = combineReducers({
     answers: answersReducer,
@@ -22,7 +23,8 @@ let reducers = combineReducers({
     doctorProfile: doctorProfileReducer,
     doctors: doctorsReducer,
     languages: languagesReducer,
-    questions: questionsReducer
+    questions: questionsReducer,
+    messages: messagesReducer
 })
 
 export default reducers

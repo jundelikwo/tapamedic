@@ -95,7 +95,30 @@
 .sidebar .nav-third-level li a {
     padding-left: 52px;
 }
-@media(min-width:768px){
+
+div.footer.messages {
+    bottom: 0;
+    position: fixed;
+}
+
+.cbp-spmenu-push div#page-wrapper.consultation-on-going {
+    margin-bottom: 70px;
+}
+
+@media (max-width: 1081px){
+    .cbp-spmenu-push div#page-wrapper.consultation-on-going {
+        margin-bottom: 100px;
+    }
+}
+
+@media(min-width:769px){
+    div.footer.messages {
+        width: calc(100% - 230px);
+        left: 230px;
+    }
+}
+
+@media(max-width:768px){
     .navbar-top-links .dropdown-messages,
     .navbar-top-links .dropdown-tasks,
     .navbar-top-links .dropdown-alerts {
@@ -103,10 +126,56 @@
     }
     div.footer.messages {
         /*margin-left: 230px;*/
-        width: auto;
+        width: 100%;
         right: 0;
-        left: 230px;
-        bottom: 0;
-        position: absolute;
+    }
+}
+
+.messageItem {
+    width: 90%; 
+    padding-top: 10px; 
+    padding-bottom: 10px; 
+    align-self: flex-start;
+    margin-bottom: 15px
+}
+
+.messageItem:last-of-type {
+    margin-bottom: 0;
+}
+
+.messageItem.isMe {
+    align-self: flex-end;
+}
+
+.messageItem .col-sm-10 {
+    background-color: #ddd; 
+    border-radius: 30px;
+    padding: 15px;
+    min-height: 65px;
+}
+
+.messageItem.isMe .col-sm-10 {
+    background-color: #5bc0de;
+}
+
+.messageItem .col-sm-2 {
+    height: 65px;
+}
+
+.messageItem .col-sm-2 img {
+    height: 55px;
+    width: 55px;
+}
+
+.messageItem .col-sm-2 div{
+    max-height: 10px;
+    overflow: hidden;
+    display: inline-block;
+    font-size: 10px;
+}
+
+@media screen and (max-width: 321px) {
+    .messageItem .col-sm-2 {
+        display: none;
     }
 }
