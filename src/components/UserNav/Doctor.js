@@ -64,7 +64,7 @@ class Nav extends Component{
                     </li>
                     <li className="treeview">
                       <NavLink to="/dashboard/talk-to-a-doc" activeStyle={activeStyle} exact>
-                      <i className="fa fa-pie-chart"></i> <span>Talk to a Doctor</span>
+                      <i className="fa fa-pie-chart"></i> <span>My Consultations</span>
                       </NavLink>
                     </li>
                     <li className="treeview">

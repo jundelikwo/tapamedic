@@ -7,6 +7,12 @@ import { goOffline } from '../../actions/'
 import IsLoggedIn from '../IsLoggedIn'
 
 class Header extends Component{
+	logOut = e => {
+		e.preventDefault()
+		this.props.dispatch(goOffline())
+		firebase.auth().signOut()
+	}
+	
     render(){
         return(
         <div className="sticky-header header-section ">
@@ -165,13 +171,18 @@ class Header extends Component{
 						</li>
 						<li className="dropdown head-dpdn">
 							<NavLink to="/dashboard/talk-to-a-doc" activeStyle={activeStyle} exact>
-								<span>Talk to a Doctor</span>
+								<span>My Consultations</span>
 							</NavLink>
 						</li>
 						<li className="dropdown head-dpdn">
 							<NavLink to="/dashboard/profile" activeStyle={activeStyle} exact>
 								<span>My Profile</span>
 							</NavLink>
+						</li>
+						<li className="dropdown head-dpdn">
+							<a onClick={this.logOut}>
+								<span>Logout</span>
+							</a> 
 						</li>
 					</div>
 					<div className="clearfix"> </div>
@@ -200,11 +211,7 @@ class Header extends Component{
 								<li> <a><i className="fa fa-cog"></i> Settings</a> </li> 
 								<li> <a><i className="fa fa-user"></i> My Profile</a> </li>
 								<li> <a><i className="fa fa-suitcase"></i> My Wallet</a> </li> 
-								<li> <a onClick={(e) => {
-									e.preventDefault()
-									this.props.dispatch(goOffline())
-									firebase.auth().signOut()
-								}}><i className="fa fa-sign-out"></i> Logout</a> </li>
+								<li> <a onClick={this.logOut}><i className="fa fa-sign-out"></i> Logout</a> </li>
 							</ul>
 						</li>
 					</ul>
