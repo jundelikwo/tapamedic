@@ -40,8 +40,6 @@ class Footer extends Component{
                         <textarea placeholder="Write your message" onChange={this.onWriteMsg} value={message} className="form-control1" style={{ padding: 0, margin: 0, height: 30 }} />
                     </div>
                     <div className="col-sm-4">
-                        <button className="btn btn-danger" style={{ marginRight: 5 }}><i className="fa fa-video-camera"/></button>
-                        <button className="btn btn-danger" style={{ marginRight: 5 }}><i className="fa fa-phone"/></button>
                         <button className="btn btn-info" style={{ marginRight: 5 }}><i className="fa fa-image"/></button>
                         <button type="submit" className={sendBtnClass}>Send</button>
                     </div>

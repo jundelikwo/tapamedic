@@ -12,13 +12,11 @@ class Header extends Component{
 		this.props.dispatch(goOffline())
 		firebase.auth().signOut()
 	}
-	
-    render(){
+
+    render(){		
         return(
         <div className="sticky-header header-section ">
-			<div className="header-left">
-				
-				
+			<div className="header-left">				
 				<button id="showLeftPush" style={{ display: 'none' }}><i className="fa fa-bars"></i></button>
 				
 				<div className="profile_details_left">
@@ -32,28 +30,28 @@ class Header extends Component{
 									</div>
 								</li>
 								<li><a>
-								   <div className="user_img"><img src="images/1.jpg" alt=""/></div>
-								   <div className="notification_desc">
+								<div className="user_img"><img src="images/1.jpg" alt=""/></div>
+								<div className="notification_desc">
 									<p>Lorem ipsum dolor amet</p>
 									<p><span>1 hour ago</span></p>
 									</div>
-								   <div className="clearfix"></div>	
+								<div className="clearfix"></div>	
 								</a></li>
 								<li className="odd"><a>
 									<div className="user_img"><img src="images/4.jpg" alt=""/></div>
-								   <div className="notification_desc">
+								<div className="notification_desc">
 									<p>Lorem ipsum dolor amet </p>
 									<p><span>1 hour ago</span></p>
 									</div>
-								  <div className="clearfix"></div>	
+								<div className="clearfix"></div>	
 								</a></li>
 								<li><a>
-								   <div className="user_img"><img src="images/3.jpg" alt=""/></div>
-								   <div className="notification_desc">
+								<div className="user_img"><img src="images/3.jpg" alt=""/></div>
+								<div className="notification_desc">
 									<p>Lorem ipsum dolor amet </p>
 									<p><span>1 hour ago</span></p>
 									</div>
-								   <div className="clearfix"></div>	
+								<div className="clearfix"></div>	
 								</a></li>
 								<li>
 									<div className="notification_bottom">
@@ -72,29 +70,29 @@ class Header extends Component{
 								</li>
 								<li><a>
 									<div className="user_img"><img src="images/4.jpg" alt=""/></div>
-								   <div className="notification_desc">
+								<div className="notification_desc">
 									<p>Lorem ipsum dolor amet</p>
 									<p><span>1 hour ago</span></p>
 									</div>
-								  <div className="clearfix"></div>	
-								 </a></li>
-								 <li className="odd"><a>
+								<div className="clearfix"></div>	
+								</a></li>
+								<li className="odd"><a>
 									<div className="user_img"><img src="images/1.jpg" alt=""/></div>
-								   <div className="notification_desc">
+								<div className="notification_desc">
 									<p>Lorem ipsum dolor amet </p>
 									<p><span>1 hour ago</span></p>
 									</div>
-								   <div className="clearfix"></div>	
-								 </a></li>
-								 <li><a>
+								<div className="clearfix"></div>	
+								</a></li>
+								<li><a>
 									<div className="user_img"><img src="images/3.jpg" alt=""/></div>
-								   <div className="notification_desc">
+								<div className="notification_desc">
 									<p>Lorem ipsum dolor amet </p>
 									<p><span>1 hour ago</span></p>
 									</div>
-								   <div className="clearfix"></div>	
-								 </a></li>
-								 <li>
+								<div className="clearfix"></div>	
+								</a></li>
+								<li>
 									<div className="notification_bottom">
 										<a>See all notifications</a>
 									</div> 
@@ -121,10 +119,10 @@ class Header extends Component{
 								<li><a>
 									<div className="task-info">
 										<span className="task-desc">Dashboard done</span><span className="percentage">90%</span>
-									   <div className="clearfix"></div>	
+									<div className="clearfix"></div>	
 									</div>
 									<div className="progress progress-striped active">
-										 <div className="bar green" style={{width: '90%'}}></div>
+										<div className="bar green" style={{width: '90%'}}></div>
 									</div>
 								</a></li>
 								<li><a>
@@ -132,17 +130,17 @@ class Header extends Component{
 										<span className="task-desc">Mobile App</span><span className="percentage">33%</span>
 										<div className="clearfix"></div>	
 									</div>
-								   <div className="progress progress-striped active">
-										 <div className="bar red" style={{width: '33%'}}></div>
+								<div className="progress progress-striped active">
+										<div className="bar red" style={{width: '33%'}}></div>
 									</div>
 								</a></li>
 								<li><a>
 									<div className="task-info">
 										<span className="task-desc">Issues fixed</span><span className="percentage">80%</span>
-									   <div className="clearfix"></div>	
+									<div className="clearfix"></div>	
 									</div>
 									<div className="progress progress-striped active">
-										 <div className="bar  blue" style={{width: '80%'}}></div>
+										<div className="bar  blue" style={{width: '80%'}}></div>
 									</div>
 								</a></li>
 								<li>
@@ -242,7 +240,8 @@ const mapStateToProps = (state) => {
 	return {
 		firstName,
 		lastName,
-		photoURL: state.user.photoURL
+		photoURL: state.user.photoURL,
+		role: state.user.role
 	}
 }
 

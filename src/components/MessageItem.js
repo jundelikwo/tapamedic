@@ -33,11 +33,7 @@ class MessageItem extends Component{
         const { isMe } = this.props
         return (
             <div className={isMe ? 'messageItem isMe' : 'messageItem'}>
-                <div className="col-sm-2">
-                    {isMe ? null : <img src={this.renderPhoto()} />}
-                    {this.renderOtherUserName()}
-                </div>
-                <div className="col-sm-10">{this.renderMsg()}</div>
+                <div>{this.renderMsg()}</div>
             </div>
         )
     }

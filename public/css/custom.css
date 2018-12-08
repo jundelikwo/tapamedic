@@ -105,6 +105,10 @@ div.footer.messages {
     margin-bottom: 70px;
 }
 
+#showLeftPush {
+    display: none;
+}
+
 @media (max-width: 1081px){
     .cbp-spmenu-push div#page-wrapper.consultation-on-going {
         margin-bottom: 100px;
@@ -129,6 +133,12 @@ div.footer.messages {
         width: 100%;
         right: 0;
     }
+    #showLeftPush {
+        display: block;
+    }
+    .profile_details_left{
+        width: calc(100% - 40px);
+    }
 }
 
 .messageItem {
@@ -136,7 +146,8 @@ div.footer.messages {
     padding-top: 10px; 
     padding-bottom: 10px; 
     align-self: flex-start;
-    margin-bottom: 15px
+    margin-bottom: 15px;
+    display: flex;
 }
 
 .messageItem:last-of-type {
@@ -145,37 +156,18 @@ div.footer.messages {
 
 .messageItem.isMe {
     align-self: flex-end;
+    justify-content: flex-end;
 }
 
-.messageItem .col-sm-10 {
+.messageItem div {
     background-color: #ddd; 
     border-radius: 30px;
     padding: 15px;
     min-height: 65px;
+    min-width: 25%;
+    max-width: 100%;
 }
 
-.messageItem.isMe .col-sm-10 {
+.messageItem.isMe div {
     background-color: #5bc0de;
-}
-
-.messageItem .col-sm-2 {
-    height: 65px;
-}
-
-.messageItem .col-sm-2 img {
-    height: 55px;
-    width: 55px;
-}
-
-.messageItem .col-sm-2 div{
-    max-height: 10px;
-    overflow: hidden;
-    display: inline-block;
-    font-size: 10px;
-}
-
-@media screen and (max-width: 321px) {
-    .messageItem .col-sm-2 {
-        display: none;
-    }
 }
