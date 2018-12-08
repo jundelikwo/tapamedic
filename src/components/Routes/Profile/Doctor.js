@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import Pikaday from 'pikaday'
 import { addUserData, uploadProfilePhoto } from '../../../actions'
+import { isImage } from '../../../functions'
 import IsLoggedIn from '../../IsLoggedIn'
 
 class Profile extends Component{
@@ -118,7 +119,12 @@ class Profile extends Component{
             let photo = this.refs[photoRef].files[0]
             console.log('File',photo)
             if(photo) {
-                this.setState({ [photoObj]: window.URL.createObjectURL(photo), [updatePhoto]: true, [photoRef]: photo })
+                if(!isImage(photo)){
+                    this.refs.photo.value = null
+                    alert('You can only upload images')
+                } else {
+                    this.setState({ [photoObj]: window.URL.createObjectURL(photo), [updatePhoto]: true, [photoRef]: photo })
+                }
             }
         }
     }

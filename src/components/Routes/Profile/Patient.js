@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom'
 import moment from 'moment'
 import Pikaday from 'pikaday'
 import { addUserData, uploadProfilePhoto } from '../../../actions'
+import { isImage } from '../../../functions'
 import IsLoggedIn from '../../IsLoggedIn'
 
 class Profile extends Component{
@@ -116,7 +117,12 @@ class Profile extends Component{
         let photo = this.refs.photo.files[0]
         console.log('File',photo)
         if(photo) {
-            this.setState({ photoURL: window.URL.createObjectURL(photo), updatePhoto: true, photo })
+            if(!isImage(photo)){
+                this.refs.photo.value = null
+                alert('You can only upload images')
+            } else {
+                this.setState({ photoURL: window.URL.createObjectURL(photo), updatePhoto: true, photo })
+            }
         }
     }
     uploadPhoto(evt){

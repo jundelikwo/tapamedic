@@ -8,6 +8,8 @@ export function b64DecodeUnicode(str) {
     }));
 }
 
+export const isImage = file => file.type.match('image.*')
+
 export function toTitleCase(str){
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
