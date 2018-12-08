@@ -24,8 +24,8 @@ class MessageItem extends Component{
     }
 
     renderMsg = () => {
-        const { message, thumbnail } = this.props
-        return message ? message : <img src={thumbnail} />
+        const { message, thumb } = this.props
+        return message ? message : <img src={thumb} />
     }
 
     render(){

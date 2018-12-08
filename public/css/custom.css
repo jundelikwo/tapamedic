@@ -172,3 +172,9 @@ div.footer.messages {
 .messageItem.isMe div {
     background-color: #5bc0de;
 }
+
+.messageItem img {
+    max-width: 100%;
+    height: auto;
+    max-height: 400px;
+}

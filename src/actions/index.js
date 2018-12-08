@@ -470,12 +470,12 @@ export var sendMessage = (consultId,message) => {
         const { user, messages } = getState();
         const chat = { user: user.uid, message }
 
+        firebase.database().ref(`/messages/${consultId}/`).push(chat)
         console.log('Send Message', message," : consultId",consultId," : user",user.uid)
         dispatch(addMessages(consultId, {
             ...messages[consultId] || {},
             [uuid()]: chat
         }))
-        firebase.database().ref(`/messages/${consultId}/`).push(chat)
     }
 }
 
@@ -504,6 +504,13 @@ export var uploadConsultationPhoto = (consultId, photo) => {
         const uniqueId = uuid()
         const fileName = uniqueId + photo.name.substring(photo.name.lastIndexOf('.'))
         let profilePhotoRef = firebase.storage().ref().child(`consultation/${consultId}/${uid}/${fileName}`)
+        
+        var metadata = {
+            uid: uid,
+            role: role
+        };
+        let uploadTask = profilePhotoRef.put(photo,metadata)
+
         const url = window.URL.createObjectURL(photo)
         dispatch(addMessages(consultId, {
             ...messages[consultId] || {},
@@ -513,11 +520,5 @@ export var uploadConsultationPhoto = (consultId, photo) => {
                 image: url
             }
         }))
-
-        var metadata = {
-            uid: uid,
-            role: role
-        };
-        let uploadTask = profilePhotoRef.put(photo,metadata)
     }
 }
