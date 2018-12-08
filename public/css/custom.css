@@ -157,6 +157,7 @@ div.footer.messages {
 .messageItem.isMe {
     align-self: flex-end;
     justify-content: flex-end;
+    color: #fff;
 }
 
 .messageItem div {
