@@ -124,6 +124,8 @@ exports.resizePicture = functions.storage.object().onFinalize((object) => {
     const contentType = object.contentType; // File content type.
     const metadata = object.metadata
     
+    console.log('Object',object)
+
     // Exit if this is triggered on a file that is not an image.
     if (!contentType.startsWith('image/')) {
         console.log('This is not an image.');
@@ -134,6 +136,8 @@ exports.resizePicture = functions.storage.object().onFinalize((object) => {
         console.log('Exiting: Already been resized')
         return null
     }
+
+    console.log('File Path',filePath)
     
     if(filePath.indexOf('/profile.') !== -1){
         console.log("Yeah I'm a profile image")
@@ -141,9 +145,78 @@ exports.resizePicture = functions.storage.object().onFinalize((object) => {
     }else if(filePath.indexOf('/mdcnPhoto.') !== -1){
         console.log("Yeah I'm a mdcnPhoto image")
         return photoFunc(object,'mdcnPhoto','200x200>','profile','mdcnPhoto')
+    }else if(filePath.indexOf('consultation/') !== -1){
+        console.log('Consultation photo', metadata)
+        return consultPhotoFunc(object)
     }
     return null
 });
+
+function consultPhotoFunc(object){
+    const fileBucket = object.bucket; // The Storage bucket that contains the file.
+    const filePath = object.name; // File path in the bucket.
+    const contentType = object.contentType; // File content type.
+    const metadata = object.metadata
+
+    const filePathSplit = filePath.split('/')
+    const consultId = filePathSplit[1]
+    const user = filePathSplit[2]
+
+    console.log('consultId',consultId,'user','user')
+
+    // Get the file name.
+    const fileName = path.basename(filePath);
+
+    const thumbFileName = `thumb_${fileName}`;
+    const thumbFilePath = path.join(path.dirname(filePath), thumbFileName);
+
+    // Download file from bucket.
+    const bucket = gcs.bucket(fileBucket);
+    const tempFilePath = path.join(os.tmpdir(), fileName);
+    const options = {
+        contentType: contentType,
+        isResized: true
+    };
+    return bucket.file(filePath).download({
+        destination: tempFilePath,
+    }).then(() => {
+        console.log('Image downloaded locally to', tempFilePath);
+        // Generate a thumbnail using ImageMagick.
+        return spawn('convert', [tempFilePath, '-thumbnail', '400x400>', tempFilePath]);
+    }).then(() => {
+        console.log('Thumbnail created at', tempFilePath);
+        // We add a 'thumb_' prefix to thumbnails file name. That's where we'll upload the thumbnail.
+        // Uploading the thumbnail.
+        return bucket.upload(tempFilePath, {
+            destination: thumbFilePath,
+            metadata: { metadata: options }
+        });
+    // Once the thumbnail has been uploaded delete the local file to free up disk space.
+    }).then(() => { 
+            fs.unlinkSync(tempFilePath)
+            return bucket.file(thumbFilePath).getSignedUrl({
+                action: 'read',
+                expires: '03-09-2491'
+            }).then(signedUrls => {
+                // signedUrls[0] contains the file's public URL
+                const thumbLink = signedUrls[0]
+                console.log('metadata',metadata)
+                return bucket.file(filePath).getSignedUrl({
+                    action: 'read',
+                    expires: '03-09-2491'
+                }).then(mainUrls => {
+                    // mainUrls[0] contains the file's public URL
+                    const fullLink = mainUrls[0]
+                    console.log('Register in database')
+                    return admin.database().ref(`/messages/${consultId}/`).push({
+                        user,
+                        thumb: thumbLink,
+                        image: fullLink
+                    })
+                });
+            });
+        })
+}
 
 function photoFunc(object,nameOfFile,resizedImgSize,photoPath,dbName){
 
@@ -178,8 +251,8 @@ function photoFunc(object,nameOfFile,resizedImgSize,photoPath,dbName){
     }).then(() => {
         console.log('Image downloaded locally to', tempFilePath);
         // Resize image using ImageMagick.
-		return spawn('convert', [tempFilePath, '-resize', resizedImgSize, '-channel', 'RGBA', '-blur', '0x24',  JPGFilePath]);
-        //return spawn('convert', [tempFilePath, '-resize', resizedImgSize, JPGFilePath]);
+		//return spawn('convert', [tempFilePath, '-resize', resizedImgSize, '-channel', 'RGBA', '-blur', '0x24',  JPGFilePath]);
+        return spawn('convert', [tempFilePath, '-resize', resizedImgSize, JPGFilePath]);
     }).then(() => {
         console.log('Resized image created at', tempFilePath);
         console.log('thumbFilePath at', thumbFilePath);
@@ -426,7 +499,7 @@ exports.acceptConsultation = functions.database.ref('doctors/{uid}/consultation/
 })
 
 exports.addLastMessageToConsultation = functions.database.ref('messages/{consultId}/{messageId}').onCreate((snapshot, context) => {
-    const { message, photo, user } = snapshot.val()
+    const { message, user, thumb } = snapshot.val()
     const { consultId, messageId } = context.params
     if(message){
         let text = message.substr(0,30)
@@ -437,8 +510,11 @@ exports.addLastMessageToConsultation = functions.database.ref('messages/{consult
             user,
             message: text
         })
-    }else if(photo){
-        return null
+    }else if(thumb){
+        return admin.database().ref(`consultation/${consultId}/lastMessage`).set({
+            user,
+            thumb
+        })
     }
     return null
 })

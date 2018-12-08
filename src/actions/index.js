@@ -1,4 +1,5 @@
 import firebase from 'firebase'
+import uuid from 'uuid'
 import { 
     LOGIN, 
     LOGOUT, 
@@ -487,5 +488,18 @@ const addMessages = (key,messages) => {
         type: ADD_MESSAGES,
         key,
         messages
+    }
+}
+
+export var uploadConsultationPhoto = (consultId, photo) => {
+    return (dispatch, getState) => {
+        const { uid, role } = getState().user;
+        const fileName = uuid() + photo.name.substring(photo.name.lastIndexOf('.'))
+        let profilePhotoRef = firebase.storage().ref().child(`consultation/${consultId}/${uid}/${fileName}`)
+        var metadata = {
+            uid: uid,
+            role: role
+        };
+        let uploadTask = profilePhotoRef.put(photo,metadata)
     }
 }
