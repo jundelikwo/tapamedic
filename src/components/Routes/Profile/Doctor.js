@@ -37,7 +37,11 @@ class Profile extends Component{
             specialty,
             university,
             photoURL,
-            match
+            match,
+            other,
+            account,
+            accountNumber,
+            bank
         } = this.props
 
         let formReadOnly = match.isExact
@@ -57,7 +61,11 @@ class Profile extends Component{
             photoURL,
             updatePhoto: false,
             photo: null,
-            formReadOnly
+            formReadOnly,
+            other,
+            account,
+            accountNumber,
+            bank
         })
     }
     componentWillReceiveProps(newProps){
@@ -72,7 +80,11 @@ class Profile extends Component{
             mdcn_membership,
             specialty,
             university,
-            photoURL
+            photoURL,
+            other,
+            account,
+            accountNumber,
+            bank
         } = newProps
 
         this.setState({
@@ -86,7 +98,11 @@ class Profile extends Component{
             mdcn_membership: this.state.mdcn_membership || mdcn_membership,
             specialty: this.state.specialty || specialty,
             university: this.state.university || university,
-            photoURL: this.state.photoURL || photoURL
+            photoURL: this.state.photoURL || photoURL,
+            other: this.state.other || other,
+            account: this.state.account || account,
+            accountNumber: this.state.accountNumber || accountNumber,
+            bank: this.state.bank || bank
         })
     }
     componentDidMount(){
@@ -191,7 +207,11 @@ class Profile extends Component{
         })
         const formData = {
             location: this.refs.location.value,
-            languages: spokenLang
+            languages: spokenLang,
+            other: this.refs.other.value,
+            account: this.refs.account.value,
+            accountNumber: this.refs.accountNumber.value,
+            bank: this.refs.bank.value
         }
 
         if(this.props.approved){
@@ -252,7 +272,11 @@ class Profile extends Component{
             mdcn_membership,
             specialty,
             university,
-            photoURL
+            photoURL,
+            other,
+            account,
+            accountNumber,
+            bank
         } = profileData
         
         return (
@@ -338,6 +362,30 @@ class Profile extends Component{
                                         <label className="col-md-2 control-label">Languages</label>
                                         <div className="col-md-8">
                                             {this.displayLanguages()}
+                                        </div>
+                                    </div>
+                                    <div className="form-group mb-n">
+                                        <label className="col-md-2 control-label">Other Languages you speak</label>
+                                        <div className="col-md-8">
+                                            <input onChange={this.onFieldChange} ref='other' placeholder="Other Languages you speak" name='other' type="text" className="form-control1" value={other} readOnly={formReadOnly} />
+                                        </div>
+                                    </div>
+                                    <div className="form-group mb-n">
+                                        <label className="col-md-2 control-label">Bank Name</label>
+                                        <div className="col-md-8">
+                                            <input onChange={this.onFieldChange} ref='bank' placeholder="Bank Name" name='bank' type="text" className="form-control1" value={bank} readOnly={formReadOnly} />
+                                        </div>
+                                    </div>
+                                    <div className="form-group mb-n">
+                                        <label className="col-md-2 control-label">Account Name</label>
+                                        <div className="col-md-8">
+                                            <input onChange={this.onFieldChange} ref='account' placeholder="Account Name" name='account' type="text" className="form-control1" value={account} readOnly={formReadOnly} />
+                                        </div>
+                                    </div>
+                                    <div className="form-group mb-n">
+                                        <label className="col-md-2 control-label">Account Number</label>
+                                        <div className="col-md-8">
+                                            <input onChange={this.onFieldChange} ref='accountNumber' placeholder="Account Number" name='accountNumber' type="number" className="form-control1" value={accountNumber} readOnly={formReadOnly} />
                                         </div>
                                     </div>
                                     <div className="form-group mb-n">
