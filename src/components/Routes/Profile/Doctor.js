@@ -283,181 +283,175 @@ class Profile extends Component{
             <div id="page-wrapper">
                 <div className="main-page">
                     <div className="panel-group tool-tips widget-shadow" id="accordion" role="tablist" aria-multiselectable="true">
-                        <h3 className="title1">My Profile<span style={{ float: 'right' }}>&#8358;{wallet}</span></h3>
+                        <h3 className="title1">My Profile
+                        {!review ?
+                            <a role="button" style={{ float: 'right' }} onClick={this.toggleEditForm}>
+                                {formReadOnly ? 
+                                    <span>
+                                        <i className="fa fa-pencil" style={{ marginRight: '10px' }} />
+                                        Edit
+                                    </span>
+                                    : 
+                                    <span>Cancel</span>
+                                }
+                            </a>
+                            : null
+                        }
+                        </h3>
                         {review ?
                             <div className="alert alert-success" role="alert">
                                 <strong>Well done!</strong> Your application is under review we will reach back to you within 2 - 3 working days
                             </div>
                             : null
                         }
-                        <div className="panel panel-default">
-                            <div className="panel-heading" role="tab" id="headingOne">
-                            <h4 className="panel-title">
-                                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                    <span>My Data</span>
-                                </a>
-                            </h4>
-                            </div>
-                            <div id="collapseOne" className="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                            <div className="panel-body">
-                                {!review ?
-                                    <a role="button" style={{ float: 'right' }} onClick={this.toggleEditForm}>
-                                        {formReadOnly ? 
-                                            <span>
-                                                <i className="fa fa-pencil" style={{ marginRight: '10px' }} />
-                                                Edit
-                                            </span>
-                                            : 
-                                            <span>Cancel</span>
+                        <div>
+                            <div id="collapseOne" aria-labelledby="headingOne">
+                                <div>
+                                    <div style={{ clear: 'both' }}/>
+                                    <form className={
+                                        formReadOnly ? 'form-horizontal readOnly' : 'form-horizontal'
+                                    }  encType="multipart/form-data" onSubmit={this.onFormSubmit}>
+                                        {(formReadOnly || (!formReadOnly && !approved)) ?
+                                            <div>
+                                                <div className="form-group mb-n">
+                                                    <label className="col-md-2 control-label">Profile Photo</label>
+                                                    <div className="col-md-8 text-center">
+                                                        <img src={photoURL} style={{ width: '200px', height: '200px' }} alt="" />
+                                                        {formReadOnly ? 
+                                                            '' :
+                                                            <input className='center-block' onChange={this.selectPhoto('photo','photoURL','updatePhoto')} type='file' ref="photo" name="photo" accept="image/*" readOnly={formReadOnly} />
+                                                        }
+                                                        {!formReadOnly && updatePhoto ?
+                                                            <div>
+                                                                <button onClick={this.uploadPhoto("photo","profilePhoto","updatePhoto","profile")} style={{ marginRight: '10px' }} className="btn btn-success">Upload</button>
+                                                                <button onClick={this.cancelPhotoChange('photo','photoURL','updatePhoto')} className="btn btn-danger">Cancel</button>
+                                                            </div>
+                                                            : ''
+                                                        }  
+                                                        {!formReadOnly && !updatePhoto && profilePhotoUploadProgress !== null ?
+                                                            <div className="progress progress-striped active progress-right" style={{ width: '90%', margin: 'auto', float: 'none', height: '18px', position: 'relative' }}>
+                                                                <div className="bar green" style={{ width:profilePhotoUploadProgress }}></div> 
+                                                                <span className="pull-right" style={{ float: 'none!important', position: 'absolute', left: '50%' }}>{ profilePhotoUploadProgress }</span>
+                                                            </div> 
+                                                        : ''
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <div className="form-group mb-n">
+                                                    <label className="col-md-2 control-label">First Name</label>
+                                                    <div className="col-md-8">
+                                                        <input onChange={this.onFieldChange} ref="firstName" name="firstName" placeholder="First Name" type="text" className="form-control1" value={firstName} readOnly={formReadOnly} />
+                                                    </div>
+                                                </div>
+                                                <div className="form-group mb-n">
+                                                    <label className="col-md-2 control-label">Last Name</label>
+                                                    <div className="col-md-8">
+                                                        <input onChange={this.onFieldChange} ref="lastName" name="lastName" placeholder="Last Name" type="text" className="form-control1" value={lastName} readOnly={formReadOnly} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            : null
                                         }
-                                    </a>
-                                    : null
-                                }
-                                <div style={{ clear: 'both' }}/>
-                                <form className={
-                                    formReadOnly ? 'form-horizontal readOnly' : 'form-horizontal'
-                                }  encType="multipart/form-data" onSubmit={this.onFormSubmit}>
-                                    {(formReadOnly || (!formReadOnly && !approved)) ?
-                                        <div>
-                                            <div className="form-group mb-n">
-                                                <label className="col-md-2 control-label">Profile Photo</label>
-                                                <div className="col-md-8 text-center">
-                                                    <img src={photoURL} style={{ width: '200px', height: '200px' }} alt="" />
-                                                    {formReadOnly ? 
-                                                        '' :
-                                                        <input className='center-block' onChange={this.selectPhoto('photo','photoURL','updatePhoto')} type='file' ref="photo" name="photo" accept="image/*" readOnly={formReadOnly} />
-                                                    }
-                                                    {!formReadOnly && updatePhoto ?
-                                                        <div>
-                                                            <button onClick={this.uploadPhoto("photo","profilePhoto","updatePhoto","profile")} style={{ marginRight: '10px' }} className="btn btn-success">Upload</button>
-                                                            <button onClick={this.cancelPhotoChange('photo','photoURL','updatePhoto')} className="btn btn-danger">Cancel</button>
-                                                        </div>
+                                        <div className="form-group mb-n">
+                                            <label className="col-md-2 control-label">Languages</label>
+                                            <div className="col-md-8">
+                                                {this.displayLanguages()}
+                                            </div>
+                                        </div>
+                                        <div className="form-group mb-n">
+                                            <label className="col-md-2 control-label">Other Languages you speak</label>
+                                            <div className="col-md-8">
+                                                <input onChange={this.onFieldChange} ref='other' placeholder="Other Languages you speak" name='other' type="text" className="form-control1" value={other} readOnly={formReadOnly} />
+                                            </div>
+                                        </div>
+                                        <div className="form-group mb-n">
+                                            <label className="col-md-2 control-label">Bank Name</label>
+                                            <div className="col-md-8">
+                                                <input onChange={this.onFieldChange} ref='bank' placeholder="Bank Name" name='bank' type="text" className="form-control1" value={bank} readOnly={formReadOnly} />
+                                            </div>
+                                        </div>
+                                        <div className="form-group mb-n">
+                                            <label className="col-md-2 control-label">Account Name</label>
+                                            <div className="col-md-8">
+                                                <input onChange={this.onFieldChange} ref='account' placeholder="Account Name" name='account' type="text" className="form-control1" value={account} readOnly={formReadOnly} />
+                                            </div>
+                                        </div>
+                                        <div className="form-group mb-n">
+                                            <label className="col-md-2 control-label">Account Number</label>
+                                            <div className="col-md-8">
+                                                <input onChange={this.onFieldChange} ref='accountNumber' placeholder="Account Number" name='accountNumber' type="number" className="form-control1" value={accountNumber} readOnly={formReadOnly} />
+                                            </div>
+                                        </div>
+                                        <div className="form-group mb-n">
+                                            <label className="col-md-2 control-label">Location</label>
+                                            <div className="col-md-8">
+                                                <input onChange={this.onFieldChange} ref='location' placeholder="Your Location" name='location' type="text" className="form-control1" value={location} readOnly={formReadOnly} />
+                                            </div>
+                                        </div>
+                                        {(formReadOnly || (!formReadOnly && !approved)) ?
+                                            <div>
+                                                <div className="form-group mb-n">
+                                                    <label className="col-md-2 control-label">MDCN Folio Number</label>
+                                                    <div className="col-md-8">
+                                                        <input onChange={this.onFieldChange} ref='mdcn_folio' placeholder="Your MDCN Folio Number" name='mdcn_folio' type="text" className="form-control1" value={mdcn_folio} readOnly={formReadOnly} />
+                                                    </div>
+                                                </div>
+                                                <div className="form-group mb-n">
+                                                    <label className="col-md-2 control-label">MDCN Membership Registration Number</label>
+                                                    <div className="col-md-8">
+                                                        <input onChange={this.onFieldChange} ref='mdcn_membership' placeholder="Your MDCN Membership Registration Number" name='mdcn_membership' type="text" className="form-control1" value={mdcn_membership} readOnly={formReadOnly} />
+                                                    </div>
+                                                </div>
+                                                <div className="form-group mb-n">
+                                                    <label className="col-md-2 control-label">MDCN License Photo</label>
+                                                    <div className="col-md-8 text-center">
+                                                        <img src={mdcnPhotoURL} style={{ width: '200px', height: '200px' }} alt="" />
+                                                        {formReadOnly ? 
+                                                            '' :
+                                                            <input className='center-block' onChange={this.selectPhoto('mdcnPhoto','mdcnPhotoURL','updateMDCNPhoto')} type='file' ref="mdcnPhoto" name="mdcnPhoto" accept="image/*" readOnly={formReadOnly} />
+                                                        }
+                                                        {!formReadOnly && updateMDCNPhoto ?
+                                                            <div>
+                                                                <button onClick={this.uploadPhoto("mdcnPhoto","mdcnPhoto","updateMDCNPhoto","mdcnPhoto")} style={{ marginRight: '10px' }} className="btn btn-success">Upload</button>
+                                                                <button onClick={this.cancelPhotoChange('mdcnPhoto','mdcnPhotoURL','updateMDCNPhoto')} className="btn btn-danger">Cancel</button>
+                                                            </div>
+                                                            : ''
+                                                        }  
+                                                        {!formReadOnly && !updateMDCNPhoto && mdcnPhotoUploadProgress !== null ?
+                                                            <div className="progress progress-striped active progress-right" style={{ width: '90%', margin: 'auto', float: 'none', height: '18px', position: 'relative' }}>
+                                                                <div className="bar green" style={{ width:mdcnPhotoUploadProgress }}></div> 
+                                                                <span className="pull-right" style={{ float: 'none!important', position: 'absolute', left: '50%' }}>{ mdcnPhotoUploadProgress }</span>
+                                                            </div> 
                                                         : ''
-                                                    }  
-                                                    {!formReadOnly && !updatePhoto && profilePhotoUploadProgress !== null ?
-                                                        <div className="progress progress-striped active progress-right" style={{ width: '90%', margin: 'auto', float: 'none', height: '18px', position: 'relative' }}>
-                                                            <div className="bar green" style={{ width:profilePhotoUploadProgress }}></div> 
-                                                            <span className="pull-right" style={{ float: 'none!important', position: 'absolute', left: '50%' }}>{ profilePhotoUploadProgress }</span>
-                                                        </div> 
-                                                    : ''
-                                                    }
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <div className="form-group mb-n">
+                                                    <label className="col-md-2 control-label">University Attended</label>
+                                                    <div className="col-md-8">
+                                                        <input onChange={this.onFieldChange} ref='university' placeholder="University Attended" name='university' type="text" className="form-control1" value={university} readOnly={formReadOnly} />
+                                                    </div>
+                                                </div>
+                                                <div className="form-group mb-n">
+                                                    <label className="col-md-2 control-label">Year of Graduation</label>
+                                                    <div className="col-md-8">
+                                                        <input onChange={this.onFieldChange} ref='graduation' placeholder="Your Year of Graduation" name='graduation' type="number" className="form-control1" value={graduation} readOnly={formReadOnly} />
+                                                    </div>
+                                                </div>
+                                                <div className="form-group mb-n">
+                                                    <label className="col-md-2 control-label">Area of Specialty</label>
+                                                    <div className="col-md-8">
+                                                        <input onChange={this.onFieldChange} ref='specialty' placeholder="Your Area of Specialty" name='specialty' type="text" className="form-control1" value={specialty} readOnly={formReadOnly} />
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div className="form-group mb-n">
-                                                <label className="col-md-2 control-label">First Name</label>
-                                                <div className="col-md-8">
-                                                    <input onChange={this.onFieldChange} ref="firstName" name="firstName" placeholder="First Name" type="text" className="form-control1" value={firstName} readOnly={formReadOnly} />
-                                                </div>
-                                            </div>
-                                            <div className="form-group mb-n">
-                                                <label className="col-md-2 control-label">Last Name</label>
-                                                <div className="col-md-8">
-                                                    <input onChange={this.onFieldChange} ref="lastName" name="lastName" placeholder="Last Name" type="text" className="form-control1" value={lastName} readOnly={formReadOnly} />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        : null
-                                    }
-                                    <div className="form-group mb-n">
-                                        <label className="col-md-2 control-label">Languages</label>
-                                        <div className="col-md-8">
-                                            {this.displayLanguages()}
-                                        </div>
-                                    </div>
-                                    <div className="form-group mb-n">
-                                        <label className="col-md-2 control-label">Other Languages you speak</label>
-                                        <div className="col-md-8">
-                                            <input onChange={this.onFieldChange} ref='other' placeholder="Other Languages you speak" name='other' type="text" className="form-control1" value={other} readOnly={formReadOnly} />
-                                        </div>
-                                    </div>
-                                    <div className="form-group mb-n">
-                                        <label className="col-md-2 control-label">Bank Name</label>
-                                        <div className="col-md-8">
-                                            <input onChange={this.onFieldChange} ref='bank' placeholder="Bank Name" name='bank' type="text" className="form-control1" value={bank} readOnly={formReadOnly} />
-                                        </div>
-                                    </div>
-                                    <div className="form-group mb-n">
-                                        <label className="col-md-2 control-label">Account Name</label>
-                                        <div className="col-md-8">
-                                            <input onChange={this.onFieldChange} ref='account' placeholder="Account Name" name='account' type="text" className="form-control1" value={account} readOnly={formReadOnly} />
-                                        </div>
-                                    </div>
-                                    <div className="form-group mb-n">
-                                        <label className="col-md-2 control-label">Account Number</label>
-                                        <div className="col-md-8">
-                                            <input onChange={this.onFieldChange} ref='accountNumber' placeholder="Account Number" name='accountNumber' type="number" className="form-control1" value={accountNumber} readOnly={formReadOnly} />
-                                        </div>
-                                    </div>
-                                    <div className="form-group mb-n">
-                                        <label className="col-md-2 control-label">Location</label>
-                                        <div className="col-md-8">
-                                            <input onChange={this.onFieldChange} ref='location' placeholder="Your Location" name='location' type="text" className="form-control1" value={location} readOnly={formReadOnly} />
-                                        </div>
-                                    </div>
-                                    {(formReadOnly || (!formReadOnly && !approved)) ?
-                                        <div>
-                                            <div className="form-group mb-n">
-                                                <label className="col-md-2 control-label">MDCN Folio Number</label>
-                                                <div className="col-md-8">
-                                                    <input onChange={this.onFieldChange} ref='mdcn_folio' placeholder="Your MDCN Folio Number" name='mdcn_folio' type="text" className="form-control1" value={mdcn_folio} readOnly={formReadOnly} />
-                                                </div>
-                                            </div>
-                                            <div className="form-group mb-n">
-                                                <label className="col-md-2 control-label">MDCN Membership Registration Number</label>
-                                                <div className="col-md-8">
-                                                    <input onChange={this.onFieldChange} ref='mdcn_membership' placeholder="Your MDCN Membership Registration Number" name='mdcn_membership' type="text" className="form-control1" value={mdcn_membership} readOnly={formReadOnly} />
-                                                </div>
-                                            </div>
-                                            <div className="form-group mb-n">
-                                                <label className="col-md-2 control-label">MDCN License Photo</label>
-                                                <div className="col-md-8 text-center">
-                                                    <img src={mdcnPhotoURL} style={{ width: '200px', height: '200px' }} alt="" />
-                                                    {formReadOnly ? 
-                                                        '' :
-                                                        <input className='center-block' onChange={this.selectPhoto('mdcnPhoto','mdcnPhotoURL','updateMDCNPhoto')} type='file' ref="mdcnPhoto" name="mdcnPhoto" accept="image/*" readOnly={formReadOnly} />
-                                                    }
-                                                    {!formReadOnly && updateMDCNPhoto ?
-                                                        <div>
-                                                            <button onClick={this.uploadPhoto("mdcnPhoto","mdcnPhoto","updateMDCNPhoto","mdcnPhoto")} style={{ marginRight: '10px' }} className="btn btn-success">Upload</button>
-                                                            <button onClick={this.cancelPhotoChange('mdcnPhoto','mdcnPhotoURL','updateMDCNPhoto')} className="btn btn-danger">Cancel</button>
-                                                        </div>
-                                                        : ''
-                                                    }  
-                                                    {!formReadOnly && !updateMDCNPhoto && mdcnPhotoUploadProgress !== null ?
-                                                        <div className="progress progress-striped active progress-right" style={{ width: '90%', margin: 'auto', float: 'none', height: '18px', position: 'relative' }}>
-                                                            <div className="bar green" style={{ width:mdcnPhotoUploadProgress }}></div> 
-                                                            <span className="pull-right" style={{ float: 'none!important', position: 'absolute', left: '50%' }}>{ mdcnPhotoUploadProgress }</span>
-                                                        </div> 
-                                                    : ''
-                                                    }
-                                                </div>
-                                            </div>
-                                            <div className="form-group mb-n">
-                                                <label className="col-md-2 control-label">University Attended</label>
-                                                <div className="col-md-8">
-                                                    <input onChange={this.onFieldChange} ref='university' placeholder="University Attended" name='university' type="text" className="form-control1" value={university} readOnly={formReadOnly} />
-                                                </div>
-                                            </div>
-                                            <div className="form-group mb-n">
-                                                <label className="col-md-2 control-label">Year of Graduation</label>
-                                                <div className="col-md-8">
-                                                    <input onChange={this.onFieldChange} ref='graduation' placeholder="Your Year of Graduation" name='graduation' type="number" className="form-control1" value={graduation} readOnly={formReadOnly} />
-                                                </div>
-                                            </div>
-                                            <div className="form-group mb-n">
-                                                <label className="col-md-2 control-label">Area of Specialty</label>
-                                                <div className="col-md-8">
-                                                    <input onChange={this.onFieldChange} ref='specialty' placeholder="Your Area of Specialty" name='specialty' type="text" className="form-control1" value={specialty} readOnly={formReadOnly} />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        : null
-                                    }
-                                    {formReadOnly ? null :
-                                        <button type="submit" className="btn btn-primary">Save Profile</button>
-                                    }
-                                </form>
-                            </div>
+                                            : null
+                                        }
+                                        {formReadOnly ? null :
+                                            <button type="submit" className="btn btn-primary">Save Profile</button>
+                                        }
+                                    </form>
+                                </div>
                             </div>
                         </div>
                         {/* <div className="panel panel-default">
