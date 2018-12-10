@@ -8,8 +8,8 @@ class Home extends Component{
             <div>
                 <h2>This is The Home Page</h2>
                 <Link to="/login">Login</Link>
-                <Link to="/createProfile">createProfile</Link>
-                <Link to="/dashboard">dashboard</Link>
+                <br/>
+                <Link to="/dashboard/profile">dashboard</Link>
             </div>
         )
     }

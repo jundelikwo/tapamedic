@@ -14,7 +14,7 @@ const PublicRoute = ({
     <Route {...rest} component={(props) => {
         if(isAuthenticated){
           if(name){
-            return <Redirect to="/dashboard" />
+            return <Redirect to="/dashboard/profile" />
           }else if(role === 'doctor' && !emailVerified){
             return <Redirect to="/dashboard/verifyEmail" />
           }else{

@@ -48,11 +48,6 @@ class Nav extends Component{
                 <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                   <ul className="sidebar-menu">
                     <li className="treeview">
-                      <NavLink to="/dashboard" activeStyle={activeStyle} exact>
-                        <i className="fa fa-dashboard"></i> <span>Dashboard</span>
-                      </NavLink>
-                    </li>
-                    <li className="treeview">
                       <NavLink to="/" activeStyle={activeStyle} exact>
                         <i className="fa fa-home"></i> <span>Home</span>
                       </NavLink>

@@ -149,11 +149,6 @@ class Header extends Component{
 					</ul>
 					<div className="mobile-nav">
 						<li className="dropdown head-dpdn">
-							<NavLink to="/dashboard" activeStyle={activeStyle} exact>
-								<span>Dashboard</span>
-							</NavLink>
-						</li>
-						<li className="dropdown head-dpdn">
 							<NavLink to="/" activeStyle={activeStyle} exact>
 								<span>Home</span>
 							</NavLink>
