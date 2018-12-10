@@ -8,6 +8,7 @@ import IsLoggedIn from '../../IsLoggedIn'
 
 class Patient extends Component{
     state = {
+        showAvailableDoctors: false,
         showHireForm: false,
         id: 0,
         name: '',
@@ -56,10 +57,25 @@ class Patient extends Component{
         )
     }
 
+    renderConsultations = () => {
+        return (
+            <div>
+                <ConsultationsList/>
+                {this.state.showAvailableDoctors ? this.renderDoctors()
+                    :<button className="btn btn-info" onClick={
+                        () => this.setState({ showAvailableDoctors: true })
+                    }>
+                        Search Available Doctors
+                    </button>    
+                }
+            </div>
+        )
+    }
+
     render(){
         console.log('Consultation TalkToADoc',this.props.consultations)
         console.log('ConsultationList TalkToADoc',this.props.consultationsList)
-        return this.props.consultationsList.length ? <ConsultationsList/> : this.renderDoctors()
+        return this.props.consultationsList.length ? this.renderConsultations() : this.renderDoctors()
     }
 }
 
