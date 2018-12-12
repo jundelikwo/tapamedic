@@ -6,6 +6,8 @@ import { toggleRole } from '../../../actions'
 import RenderRole from '../../RenderRole'
 import Doctor from './Doctor'
 import Patient from './Patient'
+import Header from '../../Header';
+import Footer from '../../Footer';
 
 let originalPageFontSize;
 
@@ -28,31 +30,7 @@ class Login extends Component{
         const { alternateRole, role } = this.props
         return (
             <div>
-                <div className="banner" style={{ minHeight: 'auto' }}>
-                    <div className="container">
-                        <div className="header">
-                            <div className="logo wow fadeInLeft" data-wow-delay="0.5s" style={{ height: 50, overflowY: "hidden"}}>
-                                <NavLink to='/'><img src="/images/logoLG.svg" alt="" style={{width: 220}}/></NavLink>
-                            </div>
-                            <div className="top-menu">
-                            <span className="menu"></span>
-                                <ul>
-                                    <li><NavLink to='/'>Home</NavLink></li>
-                                    <li className="active"><a className="scroll">Login</a></li>
-                                </ul>
-                            </div>  	
-
-                            <div className="clearfix"/>
-                        </div>
-                        <div className="banner-info">
-                            <div className="banner-text wow fadeInRight" data-wow-delay="0.5s" style={{ width: '100%' }}>
-                                <h3>introducing tap a medic</h3>
-                                <h1>Quality & Affordable healthcare without stress</h1>
-                            </div>
-                            <div className="clearfix"/>
-                        </div>
-                    </div>
-                </div>
+                <Header activeRouteTitle="Login" />
                 <div className="about-bottom" style={{ backgroundColor: '#fff' }}>
                     <div className="container">
                         <div className="col-md-6 about-customize wow fadeInRight" data-wow-delay="0.5s">
@@ -69,18 +47,7 @@ class Login extends Component{
                         <div className="clearfix"/>
                     </div>
                 </div>
-                <div className="footer text-center" id="footer-home">
-                    <div className="container">
-                        <div className="social">			 
-                            <a href="#"><span className="behance"></span></a>
-                            <a href="#"><span className="dribble"></span></a>
-                            <a href="#"><span className="twitter"></span></a>
-                            <a href="#"><span className="facebook"></span></a>
-                            <a href="#"><span className="NavLinkedin"></span></a>
-                        </div>
-                        <p className="wow bounceIn" data-wow-delay="0.4s">Copyright &copy; 2018 TAPAMEDIC All rights reserved</p>
-                    </div>
-                </div>
+                <Footer />
             </div>
         )
     }

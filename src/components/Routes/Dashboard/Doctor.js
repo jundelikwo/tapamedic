@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { Redirect } from 'react-router-dom'
+import { Switch, Redirect } from 'react-router-dom'
 
 import PrivateRoute from '../../PrivateRoute'
 import IsLoggedIn from '../../IsLoggedIn'
@@ -37,7 +37,12 @@ class DoctorDashboard extends Component{
                 </div>
             )
         }else{
-            return <PrivateRoute path={match.path + '/verifyEmail'} component={VerifyEmail}/>
+            return (
+                <Switch>
+                    <PrivateRoute path={match.path + '/verifyEmail'} component={VerifyEmail}/>
+                    <Redirect from='*' to={match.path + '/verifyEmail'} />
+                </Switch>
+            )
         }
     }
 }
