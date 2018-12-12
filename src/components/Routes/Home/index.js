@@ -54,12 +54,12 @@ class Home extends Component{
                     <div className="container">
                         <div className="header">
                             <div className="logo wow fadeInLeft" data-wow-delay="0.5s" style={{ height: 50, overflowY: "hidden"}}>
-                                <a href="index.html"><img src="images/logoLG.svg" alt="" style={{width: 220}}/></a>
+                                <NavLink to='/'><img src="images/logoLG.svg" alt="" style={{width: 220}}/></NavLink>
                             </div>
                             <div className="top-menu">
                             <span className="menu"></span>
                                 <ul>
-                                    <li className="active"><a href="index.html">Home</a></li>
+                                    <li className="active"><NavLink to='/'>Home</NavLink></li>
                                     <li><a className="scroll" href="#features">Features</a></li>
                                     <li><a className="scroll" href="#about">About</a></li>
                                     <li><a className="scroll" href="#testimonials">Testimonials</a></li>
