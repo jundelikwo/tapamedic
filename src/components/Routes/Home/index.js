@@ -173,7 +173,7 @@ class Home extends Component{
                     <div className="container">
                         <div className="pricing-text">
                             <h4>QUALITY HAS ITS PRICE</h4>
-                            <h3>Pricings & Plans</h3>				
+                            <h3>Testimonials</h3>				
                         </div>
                         <div className="pricing-grids">
                             <div className="slider">
