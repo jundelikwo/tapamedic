@@ -3,22 +3,12 @@ import firebase from 'firebase'
 import { connect } from 'react-redux'
 import firebaseui from 'firebaseui'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
-import { toggleRole } from '../../../actions'
-
 
 class DoctorLogin extends Component{
     state = {
         redirect: false
     }
-    constructor(props){
-        super(props)
-        this.getUIConfig = this.getUIConfig.bind(this)
-        this.toggleRole = this.toggleRole.bind(this)
-    }
-    toggleRole(){
-        this.props.dispatch(toggleRole())
-    }
-    getUIConfig(){
+    getUIConfig = () => {
         return {
             'callbacks': {
               // Called when the user has been successfully signed in.
@@ -48,12 +38,8 @@ class DoctorLogin extends Component{
     }
     render(){
         return (
-            <div>
-                <p>You are currently registering as a Doctor</p>
-                <button onClick={this.toggleRole} type="submit" className="btn btn-primary">Click me to register as a Patient</button>
-                <div style={{ marginTop: '30px' }}>
-                    <StyledFirebaseAuth uiConfig={this.getUIConfig()} firebaseAuth={firebase.auth()}/>        
-                </div>
+            <div style={{ marginTop: '30px' }}>
+                <StyledFirebaseAuth uiConfig={this.getUIConfig()} firebaseAuth={firebase.auth()}/>        
             </div>
         )
     }

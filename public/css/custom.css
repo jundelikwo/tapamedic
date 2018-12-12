@@ -109,6 +109,10 @@ div.footer.messages {
     display: none;
 }
 
+.mdl-card.mdl-shadow--2dp.firebaseui-container {
+    margin: 0;
+}
+
 @media (max-width: 1081px){
     .cbp-spmenu-push div#page-wrapper.consultation-on-going {
         margin-bottom: 100px;
