@@ -8,6 +8,10 @@ import Login from './components/Routes/Login/'
 import ErrorBoundary from './components/ErrorBoundary'
 import './App.css';
 
+if(process.env.NODE_ENV !== "development"){
+  console.log = () => {}
+}
+
 class App extends Component {
   componentDidMount(){
     if(!window.$){
