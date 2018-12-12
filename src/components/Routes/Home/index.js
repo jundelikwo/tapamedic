@@ -54,7 +54,7 @@ class Home extends Component{
                     <div className="container">
                         <div className="header">
                             <div className="logo wow fadeInLeft" data-wow-delay="0.5s" style={{ height: 50, overflowY: "hidden"}}>
-                                <NavLink to='/'><img src="images/logoLG.svg" alt="" style={{width: 220}}/></NavLink>
+                                <NavLink to='/'><img src="/images/logoLG.svg" alt="" style={{width: 220}}/></NavLink>
                             </div>
                             <div className="top-menu">
                             <span className="menu"></span>
@@ -85,7 +85,7 @@ class Home extends Component{
                                 <a className="scroll view hvr-bounce-to-left" href="#features">VIEW FEATURES</a>
                             </div>
                             <div className="col-md-6 banner-pic wow fadeInLeft" data-wow-delay="0.5s">
-                                <img src="images/phn.png" alt=""/>
+                                <img src="/images/phn.png" alt=""/>
                             </div>
                             <div className="clearfix"/>
                         </div>
@@ -99,17 +99,17 @@ class Home extends Component{
                         </div>
                         <div className="features-section">
                             <div className="col-md-4 feature-grid">
-                                <img className="wow bounceIn" data-wow-delay="0.4s" src="images/icon1.png" alt=""/>
+                                <img className="wow bounceIn" data-wow-delay="0.4s" src="/images/icon1.png" alt=""/>
                                 <h3>It's affordable</h3>
                                 <p>Quality healthcare is now affordable with tapamedic. For as low as &#8358;600 naira, you can have a video, voice, image or text chat with one off our qualified doctor immediately</p>
                             </div>
                             <div className="col-md-4 feature-grid">
-                                <img className="wow bounceIn" data-wow-delay="0.4s" src="images/question.png" alt=""/>
+                                <img className="wow bounceIn" data-wow-delay="0.4s" src="/images/question.png" alt=""/>
                                 <h3>Free Questions</h3>
                                 <p>Once you sign up. You can ask unlimited health related questions free off charge.</p>
                             </div>
                             <div className="col-md-4 feature-grid">
-                                <img className="wow bounceIn" data-wow-delay="0.4s" src="images/verified.png" alt=""/>
+                                <img className="wow bounceIn" data-wow-delay="0.4s" src="/images/verified.png" alt=""/>
                                 <h3>Verified Doctors</h3>
                                 <p>All our doctors have been verified to be members off the Nigerian Medical Association</p>
                             </div>
@@ -121,7 +121,7 @@ class Home extends Component{
                     <div className="container">
                         <div className="about-top">
                             <div className="col-md-6 about-device wow fadeInLeft" data-wow-delay="0.5s">
-                                <img src="images/phn2.png" alt=""/>
+                                <img src="/images/phn2.png" alt=""/>
                             </div>
                             <div className="col-md-6 about-device-info wow fadeInRight" data-wow-delay="0.5s">
                                 <div className="device-text">
@@ -164,7 +164,7 @@ class Home extends Component{
                             </div>		 
                         </div>
                         <div className="col-md-6 about-device-bottom wow fadeInLeft" data-wow-delay="0.5s">
-                            <img src="images/phn3.jpg" alt=""/>
+                            <img src="/images/phn3.jpg" alt=""/>
                         </div>
                         <div className="clearfix"/>
                     </div>
@@ -183,7 +183,7 @@ class Home extends Component{
                                             <p>Once upon a time all the Rivers combined to protest against the action of the Sea in making their waters salt.
                                             “When we come to you,” said they to the Sea.</p>
                                             <div className="pic1">
-                                                <img src="images/pr1.png" alt=""/>
+                                                <img src="/images/pr1.png" alt=""/>
                                             </div>
                                             <div className="pic-info">
                                                     <h5>John Doe</h5>
@@ -194,7 +194,7 @@ class Home extends Component{
                                         <div className="col-md-6 pricing-plans">
                                             <p>A shoe is not only a design, but it's a part of your body language, the way you walk. The way you're going to move is quite dictated by your shoes.</p>
                                             <div className="pic1">
-                                                <img src="images/pr2.png" alt=""/>
+                                                <img src="/images/pr2.png" alt=""/>
                                             </div>
                                             <div className="pic-info">
                                                     <h5>John Doe</h5>
@@ -208,7 +208,7 @@ class Home extends Component{
                                         <div className="col-md-6 pricing-plans">
                                             <p>A shoe is not only a design, but it's a part of your body language, the way you walk. The way you're going to move is quite dictated by your shoes.</p>
                                             <div className="pic1">
-                                                <img src="images/pr2.png" alt=""/>
+                                                <img src="/images/pr2.png" alt=""/>
                                             </div>
                                             <div className="pic-info">
                                                     <h5>John Doe</h5>
@@ -220,7 +220,7 @@ class Home extends Component{
                                             <p>Once upon a time all the Rivers combined to protest against the action of the Sea in making their waters salt.
                                             “When we come to you,” said they to the Sea.</p>
                                             <div className="pic1">
-                                                <img src="images/m2.jpg" alt=""/>
+                                                <img src="/images/m2.jpg" alt=""/>
                                             </div>
                                             <div className="pic-info">
                                                     <h5>John Doe</h5>
@@ -235,7 +235,7 @@ class Home extends Component{
                                             <p>Once upon a time all the Rivers combined to protest against the action of the Sea in making their waters salt.
                                             “When we come to you,” said they to the Sea.</p>
                                             <div className="pic1">
-                                                <img src="images/m1.jpg" alt=""/>
+                                                <img src="/images/m1.jpg" alt=""/>
                                             </div>
                                             <div className="pic-info">
                                                     <h5>John Doe</h5>
@@ -246,7 +246,7 @@ class Home extends Component{
                                         <div className="col-md-6 pricing-plans">
                                             <p>A shoe is not only a design, but it's a part of your body language, the way you walk. The way you're going to move is quite dictated by your shoes.</p>
                                             <div className="pic1">
-                                                <img src="images/pr1.png" alt=""/>
+                                                <img src="/images/pr1.png" alt=""/>
                                             </div>
                                             <div className="pic-info">
                                                     <h5>John Doe</h5>
@@ -260,7 +260,7 @@ class Home extends Component{
                                         <div className="col-md-6 pricing-plans">
                                             <p>A shoe is not only a design, but it's a part of your body language, the way you walk. The way you're going to move is quite dictated by your shoes.</p>
                                             <div className="pic1">
-                                                <img src="images/pr2.png" alt=""/>
+                                                <img src="/images/pr2.png" alt=""/>
                                             </div>
                                             <div className="pic-info">
                                                     <h5>John Doe</h5>
@@ -272,7 +272,7 @@ class Home extends Component{
                                             <p>Once upon a time all the Rivers combined to protest against the action of the Sea in making their waters salt.
                                             “When we come to you,” said they to the Sea.</p>
                                             <div className="pic1">
-                                                <img src="images/m2.jpg" alt=""/>
+                                                <img src="/images/m2.jpg" alt=""/>
                                             </div>
                                             <div className="pic-info">
                                                     <h5>John Doe</h5>
