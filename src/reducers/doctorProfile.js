@@ -21,8 +21,7 @@ let doctorProfileReducer = (state = initialState, action) => {
         case ADD_DOCTOR_PROFILE_DATA :
             if(action.data){
                 let mdcnPhoto = action.data.mdcnPhoto || initialState.mdcnPhoto
-                let location = action.data.location
-                return { ...state, ...action.data.data, mdcnPhoto, location, languages: action.data.languages }
+                return { ...state, ...action.data, ...action.data.data, mdcnPhoto }
             }
             return { ...state }
         case ADD_CLAIMS:

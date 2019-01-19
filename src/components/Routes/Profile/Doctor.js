@@ -102,7 +102,8 @@ class Profile extends Component{
             other: this.state.other || other,
             account: this.state.account || account,
             accountNumber: this.state.accountNumber || accountNumber,
-            bank: this.state.bank || bank
+            bank: this.state.bank || bank,
+            ...languages
         })
     }
     componentDidMount(){
@@ -491,20 +492,26 @@ class Profile extends Component{
 
 const mapStateToProps = state => {
     //const err = 'Not Yet Set'
-
+    const doctorProfile = state.doctorProfile
     let supportedLanguages = state.languages
 
-    let graduation = state.doctorProfile.graduation
-    let firstName = state.doctorProfile.firstName
-    let doctorLanguages = state.doctorProfile.languages || {}
-    let mdcnPhotoURL = state.doctorProfile.mdcnPhoto
-    let lastName = state.doctorProfile.lastName
-    let location = state.doctorProfile.location
-    let mdcn_folio = state.doctorProfile.mdcn_folio
-    let mdcn_membership = state.doctorProfile.mdcn_membership
-    let photo = state.doctorProfile.photo
-    let specialty = state.doctorProfile.specialty
-    let university = state.doctorProfile.university
+    let approved = doctorProfile.approved
+    let graduation = doctorProfile.graduation
+    let firstName = doctorProfile.firstName
+    let doctorLanguages = doctorProfile.languages || {}
+    let mdcnPhotoURL = doctorProfile.mdcnPhoto
+    let lastName = doctorProfile.lastName
+    let location = doctorProfile.location
+    let mdcn_folio = doctorProfile.mdcn_folio
+    let mdcn_membership = doctorProfile.mdcn_membership
+    let photo = doctorProfile.photo
+    let specialty = doctorProfile.specialty
+    let university = doctorProfile.university
+    let review = doctorProfile.review
+    let account = doctorProfile.account
+    let accountNumber = doctorProfile.accountNumber
+    let bank = doctorProfile.bank
+    let other = doctorProfile.other
     
     let wallet = state.wallet
 
@@ -514,8 +521,11 @@ const mapStateToProps = state => {
     })
 
     return {
-        approved: state.doctorProfile.approved,
-        review: state.doctorProfile.review,
+        account,
+        accountNumber,
+        approved,
+        bank,
+        review,
         graduation,
         firstName,
         languages,
@@ -524,6 +534,7 @@ const mapStateToProps = state => {
         location,
         mdcn_folio,
         mdcn_membership,
+        other,
         specialty,
         university,
         wallet,
