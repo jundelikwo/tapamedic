@@ -40,7 +40,7 @@ class ConsultationItem extends Component{
                     <div style={{ borderBottom: '2px solid grey', marginBottom: '10px', paddingBottom: '10px' }}>
                         <div style={{ float: 'none' }}>
                             <div className="profile_img">
-                                <span className="prfil-img"><img style={{ height: '75px', width: '75px' }} src={photo} alt=""/> </span> 
+                                <span style={{ height: '75px', width: '75px' }} className="prfil-img"><img style={{ height: '75px', width: '75px' }} src={photo} alt=""/> </span> 
                                 <div className="user-name">
                                     <p>{name}</p>
                                     <button className="btn btn-success">View Messages</button>
