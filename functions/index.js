@@ -11,6 +11,11 @@ admin.initializeApp({
   databaseURL: "https://tapamedic-7a09f.firebaseio.com"
 });
 
+const OPENTOK_API_KEY = functions.config().opentok.api;
+const OPENTOK_API_SECRET = functions.config().opentok.secret;
+let OpenTok = require('opentok');
+let opentok = new OpenTok(OPENTOK_API_KEY, OPENTOK_API_SECRET);
+
 const paystackKey = functions.config().paystack.key
 var paystack = require('paystack')(paystackKey);
 var request = require('request');
@@ -479,14 +484,32 @@ exports.acceptConsultation = functions.database.ref('doctors/{uid}/consultation/
                         console.log('startTime',time.getFullYear(),'/',time.getMonth() + 1,'/',time.getDate())
                         let doctorWallet = walSnap.val() || 0
                         doctorWallet += doctorCut
-                        return admin.database().ref('/').update({
-                            [`consultation/${consultId}/accepted`]: true,
-                            [`consultation/${consultId}/started`]: true,
-                            [`consultation/${consultId}/startTime`]: time.getTime(),
-                            [`patients/${patient.id}/consultation/${consultId}/accepted`]: true,
-                            [`patients/${patient.id}/profile/wallet`]: wallet - consultationCost,
-                            [`doctors/${uid}/profile/wallet`]: doctorWallet,
-                            [`payments/${time.getFullYear()}/${time.getMonth() + 1}/${time.getDate()}/${consultId}`]: ourCut
+                        return opentok.createSession({}, (error, session) => {
+                            if (error) {
+                              console.log("Error creating session:", error)
+                            } else {
+                              let sessionId = session.sessionId;
+                              console.log("Session ID: " + sessionId);
+                              //  Use the role value appropriate for the user:
+                              var tokenOptions = {};
+                              tokenOptions.role = "publisher";
+                              tokenOptions.data = "username=bob";
+                              tokenOptions.expireTime = new Date().getTime() + 60 * 30;
+                        
+                              // Generate a token.
+                              let token = opentok.generateToken(sessionId, tokenOptions);
+                              console.log('token',token);
+                              return admin.database().ref('/').update({
+                                  [`consultation/${consultId}/accepted`]: true,
+                                  [`consultation/${consultId}/started`]: true,
+                                  [`consultation/${consultId}/startTime`]: time.getTime(),
+                                  [`consultation/${consultId}/opentok`]: { session: sessionId, token },
+                                  [`patients/${patient.id}/consultation/${consultId}/accepted`]: true,
+                                  [`patients/${patient.id}/profile/wallet`]: wallet - consultationCost,
+                                  [`doctors/${uid}/profile/wallet`]: doctorWallet,
+                                  [`payments/${time.getFullYear()}/${time.getMonth() + 1}/${time.getDate()}/${consultId}`]: ourCut
+                              })
+                            }
                         })
                     })
                 }
