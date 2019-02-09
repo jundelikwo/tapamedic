@@ -39,6 +39,45 @@ class Home extends Component{
         //$('#toTop').css('display', 'none')
     }
 
+    renderHeader = () => {
+        const { isLoggedIn } = this.props
+        let authNavText = 'Sign In | Sign Up'
+        let authNavPath = '/login'
+        if(isLoggedIn){
+            authNavText = 'My Profile'
+            authNavPath = '/dashboard/profile'
+        }
+
+        return (
+            <div className="header home">
+                <div className="logo wow fadeInLeft" data-wow-delay="0.5s" style={{ height: 50, overflowY: "hidden"}}>
+                    <NavLink to='/'><img src="/images/logoLG.svg" alt="" style={{width: 220}}/></NavLink>
+                </div>
+                <div className="top-menu">
+                <span className="menu"></span>
+                    <ul>
+                        <li className="active"><NavLink to='/'>Home</NavLink></li>
+                        <li><NavLink to='/dashboard/talk-to-a-doc'>Talk to a Doctor</NavLink></li>
+                        <li><NavLink to='/dashboard/questions'>Ask a Question</NavLink></li>
+                        {/* <li><a className="scroll" href="#about">About</a></li>
+                        <li><a className="scroll" href="#testimonials">Testimonials</a></li>
+                        <li><a className="scroll" href="#contact">Contact</a></li> */}
+                        <li><NavLink to={authNavPath}>{authNavText}</NavLink></li> 
+                        {!isLoggedIn ? null : (
+                            <li> <a onClick={(e) => {
+                                e.preventDefault()
+                                this.props.dispatch(goOffline())
+                                firebase.auth().signOut()
+                            }}>Logout</a> </li>
+                        )}
+                    </ul>
+                </div>  	
+
+                <div className="clearfix"/>
+            </div>
+        )
+    }
+
     render(){
         const { isLoggedIn } = this.props
         let authNavText = 'Sign In | Sign Up'
@@ -52,31 +91,8 @@ class Home extends Component{
             <div>
                 <div className="banner">
                     <div className="container">
-                        <div className="header">
-                            <div className="logo wow fadeInLeft" data-wow-delay="0.5s" style={{ height: 50, overflowY: "hidden"}}>
-                                <NavLink to='/'><img src="/images/logoLG.svg" alt="" style={{width: 220}}/></NavLink>
-                            </div>
-                            <div className="top-menu">
-                            <span className="menu"></span>
-                                <ul>
-                                    <li className="active"><NavLink to='/'>Home</NavLink></li>
-                                    <li><a className="scroll" href="#features">Features</a></li>
-                                    <li><a className="scroll" href="#about">About</a></li>
-                                    <li><a className="scroll" href="#testimonials">Testimonials</a></li>
-                                    <li><a className="scroll" href="#contact">Contact</a></li>
-                                    <li><NavLink to={authNavPath}>{authNavText}</NavLink></li> 
-                                    {!isLoggedIn ? null : (
-                                        <li> <a onClick={(e) => {
-                                            e.preventDefault()
-                                            this.props.dispatch(goOffline())
-                                            firebase.auth().signOut()
-                                        }}>Logout</a> </li>
-                                    )}
-                                </ul>
-                            </div>  	
-
-                            <div className="clearfix"/>
-                        </div>
+                        {this.renderHeader()}
+                        {this.renderHeader()}
                         <div className="banner-info">
                             <div className="col-md-6 banner-text wow fadeInRight" data-wow-delay="0.5s">
                                 <h3>introducing tap a medic</h3>
@@ -95,23 +111,31 @@ class Home extends Component{
                     <div className="container">
                         <div className="features-head">
                             <h4>PRODUCT OVERVIEW</h4>
-                            <h3>List of amazing features</h3>			 
+                            <h3>Amazing Features</h3>			 
                         </div>
                         <div className="features-section">
-                            <div className="col-md-4 feature-grid">
+                            <div className="col-md-3 feature-grid">
                                 <img className="wow bounceIn" data-wow-delay="0.4s" src="/images/icon1.png" alt=""/>
-                                <h3>It's affordable</h3>
+                                <h3>Affordable</h3>
                                 <p>Quality healthcare is now affordable with tapamedic. For as low as &#8358;600 naira, you can have a video, voice, image or text chat with one off our qualified doctor immediately</p>
+                                <NavLink className="btn btn-primary" to='/dashboard/talk-to-a-doc'>Try it now</NavLink>
                             </div>
-                            <div className="col-md-4 feature-grid">
+                            <div className="col-md-3 feature-grid">
                                 <img className="wow bounceIn" data-wow-delay="0.4s" src="/images/question.png" alt=""/>
                                 <h3>Free Questions</h3>
                                 <p>Once you sign up. You can ask unlimited health related questions free off charge.</p>
+                                <NavLink className="btn btn-primary" to='/dashboard/question'>Ask now</NavLink>
                             </div>
-                            <div className="col-md-4 feature-grid">
+                            <div className="col-md-3 feature-grid">
                                 <img className="wow bounceIn" data-wow-delay="0.4s" src="/images/verified.png" alt=""/>
                                 <h3>Verified Doctors</h3>
-                                <p>All our doctors have been verified to be members off the Nigerian Medical Association</p>
+                                <p>All our doctors have been verified to be licensed by the Medical and dental council of Nigeria (MDCN) and members of The Nigeian medical association (NMA)</p>
+                                <NavLink className="btn btn-primary" to='/dashboard/talk-to-a-doc'>Talk to a Dr now</NavLink>
+                            </div>
+                            <div className="col-md-3 feature-grid">
+                                <img className="wow bounceIn" data-wow-delay="0.4s" src="/images/verified.png" alt=""/>
+                                <h3>Multiple Languages</h3>
+                                <p>You can even talk to our doctors using your local dialect</p>
                             </div>
                             <div className="clearfix"/>
                         </div>

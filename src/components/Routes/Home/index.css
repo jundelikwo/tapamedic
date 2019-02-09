@@ -37,7 +37,34 @@ min-height:657px;
 background-size:cover;
 }
 .header{
-padding-top:3em;
+	padding-top: 3em;
+}
+.header.home{
+	padding-top: 0;
+background: rgba(0,0,0,.4);
+}
+.header.home .top-menu{
+	padding-top:1.2em;
+	padding-bottom: 1em;
+	margin-bottom: 10px;
+}
+.header.home:first-of-type{
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+}
+.header.home:nth-of-type(2n){
+	visibility: hidden;
+}
+.header.home:nth-of-type(2n) .logo{
+	margin-top: 1em;
+}
+.header.home:first-of-type .logo{
+	background: transparent;
+}
+.header.home:first-of-type .logo img{
+	visibility: hidden;
 }
 .logo{
 float:left;
