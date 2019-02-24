@@ -5,6 +5,8 @@ import firebase from 'firebase'
 import { applyMiddleware, createStore, compose } from 'redux'
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
+import '@opentok/client';
+
 import reducers from './reducers'
 import {
   login,
