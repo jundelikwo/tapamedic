@@ -522,3 +522,10 @@ export var uploadConsultationPhoto = (consultId, photo) => {
         }))
     }
 }
+
+export var initiateWebRTC = (media,id) => {
+    return () => {
+        console.log(`/consultation/${id}/opentok/webrtc`,media)
+        firebase.database().ref(`/consultation/${id}/opentok/webrtc`).set(media)
+    }
+}

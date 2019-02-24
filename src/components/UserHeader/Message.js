@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom';
+import { initiateWebRTC } from '../../actions';
 
 class Message extends Component {
     goBack = () => {
@@ -7,7 +9,7 @@ class Message extends Component {
     }
 
     render(){
-        const { allowWrite, name, photo } = this.props
+        const { allowWrite, name, consultationId, photo } = this.props
         return (
             <div className="sticky-header header-section" style={{ display: 'flex' }}>
                 <div className="header-left" style={{ flex: 1, float: 'none' }}>				
@@ -26,8 +28,8 @@ class Message extends Component {
                 <div className="header-right" style={{ flex: 1, float: 'none', display: 'block' }}>
                     {allowWrite ?
                         <div style={{ float: 'right' }}>
-                            <button className="btn btn-danger" style={{ marginRight: 5, marginTop: 10 }}><i className="fa fa-video-camera"/></button>
-                            <button className="btn btn-danger" style={{ marginRight: 5, marginTop: 10 }}><i className="fa fa-phone"/></button>
+                            <button onClick={() => this.props.dispatch(initiateWebRTC('video', consultationId))} className="btn btn-danger" style={{ marginRight: 5, marginTop: 10 }}><i className="fa fa-video-camera"/></button>
+                            <button onClick={() => this.props.dispatch(initiateWebRTC('audio', consultationId))} className="btn btn-danger" style={{ marginRight: 5, marginTop: 10 }}><i className="fa fa-phone"/></button>
                         </div>
                     : null}
                     <div className="clearfix"> </div>		
@@ -38,4 +40,4 @@ class Message extends Component {
     }
 }
 
-export default withRouter(Message)
+export default connect(null)(withRouter(Message))

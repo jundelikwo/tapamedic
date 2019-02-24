@@ -29,7 +29,7 @@ class Header extends Component{
 				}
 			}
         }
-        return isMessagesRoute ? <Message allowWrite={allowWrite} name={name} photo={photo} /> : <RenderRole {...this.props} patient={Patient} doctor={Doctor} />
+        return isMessagesRoute ? <Message allowWrite={allowWrite} consultationId={consultId} name={name} photo={photo} /> : <RenderRole {...this.props} patient={Patient} doctor={Doctor} />
     }
 }
 
