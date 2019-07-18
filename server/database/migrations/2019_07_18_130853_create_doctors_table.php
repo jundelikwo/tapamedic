@@ -16,8 +16,8 @@ class CreateDoctorsTable extends Migration
         Schema::create('doctors', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
-            $table->enum('approved', ['true', 'false'])->default('false');
-            $table->enum('review', ['true', 'false'])->default('false');
+            $table->enum('approved', ['yes', 'no'])->default('no');
+            $table->enum('review', ['yes', 'no'])->default('no');
             $table->unsignedInteger('graduation_year')->nullable();
             $table->string('bank_name')->nullable();
             $table->string('account_name')->nullable();

@@ -16,7 +16,7 @@ class CreateQuestionsTable extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('asker_id');
-            $table->enum('answered', ['true', 'false'])->default('false');
+            $table->enum('answered', ['yes', 'no'])->default('no');
             $table->unsignedInteger('num_answers')->default(0);
             $table->unsignedInteger('language_id');
             $table->text('question');

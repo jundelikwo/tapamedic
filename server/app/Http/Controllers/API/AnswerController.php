@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
 
 class AnswerController extends Controller
 {
-    public function create(Request $request)
+    public function store(Request $request)
     {
         $user = $request->user();
         $user['last_seen'] = strftime("%Y-%m-%d %H:%M:%S", time());
@@ -43,7 +43,7 @@ class AnswerController extends Controller
             $answer['answer'] = $request['answer'];
             $answer->save();
         } else {
-            $question['answered'] = 'true';
+            $question['answered'] = 'yes';
             $question['num_answers'] += 1;
             $question->save();
 

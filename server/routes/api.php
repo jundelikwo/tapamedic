@@ -26,7 +26,7 @@ Route::group(['prefix' => 'v1'], function () {
 
 		Route::group(['middleware' => ['doctorOnly'], ], function () {
 			Route::group(['middleware' => ['approvedDoctorOnly'], ], function () {
-				Route::post('answers', 'API\AnswerController@create');
+				Route::post('answers', 'API\AnswerController@store');
 			});
 		});
 

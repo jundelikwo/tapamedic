@@ -110,7 +110,7 @@ class UserController extends Controller
     public function logout(Request $request)
     {
         if (\array_key_exists('reset-all', $request->all()) &&
-            $request->all()['reset-all'] == 'true') {
+            $request->all()['reset-all'] == 'yes') {
             $this->logoutAll();
 
             return response()->json([

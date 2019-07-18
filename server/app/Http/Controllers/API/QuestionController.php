@@ -37,7 +37,7 @@ class QuestionController extends Controller
             'question' => $request['question'],
             'language_id' => $request['language'],
             'asker_id' => $user->id,
-            'answered' => 'false',
+            'answered' => 'no',
             'num_answers' => 0,
             'slug' => str_slug($request['question']),
         ]);
@@ -63,7 +63,7 @@ class QuestionController extends Controller
         $query = Question::query();
 
         if($user->role !== 'doctor'){
-            $query->where('answered', 'true');
+            $query->where('answered', 'yes');
         }
 
         $query->inRandomOrder();

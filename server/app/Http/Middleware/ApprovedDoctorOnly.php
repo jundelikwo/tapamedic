@@ -19,7 +19,7 @@ class ApprovedDoctorOnly
         $isApproved = false;
         $doctor = Auth::user()->doctor;   
         if($doctor){
-            $isApproved = $doctor->approved === 'true';
+            $isApproved = $doctor->approved === 'yes';
         }
 
         return Auth::user()['role'] == 'doctor' && $isApproved ? $next($request) : response()->json([

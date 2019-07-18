@@ -17,7 +17,7 @@ class CreateConsultationsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('patient_id');
             $table->unsignedInteger('doctor_id');
-            $table->enum('accepted', ['true', 'false'])->default('false');
+            $table->enum('accepted', ['yes', 'no'])->default('no');
             $table->timestamp('start_time')->nullable();
             $table->string('opentok_session')->nullable();
             $table->string('opentok_token')->nullable();
