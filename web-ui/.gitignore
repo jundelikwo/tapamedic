@@ -1,19 +1,19 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+node_modules
 
 # testing
 /coverage
 
 # production
-/build
+build
 
 # firebase functions dependencies
-/functions/node_modules
+functions/node_modules
 
 # firebase keys
-/functions/service-account.json
+functions/service-account.json
 
 # firebase cache
 .firebase/
@@ -22,7 +22,7 @@
 %RESOURCE_DIR%/
 
 # configurations
-/src/config
+src/config
 
 # misc
 .DS_Store
