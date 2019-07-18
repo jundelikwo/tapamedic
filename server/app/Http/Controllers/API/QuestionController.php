@@ -66,7 +66,6 @@ class QuestionController extends Controller
             $query->where('answered', 'yes');
         }
 
-        $query->inRandomOrder();
         $paginator = $query->paginate($size);
         $paginator->currentPage($page);
 

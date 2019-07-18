@@ -23,6 +23,7 @@ Route::group(['prefix' => 'v1'], function () {
 		Route::get('logout', 'API\UserController@logout');
 
 		Route::get('questions', 'API\QuestionController@list');
+		Route::get('questions/{id}/answers', 'API\AnswerController@list');
 
 		Route::group(['middleware' => ['doctorOnly'], ], function () {
 			Route::group(['middleware' => ['approvedDoctorOnly'], ], function () {

@@ -58,6 +58,36 @@ class AnswerController extends Controller
             'answer' => $answer,
             'question' => $question,
             'user' => $user
+        ], 200);
+    }
+
+    public function list(Request $request, $id)
+    {
+        $size = 10;
+        $page = !empty($request->input('page')) ? $request->input('page') : 1;
+
+        $user = $request->user();
+        $user['last_seen'] = strftime("%Y-%m-%d %H:%M:%S", time());
+        $user['status'] = 'online';
+        $user->save();
+
+        $query = Answer::query()->where('question_id', $id)
+            ->where('doctor_id', '!=',$user->id);
+
+        $paginator = $query->paginate($size);
+        $paginator->currentPage($page);
+
+        $myAnswer = null;
+        
+        if($user->role === 'doctor' && $page == 1){
+            $myAnswer = Answer::query()->where('question_id', $id)
+                ->where('doctor_id',$user->id)->first();
+        }
+
+        return response()->json([
+            'user' => $user,
+            'answers' => $paginator,
+            'my_answer' => $myAnswer,
         ], 200); 
     }
 }
