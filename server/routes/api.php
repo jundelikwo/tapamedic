@@ -21,5 +21,13 @@ Route::group(['prefix' => 'v1'], function () {
 	Route::group(['middleware' => ['auth:api'], ], function () {
 		Route::get('user', 'API\UserController@user');
 		Route::get('logout', 'API\UserController@logout');
+
+		Route::group(['middleware' => ['doctorOnly'], ], function () {
+
+		});
+
+		Route::group(['middleware' => ['patientOnly'], ], function () {
+			Route::post('question', 'API\QuestionController@create');
+		});
 	});
 });

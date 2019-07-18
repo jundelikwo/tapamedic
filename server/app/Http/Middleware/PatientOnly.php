@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
-class DriverOnly
+class PatientOnly
 {
     /**
      * Handle an incoming request.
@@ -16,8 +16,8 @@ class DriverOnly
      */
     public function handle($request, Closure $next)
     {
-        return Auth::user()['role'] == 'driver' ? $next($request) : response()->json([
-            'error' => 'Forbidden',
+        return Auth::user()['role'] == 'patient' ? $next($request) : response()->json([
+            'error' => 'Only patients can access this resource',
         ], 401);
     }
 }

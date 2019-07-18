@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
-class PremiumAndUserOnly
+class DoctorOnly
 {
     /**
      * Handle an incoming request.
@@ -16,6 +16,8 @@ class PremiumAndUserOnly
      */
     public function handle($request, Closure $next)
     {
-        return Auth::user()['role'] == 'user' || Auth::user()['role'] == 'premium' ? $next($request) : redirect('home');
+        return Auth::user()['role'] == 'doctor' ? $next($request) : response()->json([
+            'error' => 'Forbidden',
+        ], 401);
     }
 }

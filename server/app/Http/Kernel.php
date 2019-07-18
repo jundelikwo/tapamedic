@@ -52,14 +52,15 @@ class Kernel extends HttpKernel
      */
     protected $routeMiddleware = [
         'adminOnly' => \App\Http\Middleware\AdminOnly::class,
+        'approvedDoctorOnly' => \App\Http\Middleware\ApprovedDoctorOnly::class,
         'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
-        'driverOnly' => \App\Http\Middleware\DriverOnly::class,
+        'doctorOnly' => \App\Http\Middleware\DoctorOnly::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'premiumAndUserOnly' => \App\Http\Middleware\PremiumAndUserOnly::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'userOnly' => \App\Http\Middleware\UserOnly::class,
+        'patientOnly' => \App\Http\Middleware\PatientOnly::class,
+        'unApprovedDoctorOnly' => \App\Http\Middleware\UnApprovedDoctorOnly::class,
     ];
 }
