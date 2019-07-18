@@ -25,7 +25,9 @@ Route::group(['prefix' => 'v1'], function () {
 		Route::get('questions', 'API\QuestionController@list');
 
 		Route::group(['middleware' => ['doctorOnly'], ], function () {
-
+			Route::group(['middleware' => ['approvedDoctorOnly'], ], function () {
+				Route::post('answers', 'API\AnswerController@create');
+			});
 		});
 
 		Route::group(['middleware' => ['patientOnly'], ], function () {
