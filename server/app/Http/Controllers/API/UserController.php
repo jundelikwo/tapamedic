@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Validator;
 use Hash;
-use App\Driver;
+use App\Doctor;
+use App\Patient;
 use App\User;
 
 class UserController extends Controller
@@ -27,8 +28,13 @@ class UserController extends Controller
             $token->revoke();   
           }
 
+          $user['last_seen'] = strftime("%Y-%m-%d %H:%M:%S", time());
+          $user['status'] = 'online';
+          $user->save();
+
           $res['user'] = $user;
-          $res['driver'] = $user->driver;
+          $res['doctor'] = $user->doctor;
+          $res['patient'] = $user->patient;
           $res['token'] = $user->createToken('web-ui-api')->accessToken;
 
           return response()->json($res, 200);
@@ -44,72 +50,61 @@ class UserController extends Controller
 
     public function register(Request $request)
     {
-        $validator = Validator::make($request->input(), [
-          'name' => [
-            'required',
-            'string',
-            'max:255',
-          ],
-          'role' => [
-            'required',
-            Rule::in(['driver', 'user'])
-          ],
-          'phone' => [
-          	'required',
-          ],
-          'plate' => [
-            'required_if:role,driver',
-          ],
-          'vin' => [
-            'required_if:role,driver',
-          ],
-          'model' => [
-            'required_if:role,driver',
-          ],
-          'email' => [
-            'required',
-            'email',
-            'unique:users,email',
-          ],
-          'password' => [
-            'required',
-            'min:8',
-            'string',
-          ]
+      $validator = Validator::make($request->input(), [
+        'role' => [
+          'required',
+          Rule::in(['patient', 'doctor'])
+        ],
+        'phone' => [
+          //'required',
+          'unique:users,phone',
+        ],
+        'email' => [
+          'required',
+          'email',
+          'unique:users,email',
+        ],
+        'password' => [
+          'required',
+          'min:8',
+          'string',
+        ]
+      ]);
+
+      if ($validator->fails()) {
+          return response()->json([
+            'error' => $validator->errors(),
+          ], 400);
+      }
+
+      $input = [
+        'email' => $request['email'],
+        'phone' => $request['phone'],
+        'role' => $request['role'],
+        'password' => bcrypt($request['password']),
+        'last_seen' => strftime("%Y-%m-%d %H:%M:%S", time()),
+      ];
+
+      $user = User::create($input);
+      $doctor = null;
+      $patient = null;
+
+      if($user->role === 'patient'){
+        $patient = Patient::create([
+          'user_id' => $user->id,
         ]);
+      } else if($user->role === 'doctor'){
+        $doctor = Doctor::create([
+          'user_id' => $user->id,
+        ]);
+      }
 
-        if ($validator->fails()) {
-            return response()->json([
-              'error' => $validator->errors(),
-            ], 400);
-        }
+      $res['user'] = $user;
+      $res['patient'] = $patient;
+      $res['doctor'] = $doctor;
+      $res['token'] = $user->createToken('web-ui-api')->accessToken;
 
-        $input = [
-          'name' => $request['name'],
-          'email' => $request['email'],
-          'phone' => $request['phone'],
-          'role' => $request['role'],
-          'password' => bcrypt($request['password']),
-        ];
-
-        $user = User::create($input);
-
-        if($user->role === 'driver'){
-          $res['driver'] = Driver::create([
-            'user_id' => $user->id,
-            'current_earnings' => 0,
-            'total_earnings' => 0,
-            'plate' => $request['plate'],
-            'vin' => $request['vin'],
-            'model' => $request['model'],
-            'status' => 'active'
-          ]);
-        }
-
-        $res['user'] = $user;
-        $res['token'] = $user->createToken('web-ui-api')->accessToken;
-
-        return response()->json($res, 200);
+      return response()->json($res, 200);
     }
 
     public function logout(Request $request)
