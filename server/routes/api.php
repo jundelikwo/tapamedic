@@ -22,12 +22,14 @@ Route::group(['prefix' => 'v1'], function () {
 		Route::get('user', 'API\UserController@user');
 		Route::get('logout', 'API\UserController@logout');
 
+		Route::get('questions', 'API\QuestionController@list');
+
 		Route::group(['middleware' => ['doctorOnly'], ], function () {
 
 		});
 
 		Route::group(['middleware' => ['patientOnly'], ], function () {
-			Route::post('question', 'API\QuestionController@create');
+			Route::post('questions', 'API\QuestionController@create');
 		});
 	});
 });

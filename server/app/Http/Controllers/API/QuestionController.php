@@ -49,4 +49,30 @@ class QuestionController extends Controller
             'user' => $user
         ], 200); 
     }
+
+    public function list(Request $request)
+    {
+        $size = 30;
+        $page = !empty($request->input('page')) ? $request->input('page') : 1;
+
+        $user = $request->user();
+        $user['last_seen'] = strftime("%Y-%m-%d %H:%M:%S", time());
+        $user['status'] = 'online';
+        $user->save();
+
+        $query = Question::query();
+
+        if($user->role !== 'doctor'){
+            $query->where('answered', 'true');
+        }
+
+        $query->inRandomOrder();
+        $paginator = $query->paginate($size);
+        $paginator->currentPage($page);
+
+        return response()->json([
+            'user' => $user,
+            'questions' => $paginator
+        ], 200); 
+    }
 }
