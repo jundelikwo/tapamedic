@@ -18,6 +18,7 @@ class WebRTC extends React.Component {
     this.sessionEventHandlers = {
       connectionDestroyed: () => {
         console.log('connectionDestroyed')
+        this.props.dispatch(initiateWebRTC(null, this.props.consultationId))
       },
       sessionConnected: () => {
         console.log('sessionConnected')
@@ -26,6 +27,7 @@ class WebRTC extends React.Component {
       sessionDisconnected: () => {
         console.log('sessionDisconnected')
         this.setState({ connection: 'Disconnected' });
+        this.props.dispatch(initiateWebRTC(null, this.props.consultationId))
       },
       sessionReconnected: () => {
         console.log('sessionReConnected')
@@ -40,12 +42,15 @@ class WebRTC extends React.Component {
     this.publisherEventHandlers = {
       accessDenied: () => {
         console.log('User denied access to media source');
+        alert('You request could not be processed because you denied access to your media source')
+        this.props.dispatch(initiateWebRTC(null, this.props.consultationId))
       },
       streamCreated: () => {
         console.log('Publisher stream created');
       },
       streamDestroyed: ({ reason }) => {
         console.log(`Publisher stream destroyed because: ${reason}`);
+        this.props.dispatch(initiateWebRTC(null, this.props.consultationId))
       },
     };
 

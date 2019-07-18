@@ -39,7 +39,7 @@ class Payment extends Component {
             close={this.close}
             reference={this.getReference()}
             //disabled={true}
-            //embed={true}
+            embed={true}
             email={this.props.email}
             amount={this.props.amount*100}
             paystackkey={this.state.key}

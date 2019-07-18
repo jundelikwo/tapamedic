@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { preloadScript } from 'opentok-react';
 
 import WebRTC from './WebRTC'
 import IsLoggedIn from '../../IsLoggedIn'
@@ -59,4 +60,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps)(IsLoggedIn(Messages))
+export default preloadScript(connect(mapStateToProps)(IsLoggedIn(Messages)))

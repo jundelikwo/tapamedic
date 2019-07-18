@@ -126,7 +126,21 @@ div.footer.messages {
     }
 }
 
+@media(max-width:992px){
+    .consultation-wrapper .webrtc-wrapper .close-btn button {
+        width: 30px;
+        height: 30px;
+        font-size: 1em;
+    }
+}
+
 @media(max-width:768px){
+    .consultation-wrapper .webrtc-wrapper .close-btn button {
+        width: 30px;
+        height: 30px;
+        font-size: 1em;
+    }
+
     .navbar-top-links .dropdown-messages,
     .navbar-top-links .dropdown-tasks,
     .navbar-top-links .dropdown-alerts {

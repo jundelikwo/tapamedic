@@ -424,10 +424,15 @@ exports.setActiveDoctor = functions.database.ref('/doctors/{uid}/status').onWrit
 
 exports.initializeConsultation = functions.database.ref('/patients/{uid}/consultation/{consultId}').onCreate((snapshot, context) => {
     const { consultId, uid } = context.params
-    const { name, picture } = context.auth.token
+    let { name, picture } = context.auth.token
     const doctorId = snapshot.val().doctor
     const initTime = new Date().getTime()
+
+    name = name || ''
+    picture = picture || 'https://tapamedic-7a09f.firebaseapp.com/images/default_avatar.png'
     console.log('Menanma')
+    console.log(`snapshot.val().doctor: ${snapshot.val().doctor}`)
+    console.log(`context.auth.token name: ${name}: photo: ${picture}`)
     return admin.database().ref(`consultation/${consultId}`).set({ 
         doctor: {
             id: doctorId,
