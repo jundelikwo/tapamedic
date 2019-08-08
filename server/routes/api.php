@@ -31,8 +31,8 @@ Route::group(['prefix' => 'v1'], function () {
 			});
 		});
 
-		Route::group(['middleware' => ['patientOnly'], ], function () {
+		//Route::group(['middleware' => ['patientOnly'], ], function () {
 			Route::post('questions', 'API\QuestionController@create');
-		});
+		//});
 	});
 });
