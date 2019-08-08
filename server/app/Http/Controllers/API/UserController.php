@@ -89,11 +89,11 @@ class UserController extends Controller
       $doctor = null;
       $patient = null;
 
-      if($user->role === 'patient'){
-        $patient = Patient::create([
-          'user_id' => $user->id,
-        ]);
-      } else if($user->role === 'doctor'){
+      $patient = Patient::create([
+        'user_id' => $user->id,
+      ]);
+      
+      if($user->role === 'doctor'){
         $doctor = Doctor::create([
           'user_id' => $user->id,
         ]);
