@@ -22,7 +22,7 @@ class PatientController extends Controller
         $validator = Validator::make($inputs, [
           'patient' => [
             'required',
-            'exists:patients,id'
+            'exists:patients,user_id'
           ],
           'address' => [
             'string',
@@ -56,7 +56,7 @@ class PatientController extends Controller
             ], 400);
         }
 
-        $patient = Patient::find($user->id);
+        $patient = Patient::query()->where('user_id',$user->id)->first();
         
         if ($request->filled('address')) {
             $patient->address = $request['address'];
