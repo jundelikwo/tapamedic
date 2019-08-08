@@ -11,6 +11,7 @@ class Consultation extends Model
         'doctor_id',
         'accepted',
         'start_time',
+        'media',
         'opentok_session',
         'opentok_token',
     ];
