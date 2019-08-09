@@ -46,6 +46,11 @@ return [
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),
+            // 'cache' => [
+            //     'store' => 'memcached',
+            //     'expire' => 600,
+            //     'prefix' => 'cache-prefix',
+            // ],
         ],
 
         'public' => [
