@@ -36,6 +36,8 @@ Route::group(['prefix' => 'v1'], function () {
 		//Route::group(['middleware' => ['patientOnly'], ], function () {
 			Route::post('questions', 'API\QuestionController@create');
 			Route::post('patient/update', 'API\PatientController@update');
+
+			Route::post('consultations', 'API\ConsultationController@store');
 		//});
 	});
 });
