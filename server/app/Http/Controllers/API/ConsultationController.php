@@ -9,8 +9,6 @@ use Illuminate\Http\Request;
 use Validator;
 use App\Http\Controllers\Controller;
 
-const ConsultationFee = 600;
-
 class ConsultationController extends Controller
 {
     public function store(Request $request)
@@ -42,7 +40,9 @@ class ConsultationController extends Controller
         $patient = $user->patient;
         $doctor = User::find($request->doctor);
 
-        if($patient->wallet < ConsultationFee){
+        $ConsultationFee = (int) env("CONSULTATION_FEE");
+        
+        if($patient->wallet < $ConsultationFee){
             return response()->json([
                 'error' => 'Oops you have insufficient funds in your wallet',
             ], 400);
