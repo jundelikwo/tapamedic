@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API;
 use App\Patient;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Image;
+use Storage;
 use Validator;
 use App\Http\Controllers\Controller;
 
@@ -15,7 +17,6 @@ class PatientController extends Controller
         $user = $request->user();
         $user['last_seen'] = strftime("%Y-%m-%d %H:%M:%S", time());
         $user['status'] = 'online';
-        $user->save();
 
         $inputs = array_merge($request->input(), ['patient' => $user->id]);
 
@@ -42,8 +43,14 @@ class PatientController extends Controller
           'genotype' => [
             Rule::in(['AA', 'AS', 'SS']),
           ],
+          'name' => [
+            'string',
+          ],
           'occupation' => [
             'string',
+          ],
+          'profile' => [
+            'mimes:jpeg,png,jpg,gif,bmp',
           ],
           'sex' => [
             Rule::in(['Male', 'Female']),
@@ -51,12 +58,30 @@ class PatientController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-              'error' => $validator->errors(),
-            ], 400);
+          $user->save();
+          return response()->json([
+            'error' => $validator->errors(),
+          ], 400);
         }
 
-        $patient = Patient::query()->where('user_id',$user->id)->first();
+        if ($request->filled('name')) {
+          $user->name = $request['name'];
+          $user->save();
+        }
+
+        if ($request->hasFile('profile')) {
+          Storage::deleteDirectory('profile/'.$user->id);
+          $profile_path = $request->file('profile')->store('profile/'.$user->id.'/large');
+          
+          $img = Image::make(getcwd().'/../storage/app/'.$profile_path);
+          $img->fit(200, 200);
+          $thumbnail_path = getcwd().'/../storage/app/'.'profile/'.$user->id.'/thumb';
+          $thumbnail_path .= substr($profile_path, strripos($profile_path, '/'));
+          Storage::makeDirectory('profile/'.$user->id.'/thumb/');
+          $img->save($thumbnail_path);
+        }
+
+        $patient = $user->patient;
         
         if ($request->filled('address')) {
             $patient->address = $request['address'];
