@@ -60,6 +60,12 @@ class ConsultationController extends Controller
             ], 400);
         }
 
+        if($doctor->doctor->approved !== 'yes'){
+            return response()->json([
+                'error' => 'Oops the doctor you requested has not been approved. Please select another doctor',
+            ], 400);
+        }
+
         if(!empty(Consultation::query()->where('patient_id', $user->id)
             ->where('status', '!=', 'closed')->count()))
         {
