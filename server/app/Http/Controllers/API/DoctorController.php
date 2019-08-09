@@ -47,6 +47,12 @@ class DoctorController extends Controller
           'mdcn_photo' => [
             'mimes:jpeg,png,jpg,gif,bmp',
           ],
+          'name' => [
+            'string',
+          ],
+          'profile' => [
+            'mimes:jpeg,png,jpg,gif,bmp',
+          ],
           'specialty' => [
             'string',
           ],
@@ -59,9 +65,9 @@ class DoctorController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-              'error' => $validator->errors(),
-            ], 400);
+          return response()->json([
+            'error' => $validator->errors(),
+          ], 400);
         }
 
         $doctor = $user->doctor;
@@ -82,9 +88,26 @@ class DoctorController extends Controller
             $doctor->location = $request['location'];
         }
 
+        if ($request->hasFile('profile')) {
+          Storage::deleteDirectory('profile/'.$user->id);
+          $profile_path = $request->file('profile')->store('profile/'.$user->id.'/large');
+          
+          $img = Image::make(getcwd().'/../storage/app/'.$profile_path);
+          $img->fit(200, 200);
+          $thumbnail_path = getcwd().'/../storage/app/'.'profile/'.$user->id.'/thumb';
+          $thumbnail_path .= substr($profile_path, strripos($profile_path, '/'));
+          Storage::makeDirectory('profile/'.$user->id.'/thumb/');
+          $img->save($thumbnail_path);
+        }
+
         if($doctor->approved === 'no' && $doctor->review === 'no') {
           if ($request->filled('specialty')) {
             $doctor->specialty = $request['specialty'];
+          }
+
+          if ($request->filled('name')) {
+            $user->name = $request['name'];
+            $user->save();
           }
 
           if ($request->hasFile('mdcn_photo')) {
@@ -116,6 +139,7 @@ class DoctorController extends Controller
           }
 
           if (
+            !empty($user->name) &&
             !empty($doctor->bank_name) &&
             !empty($doctor->account_name) &&
             !empty($doctor->account_number) &&

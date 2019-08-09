@@ -17,6 +17,7 @@ class PatientController extends Controller
         $user = $request->user();
         $user['last_seen'] = strftime("%Y-%m-%d %H:%M:%S", time());
         $user['status'] = 'online';
+        $user->save();
 
         $inputs = array_merge($request->input(), ['patient' => $user->id]);
 
@@ -58,7 +59,6 @@ class PatientController extends Controller
         ]);
 
         if ($validator->fails()) {
-          $user->save();
           return response()->json([
             'error' => $validator->errors(),
           ], 400);
