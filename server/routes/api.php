@@ -38,6 +38,7 @@ Route::group(['prefix' => 'v1'], function () {
 			Route::post('patient/update', 'API\PatientController@update');
 
 			Route::post('consultations', 'API\ConsultationController@store');
+			Route::delete('consultations/{id}/cancel', 'API\ConsultationController@cancel');
 		//});
 	});
 });

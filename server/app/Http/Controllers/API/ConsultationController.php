@@ -80,4 +80,45 @@ class ConsultationController extends Controller
             'message' => 'Consultation initiation successful, waiting for the doctor to accept.',
         ], 200);
     }
+
+    public function cancel(Request $request, $id)
+    {
+        $user = $request->user();
+        $user['last_seen'] = strftime("%Y-%m-%d %H:%M:%S", time());
+        $user['status'] = 'online';
+        $user->save();
+
+        $validator = Validator::make(['consultation' => $id], [
+            'consultation' => [
+                'required',
+                'exists:consultations,id'
+            ],
+        ]);
+  
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors(),
+            ], 400);
+        }
+
+        $consultation = Consultation::find($id);
+
+        if ($consultation->patient_id !== $user->id) {
+            return response()->json([
+                'error' => 'Oops you can only cancel your own consultation',
+            ], 400);
+        }
+
+        if ($consultation->status !== 'pending') {
+            return response()->json([
+                'error' => 'Oops can not cancel the selected consultation',
+            ], 400);
+        }
+
+        $consultation->delete();
+
+        return response()->json([
+            'message' => 'Consultation closed successfully.',
+        ], 400);
+    }
 }
