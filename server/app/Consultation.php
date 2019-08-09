@@ -9,7 +9,7 @@ class Consultation extends Model
     protected $fillable = [
         'patient_id',
         'doctor_id',
-        'accepted',
+        'status',
         'start_time',
         'media',
         'opentok_session',
