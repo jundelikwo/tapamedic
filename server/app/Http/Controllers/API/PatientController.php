@@ -28,33 +28,42 @@ class PatientController extends Controller
           ],
           'address' => [
             'string',
+            'nullable',
           ],
           'blood' => [
             Rule::in(['A', 'AB', 'B', 'O']),
+            'nullable',
           ],
           'date_of_birth' => [
             'string',
+            'nullable',
           ],
           'diseases' => [
             'string',
+            'nullable',
           ],
           'drugs' => [
             'string',
+            'nullable',
           ],
           'genotype' => [
             Rule::in(['AA', 'AS', 'SS']),
+            'nullable',
           ],
           'name' => [
             'string',
+            'nullable',
           ],
           'occupation' => [
             'string',
+            'nullable',
           ],
           'profile' => [
             'mimes:jpeg,png,jpg,gif,bmp',
           ],
           'sex' => [
             Rule::in(['Male', 'Female']),
+            'nullable',
           ],
         ]);
 
@@ -64,7 +73,7 @@ class PatientController extends Controller
           ], 400);
         }
 
-        if ($request->filled('name')) {
+        if (key_exists('name',$inputs)) {
           $user->name = $request['name'];
           $user->save();
         }
@@ -83,38 +92,38 @@ class PatientController extends Controller
 
         $patient = $user->patient;
         
-        if ($request->filled('address')) {
+        if (key_exists('address', $inputs)) {
             $patient->address = $request['address'];
         }
 
-        if ($request->filled('blood')) {
+        if (key_exists('blood', $inputs)) {
             $patient->blood = $request['blood'];
         }
 
-        if ($request->filled('date_of_birth')) {
+        if (key_exists('date_of_birth', $inputs)) {
             $dob = strtotime($request['date_of_birth']);
             if($dob && $dob < time()) {
                 $patient->date_of_birth = strftime("%Y-%m-%d %H:%M:%S", $dob);
             }
         }
 
-        if ($request->filled('diseases')) {
+        if (key_exists('diseases', $inputs)) {
             $patient->diseases = $request['diseases'];
         }
 
-        if ($request->filled('drugs')) {
+        if (key_exists('drugs', $inputs)) {
             $patient->drugs = $request['drugs'];
         }
 
-        if ($request->filled('genotype')) {
+        if (key_exists('genotype', $inputs)) {
             $patient->genotype = $request['genotype'];
         }
 
-        if ($request->filled('occupation')) {
+        if (key_exists('occupation', $inputs)) {
             $patient->occupation = $request['occupation'];
         }
 
-        if ($request->filled('sex')) {
+        if (key_exists('sex', $inputs)) {
             $patient->sex = $request['sex'];
         }
 

@@ -28,39 +28,49 @@ class DoctorController extends Controller
           'graduation_year' => [
             'integer',
             'max:'.strftime("%Y", time()),
+            'nullable',
           ],
           'bank_name' => [
             'string',
+            'nullable',
           ],
           'account_name' => [
             'string',
+            'nullable',
           ],
           'account_number' => [
             'string',
+            'nullable',
           ],
           'mdcn_folio' => [
             'string',
+            'nullable',
           ],
           'mdcn_membership' => [
             'string',
+            'nullable',
           ],
           'mdcn_photo' => [
             'mimes:jpeg,png,jpg,gif,bmp',
           ],
           'name' => [
             'string',
+            'nullable',
           ],
           'profile' => [
             'mimes:jpeg,png,jpg,gif,bmp',
           ],
           'specialty' => [
             'string',
+            'nullable',
           ],
           'university' => [
             'string',
+            'nullable',
           ],
           'location' => [
             'string',
+            'nullable',
           ],
         ]);
 
@@ -72,19 +82,19 @@ class DoctorController extends Controller
 
         $doctor = $user->doctor;
 
-        if ($request->filled('bank_name')) {
+        if (key_exists('bank_name', $inputs)) {
             $doctor->bank_name = $request['bank_name'];
         }
 
-        if ($request->filled('account_name')) {
+        if (key_exists('account_name', $inputs)) {
             $doctor->account_name = $request['account_name'];
         }
 
-        if ($request->filled('account_number')) {
+        if (key_exists('account_number', $inputs)) {
             $doctor->account_number = $request['account_number'];
         }
 
-        if ($request->filled('location')) {
+        if (key_exists('location', $inputs)) {
             $doctor->location = $request['location'];
         }
 
@@ -101,11 +111,11 @@ class DoctorController extends Controller
         }
 
         if($doctor->approved === 'no' && $doctor->review === 'no') {
-          if ($request->filled('specialty')) {
+          if (key_exists('specialty', $inputs)) {
             $doctor->specialty = $request['specialty'];
           }
 
-          if ($request->filled('name')) {
+          if (key_exists('name', $inputs)) {
             $user->name = $request['name'];
             $user->save();
           }
@@ -122,19 +132,19 @@ class DoctorController extends Controller
             $img->save($thumbnail_path);
           }
           
-          if ($request->filled('graduation_year')) {
+          if (key_exists('graduation_year', $inputs)) {
             $doctor->graduation_year = $request['graduation_year'];
           }
 
-          if ($request->filled('mdcn_folio')) {
+          if (key_exists('mdcn_folio', $inputs)) {
             $doctor->mdcn_folio = $request['mdcn_folio'];
           }
 
-          if ($request->filled('mdcn_membership')) {
+          if (key_exists('mdcn_membership', $inputs)) {
             $doctor->mdcn_membership = $request['mdcn_membership'];
           }
 
-          if ($request->filled('university')) {
+          if (key_exists('university', $inputs)) {
             $doctor->university = $request['university'];
           }
 
