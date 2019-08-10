@@ -313,7 +313,7 @@ class ConsultationController extends Controller
         $consultation->save();
 
         return response()->json([
-            'message' => 'Consultation accepted successfully.',
+            'message' => 'Consultation media type changed successfully.',
             'consultation' => $consultation,
         ], 400);
     }
