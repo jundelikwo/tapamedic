@@ -30,6 +30,7 @@ Route::group(['prefix' => 'v1'], function () {
 
 			Route::group(['middleware' => ['approvedDoctorOnly'], ], function () {
 				Route::post('answers', 'API\AnswerController@store');
+				Route::get('consultations/{id}/accept', 'API\ConsultationController@accept');
 				Route::delete('consultations/{id}/reject', 'API\ConsultationController@reject');
 			});
 		});
