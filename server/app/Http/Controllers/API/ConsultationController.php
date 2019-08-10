@@ -288,6 +288,12 @@ class ConsultationController extends Controller
             ], 400);
         }
 
+        if ($consultation->status !== 'accepted') {
+            return response()->json([
+                'error' => 'Oops can not modify the selected consultation',
+            ], 400);
+        }
+
         $consultationDurationMinutes = (int) env("CONSULTATION_DURATION_MINUTES");
 
         $consultationEndTime = strtotime('+15 minutes', strtotime($consultation->start_time));
