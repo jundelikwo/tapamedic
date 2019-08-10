@@ -297,7 +297,7 @@ class ConsultationController extends Controller
         $consultationDurationMinutes = (int) env("CONSULTATION_DURATION_MINUTES");
 
         $consultationEndTime = strtotime('+'.$consultationDurationMinutes.' minutes', strtotime($consultation->start_time));
-
+        
         if (time() >= $consultationEndTime) {
             $consultation->status = 'closed';
             $consultation->save();
