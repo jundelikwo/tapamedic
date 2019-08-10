@@ -44,6 +44,7 @@ Route::group(['prefix' => 'v1'], function () {
 			Route::post('consultations/{id}/media', 'API\ConsultationController@media');
 
 			Route::get('consultations/{id}/messages', 'API\MessageController@fetch');
+			Route::post('consultations/{id}/messages', 'API\MessageController@store');
 		//});
 	});
 });
