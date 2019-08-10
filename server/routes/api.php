@@ -42,6 +42,8 @@ Route::group(['prefix' => 'v1'], function () {
 			Route::post('consultations', 'API\ConsultationController@store');
 			Route::delete('consultations/{id}/cancel', 'API\ConsultationController@cancel');
 			Route::post('consultations/{id}/media', 'API\ConsultationController@media');
+
+			Route::get('consultations/{id}/messages', 'API\MessageController@fetch');
 		//});
 	});
 });
