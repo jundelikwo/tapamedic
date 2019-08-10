@@ -9,7 +9,9 @@ use App\Patient;
 use App\User;
 use Illuminate\Http\Request;
 use Validator;
+use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
+use OpenTok\OpenTok;
 
 class ConsultationController extends Controller
 {
@@ -249,6 +251,70 @@ class ConsultationController extends Controller
             'message' => 'Consultation accepted successfully.',
             'consultation' => $consultation,
             'doctor' => $doctor,
+        ], 400);
+    }
+
+    public function media(Request $request, $id)
+    {
+        $user = $request->user();
+        $user['last_seen'] = strftime("%Y-%m-%d %H:%M:%S", time());
+        $user['status'] = 'online';
+        $user->save();
+
+        $inputs = array_merge($request->input(), ['consultation' => $id]);
+
+        $validator = Validator::make($inputs, [
+            'consultation' => [
+                'required',
+                'exists:consultations,id'
+            ],
+            'media' => [
+                'required',
+                Rule::in(['audio', 'text', 'video']),
+            ],
+        ]);
+  
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors(),
+            ], 400);
+        }
+
+        $consultation = Consultation::find($id);
+
+        if ($consultation->doctor_id !== $user->id && $consultation->patient_id !== $user->id) {
+            return response()->json([
+                'error' => 'Oops you can only modify your consultation',
+            ], 400);
+        }
+
+        $consultationDurationMinutes = (int) env("CONSULTATION_DURATION_MINUTES");
+
+        $consultationEndTime = strtotime('+15 minutes', strtotime($consultation->start_time));
+
+        if (time() >= $consultationEndTime) {
+            return response()->json([
+                'error' => 'Oops your consultation has ended',
+            ], 400);
+        }
+
+        if (empty($consultation->opentok_session) || empty($consultation->opentok_token)) {
+            $opentok = new OpenTok(env("OPENTOK_API_KEY"), env("OPENTOK_API_SECRET"));
+            $opentokSession = $opentok->createSession();
+            $opentokToken = $opentokSession->generateToken(array(
+                'expireTime' => $consultationEndTime,
+            ));
+
+            $consultation->opentok_session = $opentokSession->getSessionId();
+            $consultation->opentok_token = $opentokToken;
+        }
+
+        $consultation->media = $request->media;
+        $consultation->save();
+
+        return response()->json([
+            'message' => 'Consultation accepted successfully.',
+            'consultation' => $consultation,
         ], 400);
     }
 }

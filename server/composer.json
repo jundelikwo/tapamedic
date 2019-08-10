@@ -11,6 +11,7 @@
         "laravel/framework": "5.5.*",
         "laravel/passport": "4.0.3",
         "laravel/tinker": "~1.0",
+        "opentok/opentok": "4.4.x",
         "paragonie/random_compat": "2.*"
     },
     "require-dev": {

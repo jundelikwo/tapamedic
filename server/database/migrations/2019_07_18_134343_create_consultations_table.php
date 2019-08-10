@@ -20,8 +20,8 @@ class CreateConsultationsTable extends Migration
             $table->enum('status', ['accepted', 'closed', 'pending'])->default('pending');
             $table->timestamp('start_time')->nullable();
             $table->enum('media', ['audio', 'text', 'video'])->default('text');
-            $table->string('opentok_session')->nullable();
-            $table->string('opentok_token')->nullable();
+            $table->text('opentok_session')->nullable();
+            $table->text('opentok_token')->nullable();
             $table->timestamps();
 
             $table->foreign('patient_id')
