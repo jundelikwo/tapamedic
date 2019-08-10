@@ -37,7 +37,17 @@ class MessageController extends Controller
             ], 400);
         }
 
+        $consultationDurationMinutes = (int) env("CONSULTATION_DURATION_MINUTES");
+
+        $consultationEndTime = strtotime('+'.$consultationDurationMinutes.' minutes', strtotime($consultation->start_time));
+        
+        if (time() >= $consultationEndTime) {
+            $consultation->status = 'closed';
+            $consultation->save();
+        }
+
         return response()->json([
+            'consultation' => $consultation,
             'messages' => $consultation->messages,
         ], 400);
     }
