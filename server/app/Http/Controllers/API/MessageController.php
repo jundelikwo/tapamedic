@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API;
 
 use App\Consultation;
 use App\Message;
+use Image;
+use Storage;
 use Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
@@ -34,7 +36,7 @@ class MessageController extends Controller
                 'string',
             ],
             'image' => [
-                'required_if:type,image',
+                //'required_if:type,image',
                 'mimes:jpeg,png,jpg,gif,bmp',
             ],
         ]);
@@ -78,6 +80,18 @@ class MessageController extends Controller
 
         if($request->type === 'text') {
             $message->message = $request->message;
+        } else if($request->type === 'image') {
+            $image_path = $request->file('image')->store('consultations/'.$id.'/large');
+            $message->image = $image_path;
+          
+            $img = Image::make(getcwd().'/../storage/app/'.$image_path);
+            $img->fit(200, 200);
+            $thumbnail_file_name = substr($image_path, strripos($image_path, '/'));
+            $thumbnail_path = getcwd().'/../storage/app/'.'consultations/'.$id.'/thumb';
+            $thumbnail_path .= $thumbnail_file_name;
+            Storage::makeDirectory('consultations/'.$id.'/thumb/');
+            $img->save($thumbnail_path);
+            $message->thumb = 'consultations/'.$id.'/thumb'.$thumbnail_file_name;
         }
 
         $message->save();
